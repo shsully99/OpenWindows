@@ -558,7 +558,7 @@ def SetupSessionVariables():
     
     # check format is 99.9-99.9-99.9-99.9-99.9-99.9
     for facade in session["facadedetails"]:
-        for str in facade["Spectra"].split('/'):
+        for str in facade["Spectra"].split('-'):
             if(math.isnan(float(str))):
                 return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9"
 
