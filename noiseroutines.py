@@ -47,7 +47,7 @@ def calcnoisesingle (selectedelement,
     sSpectra[3] = selectedelement["Hz1000"]
     sSpectra[4] = selectedelement["Hz2000"]
                 
-    sIncident = [float(x) for x in strIncidentSpectra.rstrip(';').split("/")]
+    sIncident = [float(x) for x in strIncidentSpectra.rstrip(';').split("-")]
 
     strMetric = ""
     if selectedelement["ElementType"] == "Vent":
