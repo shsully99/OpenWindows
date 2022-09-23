@@ -37,7 +37,7 @@ def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI):
         elif facade["Metric"] == "LamaxO":
             ws.cell(row = i, column = 2).value = "Overheating LAFmax dB(A)"
 
-        sIncident = [float(x) for x in facade["Spectra"].rstrip(';').split("/")]
+        sIncident = [float(x) for x in facade["Spectra"].rstrip(';').split("-")]
 
         ws.cell(row = i, column = 5).value = sIncident[0]
         ws.cell(row = i, column = 6).value = sIncident[1]
