@@ -1,0 +1,123 @@
+
+body, html {
+    margin: 0;
+    font-family: sans-serif;
+	font-size:small;
+    background-color: rgb(234, 103, 22);
+}
+
+.content {
+    margin: 0 auto;
+    width: 800px;
+}
+
+table, td, th {
+	text-align: center;
+    border: 1px solid rgb(91, 38, 38);
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+}
+
+th {
+	text-align: center;
+    height: 30px;
+}
+
+td {
+    text-align: center;
+    padding: 5px;
+}
+
+.FormLabel {
+	text-align: left;
+	display: inline-block;
+	width: 180px;
+}
+.FormEntry {
+	text-align: left;
+	display: inline;
+	width:300px;
+}
+
+.form {
+    margin-top: 20px;
+}
+.columns {
+	Width: 100%;
+	}
+	.column {
+	  width:33%;
+	}
+	@media (min-width: 48em) {
+	  .column {
+		width: 50%;
+		float:left;
+	  }
+	  .columns {
+		content: "";
+		display: table;
+		clear: both;
+	  }
+}
+
+#content {
+    width: 70%;
+}
+
+#mainMenu {
+	margin:10px;
+	width:900px;
+	font-family: sans-serif;
+	font-size:small
+}
+#mainMenu li {
+	display:block;
+	width:120px;
+	float:left;
+	margin-left:2px;
+	border:1px solid #000;
+}
+
+#mainMenu a {
+	display:block;
+	padding:3px;
+	text-decoration:none;
+	background-color:#fff;
+	color:#009;
+}
+
+#mainMenu a:hover {
+	background-color:#009;
+	color:#fff;
+}
+.wrap-iblock > * {
+	display: inline-block;	
+  }
+.shortdimension {
+	width:100px;
+}
+table{
+    width:80%;
+}
+#example_filter{
+    float:right;
+}
+#example_paginate{
+    float:right;
+}
+label {
+    display: inline-flex;
+    margin-bottom: .5rem;
+    margin-top: .5rem;
+     
+}
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
