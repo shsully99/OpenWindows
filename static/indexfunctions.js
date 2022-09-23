@@ -75,7 +75,7 @@ function ValSpectra(val, call)
     //alert("Before calc")
     Overall = CalcSpectra(spectra);
     //alert("after  calc" + Overall)
-    strSpectra = parseFloat(spectra[0]).toFixed(1) + "/" +parseFloat(spectra[1]).toFixed(1)  + "/" +parseFloat(spectra[2]).toFixed(1)  + "/" + parseFloat(spectra[3]).toFixed(1)  + "/" +parseFloat(spectra[4]).toFixed(1) 
+    strSpectra = parseFloat(spectra[0]).toFixed(1) + "-" +parseFloat(spectra[1]).toFixed(1)  + "-" +parseFloat(spectra[2]).toFixed(1)  + "-" + parseFloat(spectra[3]).toFixed(1)  + "-" +parseFloat(spectra[4]).toFixed(1) 
     //alert("strSpectra   " + Overall)
   }
   // else assume user has entered value - set up defailt spectra 
