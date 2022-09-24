@@ -1,4 +1,6 @@
     # Basic room details 
+    #
+    #
     #session["gsArea"] 
     #session["gsHeight"] 
     #session["gsVolume"] 
