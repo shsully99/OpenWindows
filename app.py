@@ -176,7 +176,7 @@ def search():
 
             session["gstrFilterField"] = request.form.get('FilterField')
 
-            querySearch  = GetfromDataBase (1)
+            querySearch  = GetfromDataBase(1)
 
             df = SetupSRIs(querySearch)
 
@@ -592,7 +592,7 @@ def SetupSessionVariables():
 
     return "Success"
 
-def GetfromDataBase (page):
+def GetfromDataBase(page):
     # Read from thee database for a page 
     print ("def GetfromDataBase (page):")
 

@@ -6,13 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script language="javascript" type="text/javascript" src = "static/indexfunctions.js"></script>
+
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="static/assets/styles/style.css">
+    <link rel="stylesheet" href="static/assets/styles/responsive.css">
 </head>
 
-
 <header>
+    <div class="header_container">
+        <div class="header_container_inner d-flex justify-content-space-between align-items-center">
+            <a href="/" class="logo f-600 fs-24 c-orange">Logo</a>
+            <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
+                <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
+                <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
+                    <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
     <!--
       <div class="container">
@@ -36,4 +50,7 @@
 <body>
     {% block body %}{% endblock %}
 </body>
+
+    <script src="static/assets/js/Modal.js"></script>
+    <script src="static/assets/js/ShowHidePass.js"></script>
 </html>
