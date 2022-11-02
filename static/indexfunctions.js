@@ -44,7 +44,7 @@ function ValRoomDimensions(val)
   sHeight = (parseFloat(sHeight)).toFixed(1)
   sVol = (parseFloat(sVol)).toFixed(1)
   document.getElementsByName('RoomDimensions')[0].value = sArea + "x"  + sHeight
-  document.getElementById('RoomDimensionsLabel').innerHTML = "   " + sVol + " m3"
+  document.getElementById('RoomDimensionsLabel').value = "   " + sVol + " m3"
 }
 
 function ValSpectra(val, call)
@@ -90,19 +90,19 @@ function ValSpectra(val, call)
   }
   if (call==1){
     document.getElementsByName('Laeq16Spectra')[0].value = strSpectra
-    document.getElementById('Laeq16SpectraLabel').innerHTML = Overall + " dB(A)"
+    document.getElementById('Laeq16SpectraLabel').value = Overall + " dB(A)"
   }
   else if (call == 2){
     document.getElementsByName('Laeq8Spectra')[0].value = strSpectra
-    document.getElementById('Laeq8SpectraLabel').innerHTML = Overall + " dB(A)"        
+    document.getElementById('Laeq8SpectraLabel').value = Overall + " dB(A)"
   }
   else if (call == 3){
     document.getElementsByName('LamaxvSpectra')[0].value = strSpectra
-    document.getElementById('LamaxvSpectraLabel').innerHTML = Overall + " dB(A)"        
+    document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
   }      
   else if (call == 4){
     document.getElementsByName('LamaxoSpectra')[0].value = strSpectra
-    document.getElementById('LamaxoSpectraLabel').innerHTML = Overall + " dB(A)"                
+    document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
   }
 }
 

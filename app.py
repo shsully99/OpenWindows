@@ -192,6 +192,7 @@ def search():
 
             session.modified = True
 
+            print('mtkkkkkkkkkkkkkkav',querySearch)
             return render_template('search.html', 
                                     df = df,
                                     querySearch = querySearch, 
@@ -515,7 +516,8 @@ def SetupSessionVariables():
     print ("def setupsessionvaribles")
     #session["gstrRoomType"] = request.form.get('roomtype')
 
-    # Check axh for Room Dimensions and assign variables accordingly 
+    # Check axh for Room Dimensions and assign variables accordingly
+    print( request.form.get('RoomDimensions'),'ssssssssss')
     strRD = request.form.get('RoomDimensions').split("x")
     #print(strRD)
     if (len(strRD) != 2 ):
@@ -600,7 +602,7 @@ def GetfromDataBase(page):
             
     tag = "%{}%".format(session["gstrFilterField"])
 
-    PageofElements = ElementSRI.query.filter(ElementSRI.ElementType == session["gstrFilterElementType"], ElementSRI.Description.like(tag)).paginate(page,pages,error_out=False)
+    PageofElements = ElementSRI.query.filter(ElementSRI.ElementType == session["gstrFilterElementType"], ElementSRI.Description.like(tag)).paginate(page=page,error_out=False)
 
     return PageofElements 
 
