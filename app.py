@@ -149,16 +149,16 @@ def search():
 
     if request.method == 'POST':
         print(f"*** In post method of search " + session["status"] )  
-        if (session["status"] == "RoomDetails"):
-            # Validate RoomDetails - return error or show search display page
-            strRet = SetupSessionVariables()
-            if strRet != "Success":
-                return render_template('search.html',BadEntry = strRet)             
-            else:
-                session["status"] = "SearchDisplay"
-                return render_template('search.html')
+        # if (session["status"] == "RoomDetails"):
+        #     # Validate RoomDetails - return error or show search display page
+        #     strRet = SetupSessionVariables()
+        #     if strRet != "Success":
+        #         return render_template('search.html',BadEntry = strRet)
+        #     else:
+        #         session["status"] = "SearchDisplay"
+        #         return render_template('search.html')
 
-        if (session["status"] == "SearchDisplay" or session["status"] == "ElementDisplay"):
+        if (session["status"] == "RoomDetails" or session["status"] == "ElementDisplay"):
             # First time Search display, validate entries
             session["gstrFilterElementType"] = request.form.get('elementtype')
             if session["gstrFilterElementType"] != "OpenArea":                
