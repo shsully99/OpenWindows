@@ -12,19 +12,15 @@
 {% block body %}
 
 <h1 style="text-align: center">Search</h1>
+{% if BadEntry  is  defined   %}
 
 
   {{ BadEntry }}
 
 
 
-    <div id="dql"
-    data-def0 = '{{ session["defaultquantitylist"][0] }}'
-    data-def1 = '{{ session["defaultquantitylist"][1] }}'
-    data-def2 = '{{ session["defaultquantitylist"][2] }}'
-    data-def3 = '{{ session["defaultquantitylist"][3] }}'
-    data-def4 = '{{ session["defaultquantitylist"][4] }}'
-    </div>
+{% elif session["status"] == "RoomDetails" %}
+
     <div class = "content">
 
         <div class="columns">
@@ -148,9 +144,18 @@
 
             </div>
         </div>
-
                     </form>
             </div>
+{% elif session["status"] == "SearchDisplay"  or session["status"] == "ElementDisplay" %}
+
+                <div id="dql"
+    data-def0 = '{{ session["defaultquantitylist"][0] }}'
+    data-def1 = '{{ session["defaultquantitylist"][1] }}'
+    data-def2 = '{{ session["defaultquantitylist"][2] }}'
+    data-def3 = '{{ session["defaultquantitylist"][3] }}'
+    data-def4 = '{{ session["defaultquantitylist"][4] }}'
+    </div>
+
             <div class="column">
                 {% if session["selectedelements"]|length > 0 %}
                     {% for facade in facadedetails %}
@@ -180,6 +185,7 @@
             </div>
         </div>
     </div>
+{% endif  %}
 
 {% if session["status"] == "SearchDisplay"  and querySearch is  defined %}
          <div class="measurement_result_block">

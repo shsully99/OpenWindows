@@ -200,7 +200,9 @@ def search():
                                     defaultquantitylist= session["defaultquantitylist"])
 
     else:
-        print(f"*** In get  method of search - do we ever get here? ")    
+
+        print(f"*** In get  method of search - do we ever get here? ")
+        session["elementtypeslist"] = ["Glazing", "Wall", "Door", "OpenArea", "Vent"]
         return render_template('search.html')
 
 @app.route('/paginate', methods=['GET', 'POST'], defaults={"page": 1}) 
