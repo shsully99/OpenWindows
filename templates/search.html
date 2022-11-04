@@ -224,45 +224,38 @@
     </table>
                   </div>
                 </div>
-<!--                <div class="pagination fs-14 f-500">-->
-<!--                    <a href="#"><</a>-->
-<!--                    <a href="#" class="active">1</a>-->
-<!--                    <a href="#">2</a>-->
-<!--                    <a href="#">3</a>-->
-<!--                    <a href="#">4</a>-->
-<!--                    <a href="#">5</a>-->
-<!--                    <a href="#">6</a>-->
-<!--                    <a href="#">></a>-->
-<!--                </div>-->
+                <div class="pagination fs-14 f-500">
+                    <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                {% if querySearch.has_prev %}
+                                  <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.prev_num) }}">Previous</a></li>
+                                {% else %}
+                                  <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
+                                {% endif %}
+
+                                {% for page in querySearch.iter_pages(left_edge=3, right_edge=3) %}
+                                    {% if page %}
+                                        {% if page==querySearch.page %}
+                                            <li class="page-item active"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
+                                        {% else %}
+                                            <li class="page-item"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
+                                        {% endif %}
+                                    {% else %}
+                                        <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% if querySearch.has_next %}
+                              <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.next_num) }}">Next</a></li>
+                            {% else %}
+                              <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>>
+                </div>
             </div>
         </div>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            {% if querySearch.has_prev %}
-              <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.prev_num) }}">Previous</a></li>
-            {% else %}
-              <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
-            {% endif %}
 
-            {% for page in querySearch.iter_pages(left_edge=3, right_edge=3) %}
-                {% if page %}
-                    {% if page==querySearch.page %}
-                        <li class="page-item active"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
-                    {% endif %}
-                {% else %}
-                    <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
-                {% endif %}
-            {% endfor %}
-
-            {% if querySearch.has_next %}
-              <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.next_num) }}">Next</a></li>
-            {% else %}
-              <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
-            {% endif %}
-        </ul>
-    </nav>
 
 {% endif %}
 

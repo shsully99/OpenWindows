@@ -605,7 +605,7 @@ def GetfromDataBase(page):
             
     tag = "%{}%".format(session["gstrFilterField"])
 
-    PageofElements = ElementSRI.query.filter(ElementSRI.ElementType == session["gstrFilterElementType"], ElementSRI.Description.like(tag)).paginate(page=page,error_out=False)
+    PageofElements = ElementSRI.query.filter(ElementSRI.ElementType == session["gstrFilterElementType"], ElementSRI.Description.like(tag)).paginate(page=page,per_page=5,error_out=False)
 
     return PageofElements 
 

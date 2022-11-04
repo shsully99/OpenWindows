@@ -579,9 +579,11 @@ a {
     margin-bottom: 63px;
 }
 .pagination {
-    margin-top: 24px;
-    display: inline-block;
-    float: right;
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .pagination a {
