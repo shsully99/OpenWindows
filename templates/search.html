@@ -19,7 +19,7 @@
 
 
 
-{% elif session["status"] == "RoomDetails" %}
+{% elif session["status"] == "RoomDetails" or session["status"] == "SearchDisplay"  %}
 
     <div class = "content">
 
@@ -195,8 +195,8 @@
                 </div>
                 <div class="result_block d-flex align-items-center justify-content-center fs_20">
                     <div style="overflow: auto; height: 380px; width: 100%">
-      <table id="example" >
-        <tr>
+      <table id="customers" >
+        <tr class="fs-18 f-500">
             <th>Spectra</th>
             <th>Description</th>
             {% for facade in facadedetails %}
@@ -213,12 +213,12 @@
                     {% for key, dfrow in df.iterrows() %}
                         {% if row.UniqueID == dfrow.UniqueID %}
                             {% for facade in facadedetails %}
-                                <td>{{'%0.1f' %  dfrow[facade.Metric] }}</td>
+                                <td class="f-500">{{'%0.1f' %  dfrow[facade.Metric] }}</td>
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <td><a href="/add/{{row.UniqueID}}" method = "POST">Add</a></td>
+                <td class="c-orange"><a class="c-orange" href="/add/{{row.UniqueID}}" method = "POST">Add</a></td>
             </tr>
         {% endfor %}
     </table>

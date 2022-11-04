@@ -148,6 +148,7 @@ def search():
     print ("def search():")
 
     if request.method == 'POST':
+        strRet = SetupSessionVariables()
         print(f"*** In post method of search " + session["status"] )  
         # if (session["status"] == "RoomDetails"):
         #     # Validate RoomDetails - return error or show search display page
@@ -158,46 +159,46 @@ def search():
         #         session["status"] = "SearchDisplay"
         #         return render_template('search.html')
 
-        if (session["status"] == "RoomDetails" or session["status"] == "ElementDisplay"):
+
             # First time Search display, validate entries
-            session["gstrFilterElementType"] = request.form.get('elementtype')
-            if session["gstrFilterElementType"] != "OpenArea":                
-                try:
-                    session["gsFilterQuantity"] = float(request.form.get('Quantity'))
-                except: 
-                    strRet = "Enter quantity"
-                    return render_template('search.html',BadEntry = strRet)   
+        session["gstrFilterElementType"] = request.form.get('elementtype')
+        if session["gstrFilterElementType"] != "OpenArea":
+            try:
+                session["gsFilterQuantity"] = float(request.form.get('Quantity'))
+            except:
+                strRet = "Enter quantity"
+                return render_template('search.html',BadEntry = strRet)
 
-                if (session["gsFilterQuantity"] == 0): 
-                    strRet = "Must be greater than 0 "
-                    return render_template('search.html',BadEntry = strRet)   
+            if (session["gsFilterQuantity"] == 0):
+                strRet = "Must be greater than 0 "
+                return render_template('search.html',BadEntry = strRet)
 
-            session["gsFacadeDifference"] = int(request.form.get('quietfacade'))
+        session["gsFacadeDifference"] = int(request.form.get('quietfacade'))
 
-            session["gstrFilterField"] = request.form.get('FilterField')
+        session["gstrFilterField"] = request.form.get('FilterField')
 
-            querySearch  = GetfromDataBase(1)
+        querySearch  = GetfromDataBase(1)
 
-            df = SetupSRIs(querySearch)
+        df = SetupSRIs(querySearch)
 
-            session["status"] = "SearchDisplay"
-            # New defaults for search 
+        session["status"] = "SearchDisplay"
+        # New defaults for search
 
-            session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
-            if session["gstrFilterElementType"] == "Glazing":session["defaultquantitylist"][0] = session["gsFilterQuantity"]
-            elif session["gstrFilterElementType"] == "Wall":session["defaultquantitylist"][1] = session["gsFilterQuantity"]
-            elif session["gstrFilterElementType"] == "Door":session["defaultquantitylist"][2] = session["gsFilterQuantity"]
-            elif session["gstrFilterElementType"] == "OpenArea":session["defaultquantitylist"][3] = session["gsFilterQuantity"]
-            elif session["gstrFilterElementType"] == "Vent":session["defaultquantitylist"][4] = session["gsFilterQuantity"]
+        session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
+        if session["gstrFilterElementType"] == "Glazing":session["defaultquantitylist"][0] = session["gsFilterQuantity"]
+        elif session["gstrFilterElementType"] == "Wall":session["defaultquantitylist"][1] = session["gsFilterQuantity"]
+        elif session["gstrFilterElementType"] == "Door":session["defaultquantitylist"][2] = session["gsFilterQuantity"]
+        elif session["gstrFilterElementType"] == "OpenArea":session["defaultquantitylist"][3] = session["gsFilterQuantity"]
+        elif session["gstrFilterElementType"] == "Vent":session["defaultquantitylist"][4] = session["gsFilterQuantity"]
 
-            session.modified = True
+        session.modified = True
 
-            print('mtkkkkkkkkkkkkkkav',querySearch)
-            return render_template('search.html', 
-                                    df = df,
-                                    querySearch = querySearch, 
-                                    facadedetails = session["facadedetails"],
-                                    defaultquantitylist= session["defaultquantitylist"])
+        print('mtkkkkkkkkkkkkkkav',querySearch)
+        return render_template('search.html',
+                                df = df,
+                                querySearch = querySearch,
+                                facadedetails = session["facadedetails"],
+                                defaultquantitylist= session["defaultquantitylist"])
 
     else:
 
