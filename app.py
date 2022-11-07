@@ -336,6 +336,14 @@ def download ():
     strFile = DownloadFile (session["selectedelements"],  session["facadedetails"], session["gsVolume"], session["gsRev"], ElementSRI)
 
     return send_file (strFile, attachment_filename='Download.xlsx', as_attachment=True)
+@app.route('/about/', methods=['GET'])
+def about ():
+    return render_template('about.html')
+
+
+@app.route('/contacts/', methods=['GET'])
+def contacts ():
+    return render_template('contacts.html')
 
 # Someone with s shared link wants to see the elements displayed 
 @app.route('/automate', methods=['GET', 'POST'])

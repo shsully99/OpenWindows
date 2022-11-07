@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Search</title>
+
+<script language="javascript" type="text/javascript">
+
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="about_container d-flex justify-content-space-between align-items-center flex-wrap">
+        <div class="about_container_main_pic">
+            <img src="{{url_for('static',filename='assets/images/about_pic.jpg')}}" alt="">
+        </div>
+        <div class="about_container_block1 d-flex fd-column">
+            <p class="home_container_block1_text1 fs-48 f-600 c-orange">OpenWindows</p>
+            <img src="{{url_for('static',filename='assets/images/home_pic2.png')}}" alt="">
+            <div class="fs-16">“OpenWindows is a web application whose purpose is to help in the specification of
+                glazing and ventilation for residences in England and Wales. Based on noise levels outside a dwelling
+                and the elements of the façade, it calculates the internal noise levels. It then compares those levels
+                them to guideline levels in  Professional Planning and Guidance (ProPG).   It is intended to be used by design teams,
+                local authorities and specifiers of glazing and ventilation. “
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end about_container_donate_button_block">
+        <button class="donate_button c-white f-500 fs-16">Donate</button>
+    </div>
+</div>
+{% endblock %}

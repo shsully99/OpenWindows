@@ -149,40 +149,44 @@
 {% elif session["status"] == "SearchDisplay"  or session["status"] == "ElementDisplay" %}
 
                 <div id="dql"
-    data-def0 = '{{ session["defaultquantitylist"][0] }}'
-    data-def1 = '{{ session["defaultquantitylist"][1] }}'
-    data-def2 = '{{ session["defaultquantitylist"][2] }}'
-    data-def3 = '{{ session["defaultquantitylist"][3] }}'
-    data-def4 = '{{ session["defaultquantitylist"][4] }}'
+            <div id="dql" class="submit_result_block ">
+            <div class="submit_result_block_inner d-flex align-items-center justify-content-space-between">
+
+              {% if session["selectedelements"]|length > 0 %}
+                {% for facade in facadedetails %}
+                <div class="f-600 fs-24">
+
+                            <label class= "FormLabel" >{{ facade.Label | safe }} </label>
+                            <label><strong> {{'%0.1f' % facade.Level|float}} </strong></label>
+                            <label> dB(A) </label>
+
+                </div>
+                {% endfor %}
+            {% endif %}
+
+
+                <div class="d-flex align-items-center share_download_block">
+                    <div class="d-flex align-items-center share_download_block">
+                        {% if session["selectedelements"]|length > 0 %}
+                            <div class="form">
+                                <form action="/download" method="POST">
+                                    <button type="submit" class="d-flex align-items-center justify-content-center download_button c-white">Download</button>
+                                </form>
+                            </div>
+                            <div class="form">
+                                <form action="/share" method="POST">
+                                    <button type="submit" class="d-flex align-items-center justify-content-center share_button c-orange myBtnShare">Share</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-            <div class="column">
-                {% if session["selectedelements"]|length > 0 %}
-                    {% for facade in facadedetails %}
-                        <p>
-                            <span>
-                                <label class= "FormLabel" >{{ facade.Label | safe }} </label>
-                                <label><strong> {{'%0.1f' % facade.Level|float}} </strong></label>
-                                <label> dB(A) </label>
-                            </span>
-                        </p>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="column">
-                {% if session["selectedelements"]|length > 0 %}
-                    <div class="form">
-                        <form action="/download" method="POST">
-                            <button type="submit">Download</button>
-                        </form>
-                    </div>
-                    <div class="form">
-                        <form action="/share" method="POST">
-                            <button type="submit">Share</button>
-                        </form>
-                    </div>
-                {% endif %}
-            </div>
+
         </div>
     </div>
 {% endif  %}
