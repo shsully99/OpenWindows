@@ -312,6 +312,10 @@ a {
     margin-bottom: 16px;
 }
 
+a {
+    color: black ;
+}
+
 .home_container_block1 img {
     margin-bottom: 24px;
     max-width: 623px;
