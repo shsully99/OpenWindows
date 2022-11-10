@@ -22,10 +22,22 @@
                     <button class="about fs-16 f-500"><a href="/about/">About</a></button>
                     <button class="contacts fs-16 f-500"><a href="/contacts/">Contacts</a></button>
                 </div>
-                <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
-                <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
-                    <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+
+                {% if not current_user.is_authenticated %}
+                    <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
+                    <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
+                        <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+                    </div>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <div class="registration_button d-flex justify-content-center align-items-center">
+                    <a href="/logout" class="navbar-item">
+                        Log out
+                    </a>
                 </div>
+
+                {% endif %}
+
             </div>
         </div>
     </div>

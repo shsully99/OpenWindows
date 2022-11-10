@@ -36,24 +36,27 @@
                     src="static/assets/images/back_page_arrow.png" alt="">Back to Home Page</a>
             <div class="d-flex fd-column justify-content-center align-items-center">
                 <p class="welcome fs-48">Welcome</p>
-                <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
-                    <input type="text" placeholder="Full Name" class="input_text fs-16"/>
-                    <input type="email" placeholder="Email" class="input_text c-grey fs-16"/>
-                    <div class="pass_block">
-                        <input type="password" placeholder="Password" class="input_pass c-grey fs-16 passwordInput"
-                               id="passwordInput1"/>
-                        <img src="static/assets/images/not_show_pass.png" alt=""
-                             style="cursor: pointer" class="togglePassword">
-                    </div>
-                    <div class="pass_block">
-                        <input type="password" placeholder="Confirm password"
-                               class="input_pass c-grey fs-16 confirmPasswordInput"
-                               id="passwordInput2"/>
-                        <img src="static/assets/images/not_show_pass.png" alt=""
-                             style="cursor: pointer" class="toggleConfirmPassword">
-                    </div>
+                    <form action="/register"  method="POST">
 
-                    <button class="btn_registration myBtnLogIn c-white f-500 fs-16">Registration</button>
+                        <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
+                            <input type="text" require='true'  name="full_name" placeholder="Full Name" class="input_text fs-16"/>
+                            <input type="email" require='true'  name="email" placeholder="Email" class="input_text c-grey fs-16"/>
+                            <div class="pass_block">
+                                <input type="password" require='true' name="password" placeholder="Password" class="input_pass c-grey fs-16 passwordInput"
+                                       id="passwordInput1"/>
+                                <img src="static/assets/images/not_show_pass.png" alt=""
+                                     style="cursor: pointer" class="togglePassword">
+                            </div>
+                            <div class="pass_block">
+                                <input type="password" require='true'  name="confirm" placeholder="Confirm password"
+                                       class="input_pass c-grey fs-16 confirmPasswordInput"
+                                       id="passwordInput2"/>
+                                <img src="static/assets/images/not_show_pass.png" alt=""
+                                     style="cursor: pointer" class="toggleConfirmPassword">
+                            </div>
+
+                            <button class="btn_registration c-white f-500 fs-16">Registration</button>
+                        </form>
                     <div class="have_account fs-16">Already have an account? <span
                             class="c-orange myBtnLogIn">log In</span></div>
                 </div>
@@ -68,9 +71,12 @@
             <div class="d-flex fd-column justify-content-center align-items-center">
                 <p class="welcome fs-48">Welcome</p>
                 <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
-                    <input type="email" placeholder="Email" class="input_text c-grey fs-16">
+
+                    <form action="/login"  method="POST">
+
+                    <input type="email" name="email" placeholder="Email" class="input_text c-grey fs-16">
                     <div class="pass_block">
-                        <input type="password" placeholder="Password" class="input_pass c-grey fs-16 loginPasswordInput"
+                        <input type="password" name="password" placeholder="Password" class="input_pass c-grey fs-16 loginPasswordInput"
                                id="passwordInput3"/>
                         <img src="static/assets/images/not_show_pass.png" alt=""
                              style="cursor: pointer" class="toggleLoginPassword">
@@ -78,8 +84,10 @@
                     <div class="fs-16 d-flex justify-content-end myBtnForgetPass"
                          style="margin-top: -10px; width: 100%; cursor: pointer">Forget password ?
                     </div>
-                    <button class="btn_login"><a href="MeasureNoisePage.html" class="c-white f-500 fs-16">Log In</a>
+                    <button class="btn_login">Log In
                     </button>
+
+                    </form>
                     <div class="have_account fs-16">Don't have an account? <span class="c-orange myBtnRegistration">Registration</span>
                     </div>
                 </div>

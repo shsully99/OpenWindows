@@ -51,22 +51,28 @@ import math
 #import numbers
 #import numpy
 from pathlib import Path
+from flask_login import login_user
 
 from noiseroutines import calcnoiseall
 from noiseroutines import calcnoisesingle
 from download import DownloadFile
 
 from ssl import get_server_certificate
-from flask import Flask, render_template, url_for, request, redirect,session, send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
+from flask import Flask, render_template, flash, redirect, request, session, logging, url_for,send_file
+from flask_login import LoginManager
 
 from datetime import datetime
 global gpElementData
 global strSetinPost
 strLevel = "set globally"
 app = Flask(__name__)
+from forms import LoginForm, RegisterForm
+from flask_login import UserMixin
+from flask_login import login_user, login_required, logout_user
 
+from werkzeug.security import generate_password_hash, check_password_hash
 #app.secret_key = 'BAD_SECRET_KEY'
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -74,11 +80,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['SQLALCHEMY_DATABASE_URI'] =\
     'sqlite:///' + os.path.join(basedir, 'ElementSRIs.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+login_manager = LoginManager()
+ #Added this line fixed the issue.
+login_manager.init_app(app)
+login_manager.login_view = 'app.login'
+login_manager.init_app(app)
 
-#   Declaration of database class
+
+    #   Declaration of database class
 class ElementSRI(db.Model):
 
     __tablename__ = 'ElementSRIs'
@@ -119,6 +130,114 @@ class ElementSRI(db.Model):
     def __repr__(self):
         return '<ElementSRIs %r>' % self.Description
 
+
+class User(db.Model,UserMixin):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    full_name= db.Column(db.String(55),unique=False)
+
+    is_active = db.Column(db.Boolean,default=True)
+    email = db.Column(db.String(50), unique=True)
+
+    password = db.Column(db.String(256), unique=True)
+
+    def __repr__(self):
+        return '<User %r>' % self.full_name
+
+
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
+def init_db():
+    db.drop_all()
+    db.create_all()
+
+    # Create a test user
+    # hashed_password = generate_password_hash('12345678v', method='sha256')
+    # new_user = User(email='adminss@gmail.com',password=hashed_password)
+    # new_user.full_name = 'Nathansssssss'
+    # db.session.add(new_user)
+    # db.session.commit()
+    #
+    # new_user.datetime_subscription_valid_until = datetime(2019, 1, 1)
+    # db.session.commit()
+
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+
+    form = LoginForm(request.form)
+
+    print(form.validate)
+    if request.method == 'POST' and form.validate():
+
+        user = User.query.filter_by(email=form.email.data).first()
+
+        print(user,'+++++++++++++++++++',form.email.data)
+        if user:
+
+            if check_password_hash(user.password, form.password.data):
+
+                flash('You have successfully logged in.', "success")
+
+                session['logged_in'] = True
+
+                session['email'] = user.email
+                login_user(user)
+
+                return redirect('/')
+
+            else:
+
+                flash('Username or Password Incorrect', "Danger")
+
+                return redirect(url_for('login'))
+
+    return render_template('login.html', form=form)
+
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+
+    form = RegisterForm(request.form)
+
+    print(form.data,'ggggggggggggggg')
+
+    if request.method == 'POST' and form.validate():
+
+        hashed_password = generate_password_hash(form.password.data, method='sha256')
+
+        new_user = User(
+
+            full_name=form.full_name.data,
+
+            email=form.email.data,
+
+            password=hashed_password)
+
+        db.session.add(new_user)
+
+        db.session.commit()
+
+        flash('You have successfully registered', 'success')
+
+        return redirect('/')
+
+    else:
+
+        return render_template('register.html', form=form)
+
+@app.route('/logout/')
+def logout():
+    logout_user()
+
+    session['logged_in'] = False
+
+    return redirect('/')
+
+@login_manager.user_loader
+def load_user(user):
+    return User.query.get(int(user))
 @app.route('/', methods=['POST', 'GET'])
 def index():
     print ("def index():")
@@ -717,4 +836,10 @@ def SetupTotals():
 if __name__ == "__main__":
     app.jinja_env.auto_reload = True
     app.config["TEMPLATES_AUTO_RELOAD"] = True
+    # with app.app_context():
+    #     init_db()
+
+
     app.run(debug=True)
+
+
