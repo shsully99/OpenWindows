@@ -151,7 +151,7 @@ class User(db.Model,UserMixin):
 # def create_tables():
 #     db.create_all()
 def init_db():
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
     # Create a test user

@@ -11,173 +11,197 @@
 
 {% block body %}
 
-<h1 style="text-align: center">Search</h1>
-{% if BadEntry  is  defined   %}
+<h1 style="text-align: center">Search-------</h1>
+{% if BadEntry is defined %}
 
 
-  {{ BadEntry }}
+{{ BadEntry }}
 
 
+{% elif session["status"] == "RoomDetails" or session["status"] == "SearchDisplay" or session["status"] == "ElementDisplay" %}
+<div class="content">
 
-{% elif session["status"] == "RoomDetails" or session["status"] == "SearchDisplay"  %}
+    <div class="columns">
+        <div class="column">
+            <form action="/search" method="POST">
+                <p style="text-align: left">
 
-    <div class = "content">
-
-        <div class="columns">
-            <div class="column">
-                    <form action="/search" method="POST">
-                                    <p style="text-align: left">
-
-                                               <div class="measure_noise_block d-flex fd-column">
-            <div class="measure_noise_block_inner">
-                <div class="d-flex justify-content-space-between align-items-center clear_block fw_wrap">
-                    <span class="fs-24">Let’s measure the noise</span>
-                    <a href="MeasureNoisePage.html">
-                        <div class="clear_button clear_button_active c-white d-flex align-items-center justify-content-center">
-                            Clear all
+                <div class="measure_noise_block d-flex fd-column">
+                    <div class="measure_noise_block_inner">
+                        <div class="d-flex justify-content-space-between align-items-center clear_block fw_wrap">
+                            <span class="fs-24">Let’s measure the noise</span>
+                            <a href="MeasureNoisePage.html">
+                                <div
+                                    class="clear_button clear_button_active c-white d-flex align-items-center justify-content-center">
+                                    Clear all
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-                <div class="" style="margin-top: 32px">
-                    <span class="fs-18">Fill in the room details</span>
-                    <div class="d-flex fw_wrap justify-content-space-between inputs_blocks">
-                        <div class="inputs_block1 d-flex fd-column">
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Room Dimensions</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                    <input name="RoomDimensions" id="RoomDimensions" type="text" class="measure_noise_input"
-                                           placeholder="Enter floor area(m2) x height(m), alternatively length"  onchange = "ValRoomDimensions(this.value)">
-                                    <input readonly name="RoomDimensionsLabel" id ="RoomDimensionsLabel" class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="0 m3"/>
+                        <div class="" style="margin-top: 32px">
+                            <span class="fs-18">Fill in the room details</span>
+                            <div class="d-flex fw_wrap justify-content-space-between inputs_blocks">
+                                <div class="inputs_block1 d-flex fd-column">
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Room Dimensions</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                            <input name="RoomDimensions" id="RoomDimensions" type="text"
+                                                class="measure_noise_input"
+                                                placeholder="Enter floor area(m2) x height(m), alternatively length"
+                                                onchange="ValRoomDimensions(this.value)">
+                                            <input readonly name="RoomDimensionsLabel" id="RoomDimensionsLabel"
+                                                class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="0 m3" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Daytime LAeq,16h dB(A)</label>
+                                        <div class="measure_noise_input_block d-flex align-items-center">
+                                            <input type="text" name="Laeq16Spectra" id="Laeq16Spectra"
+                                                onchange="ValSpectra(this.value,1)" class="measure_noise_input"
+                                                placeholder="Spectra from 125 - 2000 Hz">
+                                            <input id="Laeq16SpectraLabel"
+                                                class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="0 dB(A)" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Night-time LAeq,8h dB(A)</label>
+                                        <div class="measure_noise_input_block d-flex align-items-center">
+                                            <input name="Laeq8Spectra" onchange="ValSpectra(this.value,2)"
+                                                id="Laeq8Spectra" type="text" class="measure_noise_input"
+                                                placeholder="Spectra from 125 - 2000 Hz">
+                                            <input id="Laeq8SpectraLabel"
+                                                class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="0 dB(A)" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Ventilation LAFmax dB(A)</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                            <input name="LamaxvSpectra" id="LamaxvSpectra"
+                                                onchange="ValSpectra(this.value,3)" type="text"
+                                                class="measure_noise_input" placeholder="Spectra from 125 - 2000 Hz">
+                                            <input id="LamaxvSpectraLabel"
+                                                class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="0 dB(A)" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Overheating LAFmax dB(A)</label>
+                                        <div class="measure_noise_input_block d-flex align-items-center">
+                                            <input name="LamaxoSpectra" id="LamaxoSpectra"
+                                                onchange="ValSpectra(this.value,4)" type="text"
+                                                class="measure_noise_input" placeholder="Spectra from 125 - 2000 Hz">
+                                            <input id="LamaxoSpectraLabel"
+                                                class="fs-16 d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="0 dB(A)" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Daytime LAeq,16h dB(A)</label>
-                                <div class="measure_noise_input_block d-flex align-items-center">
-                                    <input type="text"  name="Laeq16Spectra" id="Laeq16Spectra"   onchange = "ValSpectra(this.value,1)" class="measure_noise_input"
-                                           placeholder="Spectra from 125 - 2000 Hz">
-                                    <input   id ="Laeq16SpectraLabel" class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="0 dB(A)"/></div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Night-time LAeq,8h dB(A)</label>
-                                <div class="measure_noise_input_block d-flex align-items-center">
-                                    <input name="Laeq8Spectra" onchange="ValSpectra(this.value,2)"  id="Laeq8Spectra" type="text" class="measure_noise_input"
-                                           placeholder="Spectra from 125 - 2000 Hz">
-                                    <input  id ="Laeq8SpectraLabel" class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="0 dB(A)"/>
-                                </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Ventilation LAFmax dB(A)</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                    <input  name="LamaxvSpectra" id="LamaxvSpectra"  onchange="ValSpectra(this.value,3)"  type="text" class="measure_noise_input"
-                                           placeholder="Spectra from 125 - 2000 Hz">
-                                    <input id="LamaxvSpectraLabel" class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="0 dB(A)"/>
-                                </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Overheating LAFmax dB(A)</label>
-                                <div class="measure_noise_input_block d-flex align-items-center">
-                                    <input name="LamaxoSpectra" id="LamaxoSpectra"  onchange = "ValSpectra(this.value,4)"  type="text" class="measure_noise_input"
-                                           placeholder="Spectra from 125 - 2000 Hz">
-                                    <input id="LamaxoSpectraLabel" class="fs-16 d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="0 dB(A)"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inputs_block2">
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Element Type</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                    <select name="elementtype" class="measure_noise_select" onchange = 'FilterConfig(this.value)'>
-                                    {% for i in range(5) %}
-                                        <option name= "{{ i }}" value = "{{ session['elementtypeslist'][i] }}"
-                                        {{'selected' if  session['elementtypeslist'][i] == session["gstrFilterElementType"], }}
-                                        >
-                                        {{ session['elementtypeslist'][i] }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Area</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                    <input type="text" class="measure_noise_input" placeholder="Type area" name="Quantity" id="Quantity"  value = "{{ session['gsFilterQuantity'] }}" >
-                                    <input  name="QuantityMetric" id ="QuantityMetric" class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                           placeholder="m2"/>
-                                </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Quieter Facade</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                <div class="inputs_block2">
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Element Type</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                            <select name="elementtype" class="measure_noise_select"
+                                                onchange='FilterConfig(this.value)'>
+                                                {% for i in range(5) %}
+                                                <option name="{{ i }}" value="{{ session['elementtypeslist'][i] }}"
+                                                    {{'selected' if
+                                                    session['elementtypeslist'][i]==session["gstrFilterElementType"],
+                                                    }}>
+                                                    {{ session['elementtypeslist'][i] }}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Area</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                            <input type="text" class="measure_noise_input" placeholder="Type area"
+                                                name="Quantity" id="Quantity" value="{{ session['gsFilterQuantity'] }}">
+                                            <input name="QuantityMetric" id="QuantityMetric"
+                                                class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                placeholder="m2" />
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Quieter Facade</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
 
-                                     <select name="quietfacade"  class="measure_noise_select">
-                                    {% for i in range(11) %}
-                                        <option name= "{{ i }}" value = "{{ i }}"
-                                            {{ 'selected' if i == session['gsFacadeDifference'] }}
-                                            >
-                                            {% if i == 0 %}
-                                                Main Facade
-                                            {% else %}
-                                                {{ i }} dB quieter
-                                            {% endif %}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                                </div>
-                            </div>
-                            <div class="d-flex fd-column measure_noise_input_cont">
-                                <label for="" class="fs-16">Filter</label>
-                                <div class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                    <input type="text" class="measure_noise_input" name="FilterField" id="FilterField"  value = '{{ session["gstrFilterField"] }}' placeholder="Enter keyword"/>
-                                </div>
-                            </div>
+                                            <select name="quietfacade" class="measure_noise_select">
+                                                {% for i in range(11) %}
+                                                <option name="{{ i }}" value="{{ i }}" {{ 'selected' if
+                                                    i==session['gsFacadeDifference'] }}>
+                                                    {% if i == 0 %}
+                                                    Main Facade
+                                                    {% else %}
+                                                    {{ i }} dB quieter
+                                                    {% endif %}
+                                                </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex fd-column measure_noise_input_cont">
+                                        <label for="" class="fs-16">Filter</label>
+                                        <div
+                                            class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                            <input type="text" class="measure_noise_input" name="FilterField"
+                                                id="FilterField" value='{{ session["gstrFilterField"] }}'
+                                                placeholder="Enter keyword" />
+                                        </div>
+                                    </div>
 
-                            <button type="submit" value="Submit"  class="submit_button submit_button_active c-white"> Submit</button>
+                                    <button type="submit" value="Submit"
+                                        class="submit_button submit_button_active c-white"> Submit</button>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
                 </div>
-
-            </div>
+            </form>
         </div>
-                    </form>
-            </div>
-{% elif session["status"] == "SearchDisplay"  or session["status"] == "ElementDisplay" %}
-
-                <div id="dql"
-            <div id="dql" class="submit_result_block ">
+        {% elif session["status"] == "SearchDisplay" or session["status"] == "ElementDisplay" %}
+        ------
+        <div id="dql" <div id="dql" class="submit_result_block ">
             <div class="submit_result_block_inner d-flex align-items-center justify-content-space-between">
 
-              {% if session["selectedelements"]|length > 0 %}
+                {% if session["selectedelements"]|length > 0 %}
                 {% for facade in facadedetails %}
                 <div class="f-600 fs-24">
 
-                            <label class= "FormLabel" >{{ facade.Label | safe }} </label>
-                            <label><strong> {{'%0.1f' % facade.Level|float}} </strong></label>
-                            <label> dB(A) </label>
+                    <label class="FormLabel">{{ facade.Label | safe }} </label>
+                    <label><strong> {{'%0.1f' % facade.Level|float}} </strong></label>
+                    <label> dB(A) </label>
 
                 </div>
                 {% endfor %}
-            {% endif %}
+                {% endif %}
 
 
                 <div class="d-flex align-items-center share_download_block">
                     <div class="d-flex align-items-center share_download_block">
                         {% if session["selectedelements"]|length > 0 %}
-                            <div class="form">
-                                <form action="/download" method="POST">
-                                    <button type="submit" class="d-flex align-items-center justify-content-center download_button c-white">Download</button>
-                                </form>
-                            </div>
-                            <div class="form">
-                                <form action="/share" method="POST">
-                                    <button type="submit" class="d-flex align-items-center justify-content-center share_button c-orange myBtnShare">Share</button>
-                                </form>
-                            </div>
+                        <div class="form">
+                            <form action="/download" method="POST">
+                                <button type="submit"
+                                    class="d-flex align-items-center justify-content-center download_button c-white">Download</button>
+                            </form>
+                        </div>
+                        <div class="form">
+                            <form action="/share" method="POST">
+                                <button type="submit"
+                                    class="d-flex align-items-center justify-content-center share_button c-orange myBtnShare">Share</button>
+                            </form>
+                        </div>
                         {% endif %}
                     </div>
                 </div>
@@ -187,126 +211,133 @@
     </div>
 
 
+</div>
+</div>
+{% endif %}
+
+{% if session["status"] == "SearchDisplay" and querySearch is defined %}
+-------
+<div class="measurement_result_block">
+    <div class="measure_noise_block_inner">
+        <div class="d-flex justify-content-space-between align-items-center clear_block">
+            <span class="fs-24">Results</span>
         </div>
-    </div>
-{% endif  %}
-
-{% if session["status"] == "SearchDisplay"  and querySearch is  defined %}
-         <div class="measurement_result_block">
-            <div class="measure_noise_block_inner">
-                <div class="d-flex justify-content-space-between align-items-center clear_block">
-                    <span class="fs-24">Results</span>
-                </div>
-                <div class="result_block d-flex align-items-center justify-content-center fs_20">
-                    <div style="overflow: auto; height: 380px; width: 100%">
-      <table id="customers" >
-        <tr class="fs-18 f-500">
-            <th>Spectra</th>
-            <th>Description</th>
-            {% for facade in facadedetails %}
-            <th>{{ facade.Label | safe }} </th>
-            {% endfor %}
-            <th>Select</th>
-            <!-- <th>Actions</th> -->
-        </tr>
-        {% for row in querySearch.items %}
-            <tr>
-                <td>{{ row.Hz125|string + "/" + row.Hz250|string + "/" + row.Hz500|string + "/" + row.Hz1000|string + "/" + row.Hz2000|string }}
-                <td>{{ row.Description }}</td>
-                {% if df is defined %}
-                    {% for key, dfrow in df.iterrows() %}
+        <div class="result_block d-flex align-items-center justify-content-center fs_20">
+            <div style="overflow: auto; height: 380px; width: 100%">
+                <table id="customers">
+                    <tr class="fs-18 f-500">
+                        <th>Spectra</th>
+                        <th>Description</th>
+                        {% for facade in facadedetails %}
+                        <th>{{ facade.Label | safe }} </th>
+                        {% endfor %}
+                        <th>Select</th>
+                        <!-- <th>Actions</th> -->
+                    </tr>
+                    {% for row in querySearch.items %}
+                    <tr>
+                        <td>{{ row.Hz125|string + "/" + row.Hz250|string + "/" + row.Hz500|string + "/" +
+                            row.Hz1000|string + "/" + row.Hz2000|string }}
+                        <td>{{ row.Description }}</td>
+                        {% if df is defined %}
+                        {% for key, dfrow in df.iterrows() %}
                         {% if row.UniqueID == dfrow.UniqueID %}
-                            {% for facade in facadedetails %}
-                                <td class="f-500">{{'%0.1f' %  dfrow[facade.Metric] }}</td>
-                            {% endfor %}
+                        {% for facade in facadedetails %}
+                        <td class="f-500">{{'%0.1f' % dfrow[facade.Metric] }}</td>
+                        {% endfor %}
                         {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        <td class="c-orange"><a class="c-orange" href="/add/{{row.UniqueID}}" method="POST">Add</a></td>
+                    </tr>
                     {% endfor %}
-                {% endif %}
-                <td class="c-orange"><a class="c-orange" href="/add/{{row.UniqueID}}" method = "POST">Add</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-                  </div>
-                </div>
-                <div class="pagination fs-14 f-500">
-                    <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                {% if querySearch.has_prev %}
-                                  <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.prev_num) }}">Previous</a></li>
-                                {% else %}
-                                  <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
-                                {% endif %}
-
-                                {% for page in querySearch.iter_pages(left_edge=3, right_edge=3) %}
-                                    {% if page %}
-                                        {% if page==querySearch.page %}
-                                            <li class="page-item active"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
-                                        {% else %}
-                                            <li class="page-item"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page }}</a></li>
-                                        {% endif %}
-                                    {% else %}
-                                        <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
-                                    {% endif %}
-                                {% endfor %}
-
-                            {% if querySearch.has_next %}
-                              <li class="page-item"> <a class="page-link" href="{{ url_for('paginate', page=querySearch.next_num) }}">Next</a></li>
-                            {% else %}
-                              <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
-                            {% endif %}
-                        </ul>
-                    </nav>>
-                </div>
+                </table>
             </div>
         </div>
+        <div class="pagination fs-14 f-500">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if querySearch.has_prev %}
+                    <li class="page-item"> <a class="page-link"
+                            href="{{ url_for('paginate', page=querySearch.prev_num) }}">Previous</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
+                    {% endif %}
+
+                    {% for page in querySearch.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page %}
+                    {% if page==querySearch.page %}
+                    <li class="page-item active"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{
+                            page }}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('paginate', page=page) }}">{{ page
+                            }}</a></li>
+                    {% endif %}
+                    {% else %}
+                    <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if querySearch.has_next %}
+                    <li class="page-item"> <a class="page-link"
+                            href="{{ url_for('paginate', page=querySearch.next_num) }}">Next</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>>
+        </div>
+    </div>
+</div>
 
 
 {% endif %}
 
-{% if session["status"] == "ElementDisplay"  and selected is  defined %}
-
-    <div class="row">
+{% if session["status"] == "ElementDisplay" and selected is defined %}
+-----------
+<div class="row">
     <div class="col-12">
-    <table id="example" class="table table-striped table-bordered" style="width:100%">
-        <tr>
-            <th>Quantity</th>
-            <th>Type</th>
-            <th>Description</th>
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
+            <tr>
+                <th>Quantity</th>
+                <th>Type</th>
+                <th>Description</th>
                 {% for facade in facadedetails %}
-                    <th>{{ facade.Label | safe }}  </th>
+                <th>{{ facade.Label | safe }} </th>
                 {% endfor %}
                 {% if session["FacadeColumn"] == True %}
-                    <th>Facade</th>
+                <th>Facade</th>
                 {% endif %}
-            <th>Selected</th>
-            <th>Remove</th>
-        </tr>
-        {% for item in session["selectedelements"] %}
+                <th>Selected</th>
+                <th>Remove</th>
+            </tr>
+            {% for item in session["selectedelements"] %}
             <tr>
                 <td>{{ item['Quantity'] }}</td>
                 <td>{{ item['ElementType'] }}</td>
                 <td>{{ item['ElementDescription'] }}</td>
                 {% for facade in facadedetails %}
-                    {% for elDetail in item['elementLevels'] %}
-                        {% if elDetail.Metric == facade.Metric %}
-                            <td> {{'%0.1f' % elDetail.Level|float}} ({{ elDetail.Percent }})% </td>
-                        {% endif %}
-                    {% endfor %}
+                {% for elDetail in item['elementLevels'] %}
+                {% if elDetail.Metric == facade.Metric %}
+                <td> {{'%0.1f' % elDetail.Level|float}} ({{ elDetail.Percent }})% </td>
+                {% endif %}
+                {% endfor %}
                 {% endfor %}
                 {% if session["FacadeColumn"] == True %}
-                    {% if item["FacadeDifference"] == 0 %}
-                        <td> Main </td>
-                    {% else %}
-                        <td> {{ item["FacadeDifference"]  }} dB quieter </td>
-                    {% endif %}
+                {% if item["FacadeDifference"] == 0 %}
+                <td> Main </td>
+                {% else %}
+                <td> {{ item["FacadeDifference"] }} dB quieter </td>
                 {% endif %}
-                <td><a href="/change/{{item.ElementID}}" method = "POST">{{ "On" if item["State"] == "Active" else "Off"  }}</a></td>
-                <td><a href="/remove/{{item.ElementID}}" method = "POST">Remove</a></td>
+                {% endif %}
+                <td><a href="/change/{{item.ElementID}}" method="POST">{{ "On" if item["State"] == "Active" else "Off"
+                        }}</a></td>
+                <td><a href="/remove/{{item.ElementID}}" method="POST">Remove</a></td>
             </tr>
-        {% endfor %}
-    </table>
+            {% endfor %}
+        </table>
     </div>
-    </div>
+</div>
 
 {% endif %}
 
