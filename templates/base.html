@@ -18,9 +18,10 @@
         <div class="header_container_inner d-flex justify-content-space-between align-items-center">
             <a href="/" class="logo f-600 fs-24 c-orange">Logo</a>
             <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
-                <div class="d-flex">
+                <div class="d-flex ">
                     <button class="about fs-16 f-500"><a href="/about/">About</a></button>
                     <button class="contacts fs-16 f-500"><a href="/contacts/">Contacts</a></button>
+                    <button class="donate fs-16 f-500"><a href="//">Donate</a></button>
                 </div>
 
                 {% if not current_user.is_authenticated %}
@@ -30,14 +31,54 @@
                     </div>
                 {% endif %}
                 {% if current_user.is_authenticated %}
+                <div class="d-flex">
+                    <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
+                    <button class="contacts fs-16 f-600"><a href="//">Share</a></button>
+                    <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
+                </div>
                 <div class="registration_button d-flex justify-content-center align-items-center">
-                    <a href="/logout" class="navbar-item">
+                    <a href="/logout" class="navbar-item c-white">
                         Log out
                     </a>
                 </div>
-
                 {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="header_container_mobile">
+        <div class="header_container_inner d-flex justify-content-space-between align-items-center">
+            <a href="/" class="logo f-600 fs-24 c-orange">Logo</a>
+            <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
+                <div class="header_mobile_dropdown">
+                    <button class="dropbtn"> ☰ </button>
+                    <div class="header_mobile_dropdown_content">
+                        <div class="d-flex fd-column ">
+                            <button class="about fs-16 f-500"><a href="/about/">About</a></button>
+                            <button class="contacts fs-16 f-500"><a href="/contacts/">Contacts</a></button>
+                            <button class="donate fs-16 f-500"><a href="//">Donate</a></button>
+                        </div>
+                    </div>
+                </div>
 
+
+                {% if not current_user.is_authenticated %}
+                <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
+                <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
+                    <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+                </div>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <div class="d-flex">
+                    <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
+                    <button class="contacts fs-16 f-600"><div class="myBtnShare">Share</div></button>
+                    <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
+                </div>
+                <div class="registration_button d-flex justify-content-center align-items-center">
+                    <a href="/logout" class="navbar-item c-white">
+                        Log out
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -54,7 +95,27 @@
     </div>
   -->
 
-    
+<div id="myModalShare" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content-share">
+        <div class="d-flex align-items-center justify-content-space-between modal-share-header">
+            <div class="fs_20 f-500">Share the link</div>
+            <span class="close_share_modal"><img src="../assets/images/close_grey.png" alt=""></span>
+        </div>
+        <div class="d-flex fd-column copy_share_block">
+            <div class="fs_20 f-500">Copy link to share</div>
+            <div class="share_link">12354687852658</div>
+            <div class="d-flex justify-content-center copy_button c-white"><img src="../assets/images/copy_white.png" alt="">Copy</div>
+        </div>
+        <p style="margin-bottom: 10px">or</p>
+        <div class="d-flex fd-column copy_share_block send_email_block">
+            <div class="fs_20 f-500">Send it to email</div>
+            <input type="email" placeholder="Email" class="share_input">
+            <textarea name="Comment" id="" cols="30" rows="10">  Comment...</textarea>
+            <button class="send_btn fs-16">Send</button>
+        </div>
+    </div>
+</div>
 
   <!-- ss- -->
 
@@ -65,7 +126,7 @@
 <body>
     {% block body %}{% endblock %}
 </body>
-
     <script src="{{url_for('static',filename='assets/js/Modal.js')}}"></script>
     <script src="{{url_for('static',filename='assets/js/ShowHidePass.js')}}"></script>
+<script src="{{url_for('static',filename='assets/js/OpenNavbar.js')}}"></script>
 </html>

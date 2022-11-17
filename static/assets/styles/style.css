@@ -117,13 +117,105 @@ a {
     align-items: end;
 }
 
-.header_container {
+.header_container, .header_container_mobile {
     width: 100%;
     height: 60px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
 }
+.header_container_mobile{
+    position: relative;
+}
+.dropbtn{
+    background: none;
+    border:none;
+    margin-right: 40px;
+    font-size: 16px;
+    padding: 16px;
+    cursor: pointer;
+}
 
+.header_mobile_dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.header_mobile_dropdown_content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.header_mobile_dropdown_content{
+    color: black;
+    text-decoration: none;
+    /*display: block;*/
+}
+
+.header_mobile_dropdown_content a:hover {
+    background-color: #f1f1f1
+}
+
+.header_mobile_dropdown:hover .header_mobile_dropdown_content {
+    display: block;
+}
+
+.header_mobile_dropdown:hover .dropbtn {
+    background-color: #EF5835;
+}
+
+.openBtn{
+    background: none;
+    border:none;
+    margin-right: 40px;
+    font-size: 20px;
+}
+.openBtn:active{
+    border: none;
+}
+.header_container_mobile  #links {
+    display: block;
+}
+.header_container_mobile  .about {
+    margin: 0;
+}
+.header_container_mobile  .contacts{
+    margin: 0;
+}
+.header_container_mobile  .donate{
+    margin: 0;
+}
+
+.header_container_mobile a {
+    /*color: white;*/
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    display: block;
+}
+
+.header_container_mobile .icon {
+    background: white;
+    display: block;
+    border: 1px solid #c3c7cb;
+    width: 250px;
+    position: absolute;
+    right: 28%;
+    top: 63px;
+}
+
+.header_container_mobile a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.active {
+    background-color: #04AA6D;
+    color: white;
+}
 .header_container_inner {
     max-width: 1520px;
     width: 100%;
@@ -279,7 +371,7 @@ a {
 .modal-share-header{
     border-bottom: 1px solid #ABABAB;
     padding-bottom: 17px;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
 }
 /* The Close Button */
 .close {
@@ -453,7 +545,7 @@ a {
 
 .measure_noise_input_cont {
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
 }
 
 .measure_noise_input {
@@ -466,12 +558,12 @@ a {
 }
 
 .measure_noise_select {
-    margin-top: 8px;
+    margin-top: 9px;
     width: 100%;
     height: 42px;
     border: 1px solid #ABABAB;
     border-radius: 360px;
-    padding: 10px 40px 10px 18px;
+    padding: 12px 40px 12px 18px;
     color: black;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -548,7 +640,7 @@ a {
     background: #ABABAB;
     border-radius: 360px;
     border: none;
-    margin-top: 32px;
+    margin-top: 45px;
     cursor: pointer;
 }
 .submit_button_active{
@@ -644,7 +736,36 @@ a {
     margin-right: 6px;
 }
 .copy_share_block{
-    margin-bottom: 63px;
+    margin-bottom: 23px;
+}
+.send_email_block{
+
+}
+.send_email_block .share_input{
+    max-width: 424px;
+    width: 100%;
+    height: 44px;
+    border: 1px solid #ABABAB;
+    border-radius: 360px;
+    padding: 10px;
+}
+.send_email_block textarea{
+    max-width: 424px;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ABABAB;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+.send_btn{
+    background: #EF5835;
+    border-radius: 360px;
+    width: 136px;
+    height: 44px;
+    padding: 10px;
+    margin-top: 0px;
+    color: white;
+
 }
 .pagination {
     margin-top: 10px;
@@ -665,12 +786,20 @@ a {
 }
 
 .contacts {
+    margin-right: 30px;
+    background: transparent;
+    border: none;
+}
+.donate{
     margin-right: 50px;
     background: transparent;
     border: none;
 }
 
 .contacts a:hover {
+    color: #EF5835;
+}
+.donate a:hover{
     color: #EF5835;
 }
 
@@ -710,4 +839,8 @@ a {
 }
 .close_share_modal{
     cursor: pointer;
+}
+.about_container_main_pic{
+    max-width: 700px;
+    width: 100%;
 }

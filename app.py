@@ -1,4 +1,4 @@
-    # Basic room details 
+    # Basic room details
     #
     #
     #session["gsArea"] 
@@ -259,7 +259,7 @@ def index():
 
         print("In get method of index - never executed? ")
         strLevel = "Here is the level"
-        return render_template('index.html')
+        return render_template('search.html')
 
 
 @app.route('/search', methods=['POST', 'GET'])
