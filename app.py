@@ -253,12 +253,15 @@ def index():
 
         session["status"] = "RoomDetails"
         
-        return redirect('/search') 
+        return redirect('/search')
 
     else:        
 
         print("In get method of index - never executed? ")
         strLevel = "Here is the level"
+        # strRet = SetupSessionVariables()
+        session["status"] = "RoomDetails"
+        session["elementtypeslist"] = ["Glazing", "Wall", "Door", "OpenArea", "Vent"]
         return render_template('search.html')
 
 
@@ -313,6 +316,13 @@ def search():
         session.modified = True
 
         print('mtkkkkkkkkkkkkkkav',querySearch)
+
+        session['RoomDimensions'] =request.form.get('RoomDimensions')
+        session['Laeq16Spectra'] = request.form.get('Laeq16Spectra')
+        session['Laeq8Spectra'] = request.form.get('Laeq8Spectra')
+        session['LamaxvSpectra'] = request.form.get('LamaxvSpectra')
+        session['LamaxoSpectra'] = request.form.get('LamaxoSpectra')
+
         return render_template('search.html',
                                 df = df,
                                 querySearch = querySearch,

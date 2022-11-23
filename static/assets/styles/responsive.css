@@ -2,6 +2,14 @@
     .fw_wrap {
         flex-wrap: wrap;
     }
+    .header_container_mobile{
+    position: relative;
+    display:block;
+}
+.header_container{
+display:none;
+}
+
 }
 
 @media (max-width: 768px) {

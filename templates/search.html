@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block body %}
+{% include 'auth.html' %}
 
 <!--<h1 style="text-align: center">Search-&#45;&#45;&#45;&#45;&#45;&#45;</h1>-->
 {% if BadEntry is defined %}
@@ -29,12 +30,12 @@
                         <div class="measure_noise_block_inner">
                             <div class="d-flex justify-content-space-between align-items-center clear_block fw_wrap">
                                 <span class="fs-24">Let’s measure the noise</span>
-                                <a href="MeasureNoisePage.html">
+
                                     <div
                                             class="clear_button  c-white d-flex align-items-center justify-content-center">
                                         Clear all
                                     </div>
-                                </a>
+
                             </div>
                             <div class="" style="margin-top: 32px">
                                 <span class="fs-18">Fill in the room details</span>
@@ -47,7 +48,9 @@
                                                 <input name="RoomDimensions" id="RoomDimensions" type="text"
                                                        class="measure_noise_input"
                                                        placeholder="Enter floor area(m2) x height(m), alternatively length"
-                                                       onchange="ValRoomDimensions(this.value)">
+                                                       onchange="ValRoomDimensions(this.value)"
+                                                       value="{{ session['RoomDimensions']}}"
+                                                >
                                                 <input readonly name="RoomDimensionsLabel" id="RoomDimensionsLabel"
                                                        class="d-flex align-items-center justify-content-center fs-14 input_2"
                                                        placeholder="0 m3"/>
@@ -58,7 +61,9 @@
                                             <div class="measure_noise_input_block d-flex align-items-center">
                                                 <input type="text" name="Laeq16Spectra" id="Laeq16Spectra"
                                                        onchange="ValSpectra(this.value,1)" class="measure_noise_input"
-                                                       placeholder="Spectra from 125 - 2000 Hz">
+                                                       placeholder="Spectra from 125 - 2000 Hz"
+                                                        value="{{ session['Laeq16Spectra']}}"
+                                                >
                                                 <input id="Laeq16SpectraLabel"
                                                        class="d-flex align-items-center justify-content-center fs-14 input_2"
                                                        placeholder="0 dB(A)"/>
@@ -69,7 +74,9 @@
                                             <div class="measure_noise_input_block d-flex align-items-center">
                                                 <input name="Laeq8Spectra" onchange="ValSpectra(this.value,2)"
                                                        id="Laeq8Spectra" type="text" class="measure_noise_input"
-                                                       placeholder="Spectra from 125 - 2000 Hz">
+                                                       placeholder="Spectra from 125 - 2000 Hz"
+                                                         value="{{ session['Laeq8Spectra']}}"
+                                                >
                                                 <input id="Laeq8SpectraLabel"
                                                        class="d-flex align-items-center justify-content-center fs-14 input_2"
                                                        placeholder="0 dB(A)"/>
@@ -82,7 +89,9 @@
                                                 <input name="LamaxvSpectra" id="LamaxvSpectra"
                                                        onchange="ValSpectra(this.value,3)" type="text"
                                                        class="measure_noise_input"
-                                                       placeholder="Spectra from 125 - 2000 Hz">
+                                                       placeholder="Spectra from 125 - 2000 Hz"
+                                                         value="{{ session['LamaxvSpectra']}}"
+                                                >
                                                 <input id="LamaxvSpectraLabel"
                                                        class="d-flex align-items-center justify-content-center fs-14 input_2"
                                                        placeholder="0 dB(A)"/>
@@ -94,7 +103,9 @@
                                                 <input name="LamaxoSpectra" id="LamaxoSpectra"
                                                        onchange="ValSpectra(this.value,4)" type="text"
                                                        class="measure_noise_input"
-                                                       placeholder="Spectra from 125 - 2000 Hz">
+                                                       placeholder="Spectra from 125 - 2000 Hz"
+                                                        value="{{ session['LamaxoSpectra']}}"
+                                                >
                                                 <input id="LamaxoSpectraLabel"
                                                        class="fs-16 d-flex align-items-center justify-content-center fs-14 input_2"
                                                        placeholder="0 dB(A)"/>
@@ -163,7 +174,7 @@
                                         </div>
 
                                         <button type="submit" value="Submit"
-                                                class="submit_button c-white"> Submit
+                                                class="submit_button submit_button_active c-white "> Submit
                                         </button>
                                     </div>
 
