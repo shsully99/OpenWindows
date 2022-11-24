@@ -28,9 +28,8 @@
                 <div class="container">
                     <div class="measure_noise_block d-flex fd-column">
                         <div class="measure_noise_block_inner">
-                            <div class="d-flex justify-content-space-between align-items-center clear_block fw_wrap">
-                                <span class="fs-24">Let’s measure the noise</span>
-
+                            <div class="d-flex  justify-content-end align-items-center clear_block fw_wrap">
+<!--                                <span class="fs-24">Let’s measure the noise</span>-->
                                     <div
                                             class="clear_button  c-white d-flex align-items-center justify-content-center">
                                         Clear all
@@ -41,21 +40,6 @@
                                 <span class="fs-18">Fill in the room details</span>
                                 <div class="d-flex fw_wrap justify-content-space-between inputs_blocks">
                                     <div class="inputs_block1 d-flex fd-column">
-                                        <div class="d-flex fd-column measure_noise_input_cont">
-                                            <label for="" class="fs-16">Room Dimensions</label>
-                                            <div
-                                                    class="measure_noise_input_block d-flex justify-content-center align-items-center">
-                                                <input name="RoomDimensions" id="RoomDimensions" type="text"
-                                                       class="measure_noise_input"
-                                                       placeholder="Enter floor area(m2) x height(m), alternatively length"
-                                                       onchange="ValRoomDimensions(this.value)"
-                                                       value="{{ session['RoomDimensions']}}"
-                                                >
-                                                <input readonly name="RoomDimensionsLabel" id="RoomDimensionsLabel"
-                                                       class="d-flex align-items-center justify-content-center fs-14 input_2"
-                                                       placeholder="0 m3"/>
-                                            </div>
-                                        </div>
                                         <div class="d-flex fd-column measure_noise_input_cont">
                                             <label for="" class="fs-16">Daytime LAeq,16h dB(A)</label>
                                             <div class="measure_noise_input_block d-flex align-items-center">
@@ -111,8 +95,64 @@
                                                        placeholder="0 dB(A)"/>
                                             </div>
                                         </div>
+                                        <div class="d-flex fd-column measure_noise_input_cont">
+                                            <label for="" class="fs-16">Room Dimensions</label>
+                                            <div
+                                                    class="measure_noise_input_block d-flex justify-content-center align-items-center">
+                                                <input name="RoomDimensions" id="RoomDimensions" type="text"
+                                                       class="measure_noise_input"
+                                                       placeholder="Enter floor area(m2) x height(m), alternatively length"
+                                                       onchange="ValRoomDimensions(this.value)"
+                                                       value="{{ session['RoomDimensions']}}"
+                                                >
+                                                <input readonly name="RoomDimensionsLabel" id="RoomDimensionsLabel"
+                                                       class="d-flex align-items-center justify-content-center fs-14 input_2"
+                                                       placeholder="0 m3"/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="inputs_block2">
+                                        <div class="inputs_block2_title d-flex justify-content-center">Internal Level dB(A)</div>
+                                        <div class="d-flex fd-column measure_noise_input_cont">
+                                            <div
+                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
+                                                <input readonly name="" id="" type="text"
+                                                       class="measure_noise_input"
+                                                       placeholder=""
+                                                      />
+                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
+                                                       placeholder="0 dB(A)"/>
+                                            </div>
+                                            <div
+                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
+                                                <input readonly name="" id="" type="text"
+                                                       class="measure_noise_input"
+                                                       placeholder=""
+                                                />
+                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
+                                                       placeholder="0 dB(A)"/>
+                                            </div>
+                                            <div
+                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
+                                                <input readonly name="" id="" type="text"
+                                                       class="measure_noise_input"
+                                                       placeholder=""
+                                                />
+                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
+                                                       placeholder="0 dB(A)"/>
+                                            </div>
+                                            <div
+                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
+                                                <input readonly name="" id="" type="text"
+                                                       class="measure_noise_input"
+                                                       placeholder=""
+                                                />
+                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
+                                                       placeholder="0 dB(A)"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="inputs_block3">
                                         <div class="d-flex fd-column measure_noise_input_cont">
                                             <label for="" class="fs-16">Element Type</label>
                                             <div

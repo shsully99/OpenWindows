@@ -435,7 +435,7 @@ a {
     color: #ABABAB;
 }
 
-.measure_noise_input_block {
+.measure_noise_input_block, .measure_noise_input_block2 {
     position: relative;
 }
 
