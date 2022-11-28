@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script language="javascript" type="text/javascript" src = "{{url_for('static',filename='indexfunctions.js')}}"></script>
+    <script language="javascript" type="text/javascript"
+            src="{{url_for('static',filename='indexfunctions.js')}}"></script>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          id="bootstrap-css">-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <link rel="stylesheet" href="{{url_for('static',filename='assets/styles/style.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='assets/styles/responsive.css')}}">
+<!--    <link rel="stylesheet" href="{{url_for('static',filename='assets/styles/responsive.css')}}">-->
 </head>
 
 <header>
@@ -25,58 +27,6 @@
                 </div>
 
                 {% if not current_user.is_authenticated %}
-                    <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
-                    <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
-                        <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
-                    </div>
-                {% endif %}
-                {% if current_user.is_authenticated %}
-                <div class="d-flex">
-
-                                <div class="column">
-                {% if session["selectedelements"]|length > 0 %}
-                    <div class="form">
-                        <form action="/download" method="POST">
-                            <button type="submit">Download</button>
-                        </form>
-                    </div>
-                    <div class="form">
-                        <form action="/share" method="POST">
-                            <button type="submit">Share</button>
-                        </form>
-                    </div>
-                {% endif %}
-
-                    <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
-                    <button class="contacts fs-16 f-600"><a href="//">Share</a></button>
-                    <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
-                </div>
-                <div class="registration_button d-flex justify-content-center align-items-center">
-                    <a href="/logout" class="navbar-item c-white">
-                        Log out
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="header_container_mobile">
-        <div class="header_container_inner d-flex justify-content-space-between align-items-center">
-            <a href="/" class="logo f-600 fs-24 c-orange">Logo</a>
-            <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
-                <div class="header_mobile_dropdown">
-                    <button class="dropbtn"> ☰ </button>
-                    <div class="header_mobile_dropdown_content">
-                        <div class="d-flex fd-column ">
-                            <button class="about fs-16 f-500"><a href="/about/">About</a></button>
-                            <button class="contacts fs-16 f-500"><a href="/contacts/">Contacts</a></button>
-                            <button class="donate fs-16 f-500"><a href="//">Donate</a></button>
-                        </div>
-                    </div>
-                </div>
-
-
-                {% if not current_user.is_authenticated %}
                 <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
                 <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
                     <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
@@ -84,31 +34,91 @@
                 {% endif %}
                 {% if current_user.is_authenticated %}
                 <div class="d-flex">
-                    <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
-                    <button class="contacts fs-16 f-600"><div class="myBtnShare">Share</div></button>
-                    <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
+
+                    <div class="d-flex justify-content-center align-items-center column">
+<!--                        class="column"-->
+                        {% if session["selectedelements"]|length > 0 %}
+                        <div class="form">
+                            <form action="/download" method="POST">
+                                <button type="submit">Download</button>
+                            </form>
+                        </div>
+                        <div class="form">
+                            <form action="/share" method="POST">
+                                <button type="submit">Share</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                        <div class="d-flex justify-content-center align-items-center">
+                            <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
+                            <button class="contacts fs-16 f-600"><a href="//">Share</a></button>
+                            <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
+                        </div>
+                    </div>
+                    <div class="registration_button d-flex justify-content-center align-items-center">
+                        <a href="/logout" class="navbar-item c-white">
+                            Log out
+                        </a>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="registration_button d-flex justify-content-center align-items-center">
-                    <a href="/logout" class="navbar-item c-white">
-                        Log out
-                    </a>
-                </div>
-                {% endif %}
             </div>
         </div>
-    </div>
 </header>
+<div class="header_container_mobile d-flex  align-items-center">
+    <div class="header_container_inner_mobile d-flex justify-content-space-between align-items-center">
+        <a href="/" class="logo f-600 fs-24 c-orange">Logo</a>
+        <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
+            <div class="header_mobile_dropdown">
+                <button class="dropbtn"> ☰</button>
+                <div class="header_mobile_dropdown_content">
+                    <div class="d-flex fd-column ">
+                        <button class="about fs-16 f-500"><a href="/about/">About</a></button>
+                        <button class="contacts fs-16 f-500"><a href="/contacts/">Contacts</a></button>
+                        <button class="donate fs-16 f-500"><a href="//">Donate</a></button>
+                        <button class="contacts fs-16 f-600"><a href="//">Download</a></button>
+                        <button class="contacts fs-16 f-600">
+                            <div class="myBtnShare">Share</div>
+                        </button>
+                        <button class="contacts fs-16 f-600"><a href="//">Database</a></button>
+                    </div>
+                </div>
+            </div>
 
-    <!--
-      <div class="container">
-      <strong><nav>
-        <ul  id = "mainMenu" class="menu">
-            <li><a> Home</a></li>
-            <li><a> About</a></li>
-        </ul>
-      </nav></strong>
+            {% if not current_user.is_authenticated %}
+            <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
+            <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
+                <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+            </div>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+<!--            <div class="d-flex">-->
+<!--                <button class="contacts fs-16 f-600"><a href="//">Download</a></button>-->
+<!--                <button class="contacts fs-16 f-600">-->
+<!--                    <div class="myBtnShare">Share</div>-->
+<!--                </button>-->
+<!--                <button class="contacts fs-16 f-600"><a href="//">Database</a></button>-->
+<!--            </div>-->
+            <div class="registration_button d-flex justify-content-center align-items-center">
+                <a href="/logout" class="navbar-item c-white">
+                    Log out
+                </a>
+            </div>
+            {% endif %}
+        </div>
     </div>
-  -->
+</div>
+
+<!--
+  <div class="container">
+  <strong><nav>
+    <ul  id = "mainMenu" class="menu">
+        <li><a> Home</a></li>
+        <li><a> About</a></li>
+    </ul>
+  </nav></strong>
+</div>
+-->
 
 <div id="myModalShare" class="modal">
     <!-- Modal content -->
@@ -120,7 +130,9 @@
         <div class="d-flex fd-column copy_share_block">
             <div class="fs_20 f-500">Copy link to share</div>
             <div class="share_link">12354687852658</div>
-            <div class="d-flex justify-content-center copy_button c-white"><img src="../assets/images/copy_white.png" alt="">Copy</div>
+            <div class="d-flex justify-content-center copy_button c-white"><img src="../assets/images/copy_white.png"
+                                                                                alt="">Copy
+            </div>
         </div>
         <p style="margin-bottom: 10px">or</p>
         <div class="d-flex fd-column copy_share_block send_email_block">
@@ -132,16 +144,16 @@
     </div>
 </div>
 
-  <!-- ss- -->
+<!-- ss- -->
 
 
-    {% block head %}
-    {% endblock %}
+{% block head %}
+{% endblock %}
 </heade>
 <body>
-    {% block body %}{% endblock %}
+{% block body %}{% endblock %}
 </body>
-    <script src="{{url_for('static',filename='assets/js/Modal.js')}}"></script>
-    <script src="{{url_for('static',filename='assets/js/ShowHidePass.js')}}"></script>
+<script src="{{url_for('static',filename='assets/js/Modal.js')}}"></script>
+<script src="{{url_for('static',filename='assets/js/ShowHidePass.js')}}"></script>
 <script src="{{url_for('static',filename='assets/js/OpenNavbar.js')}}"></script>
 </html>

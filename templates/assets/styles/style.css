@@ -123,6 +123,9 @@ a {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
 }
+.header_container_mobile{
+    display: none;
+}
 
 .header_container_inner {
     max-width: 1520px;
