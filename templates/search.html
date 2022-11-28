@@ -114,42 +114,21 @@
                                     <div class="inputs_block2">
                                         <div class="inputs_block2_title d-flex justify-content-center">Internal Level dB(A)</div>
                                         <div class="d-flex fd-column measure_noise_input_cont">
-                                            <div
-                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
-                                                <input readonly name="" id="" type="text"
-                                                       class="measure_noise_input"
-                                                       placeholder=""
-                                                      />
-                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
-                                                       placeholder="0 dB(A)"/>
-                                            </div>
-                                            <div
-                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
-                                                <input readonly name="" id="" type="text"
-                                                       class="measure_noise_input"
-                                                       placeholder=""
-                                                />
-                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
-                                                       placeholder="0 dB(A)"/>
-                                            </div>
-                                            <div
-                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
-                                                <input readonly name="" id="" type="text"
-                                                       class="measure_noise_input"
-                                                       placeholder=""
-                                                />
-                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
-                                                       placeholder="0 dB(A)"/>
-                                            </div>
-                                            <div
-                                                    class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
-                                                <input readonly name="" id="" type="text"
-                                                       class="measure_noise_input"
-                                                       placeholder=""
-                                                />
-                                                <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
-                                                       placeholder="0 dB(A)"/>
-                                            </div>
+                                        {% if session["selectedelements"]|length > 0 %}
+                                            {% for facade in facadedetails %}
+                                                    <div
+                                                            class="measure_noise_input_block2 d-flex justify-content-center align-items-center">
+                                                        <input readonly name="" id="" type="text"
+                                                               class="measure_noise_input" value=" {{'%0.1f' % facade.Level|float}}"
+                                                               placeholder=""
+                                                        />
+                                                        <input readonly class="d-flex align-items-center justify-content-center fs-14 inputs_block2_input_2"
+                                                               placeholder="dB(A)"/>
+                                                    </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+
                                         </div>
                                     </div>
                                     <div class="inputs_block3">
@@ -381,7 +360,6 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-12">
             <table id="example" class="table table-striped table-bordered" style="width:100%">
                 <tr>
                     <th>Quantity</th>
