@@ -140,11 +140,8 @@
                                                         onchange='FilterConfig(this.value)'>
                                                     {% for i in range(5) %}
                                                     <option name="{{ i }}" value="{{ session['elementtypeslist'][i] }}"
-                                                            {{
-                                                    'selected' if
-                                                    session['elementtypeslist'][i]==session["gstrFilterElementType"],
-                                                    }}>
-                                                    {{ session['elementtypeslist'][i] }}
+                                                            {{'selected' if session['elementtypeslist'][i] == session["gstrFilterElementType"]}}>
+                                                            {{ session['elementtypeslist'][i] }}
                                                     </option>
                                                     {% endfor %}
                                                 </select>
