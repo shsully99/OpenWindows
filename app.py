@@ -192,9 +192,10 @@ def login():
 
                 flash('Username or Password Incorrect', "Danger")
 
-                return redirect(url_for('login'))
+                return redirect(url_for('auth'))
 
-    return render_template('login.html', form=form)
+
+    return render_template('/search.html', form=form)
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
