@@ -28,24 +28,25 @@ def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI):
 
     i=7
     for facade in facadedetails:
-        if facade["Metric"] == "Laeq16":
-            ws.cell(row = i, column = 2).value = "Daytime LAeq,16h dB(A)"
-        elif facade["Metric"] == "Laeq8":
-            ws.cell(row = i, column = 2).value = "Night-time LAeq,8h dB(A)"
-        elif facade["Metric"] == "LamaxV":
-            ws.cell(row = i, column = 2).value = "Ventilation LAFmax dB(A)"
-        elif facade["Metric"] == "LamaxO":
-            ws.cell(row = i, column = 2).value = "Overheating LAFmax dB(A)"
+        if facade["FacadeSpectra"] != "":
+            if facade["Metric"] == "Laeq16":
+                ws.cell(row = i, column = 2).value = "Daytime LAeq,16h dB(A)"
+            elif facade["Metric"] == "Laeq8":
+                ws.cell(row = i, column = 2).value = "Night-time LAeq,8h dB(A)"
+            elif facade["Metric"] == "LamaxV":
+                ws.cell(row = i, column = 2).value = "Ventilation LAFmax dB(A)"
+            elif facade["Metric"] == "LamaxO":
+                ws.cell(row = i, column = 2).value = "Overheating LAFmax dB(A)"
 
-        sIncident = [float(x) for x in facade["Spectra"].rstrip(';').split("-")]
+            sIncident = [float(x) for x in facade["FacadeSpectra"].rstrip(';').split("-")]
 
-        ws.cell(row = i, column = 5).value = sIncident[0]
-        ws.cell(row = i, column = 6).value = sIncident[1]
-        ws.cell(row = i, column = 7).value = sIncident[2]
-        ws.cell(row = i, column = 8).value = sIncident[3]
-        ws.cell(row = i, column = 9).value = sIncident[4]
+            ws.cell(row = i, column = 5).value = sIncident[0]
+            ws.cell(row = i, column = 6).value = sIncident[1]
+            ws.cell(row = i, column = 7).value = sIncident[2]
+            ws.cell(row = i, column = 8).value = sIncident[3]
+            ws.cell(row = i, column = 9).value = sIncident[4]
 
-        i=i+1
+            i=i+1
 
     i = 16
 

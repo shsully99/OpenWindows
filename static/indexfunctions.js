@@ -44,7 +44,18 @@ function ValRoomDimensions(val)
   sHeight = (parseFloat(sHeight)).toFixed(1)
   sVol = (parseFloat(sVol)).toFixed(1)
   document.getElementsByName('RoomDimensions')[0].value = sArea + "x"  + sHeight
-  document.getElementById('RoomDimensionsLabel').value = "   " + sVol + " m3"
+  $("#RoomDimensionsLabel").text(sVol + " m3");
+  $(document).ready()
+  {
+    var val1 = 1
+    var val2 = 2
+    $.ajax({
+      url: "./set_option",
+      type: "POST",
+      data: {arg1:val1, arg2:val2}
+    });
+  };
+  /*document.getElementById('RoomDimensionsLabel').value = "   " + sVol + " m3"*/
 }
 
 function ValSpectra(val, call)
@@ -79,7 +90,7 @@ function ValSpectra(val, call)
     //alert("strSpectra   " + Overall)
   }
   // else assume user has entered value - set up defailt spectra 
-  else {
+  else  if (typeof(val) == Number || !isNaN(parseFloat(val))) {
     spectra[0] = val - 10
     spectra[1] = val - 10
     spectra[2] = val - 4
@@ -88,24 +99,60 @@ function ValSpectra(val, call)
     Overall = parseFloat(val).toFixed(1);
     strSpectra = spectra[0].toFixed(1) + "-" +spectra[1].toFixed(1)  + "-" +spectra[2].toFixed(1)  + "-" + spectra[3].toFixed(1)  + "-" +spectra[4].toFixed(1) 
   }
-  if (call==1){
-    document.getElementsByName('Laeq16Spectra')[0].value = strSpectra
-    document.getElementById('Laeq16SpectraLabel').value = Overall + " dB(A)"
+  if (Overall >0)
+  {
+    if (call==1){
+      document.getElementsByName('Laeq16Spectra')[0].value =  strSpectra   + " (" + Overall + ")"
+      /*document.getElementByID('Laeq16SpectraLabel').innerText = Overall + " dB(A)"
+      $("#Laeq16SpectraLabel").text(Overall);*/
+    }
+    else if (call == 2){
+      document.getElementsByName('Laeq8Spectra')[0].value = strSpectra + " (" + Overall + ")"
+    /* document.getElementByID('Laeq8SpectraLabel').value = Overall + " dB(A)"
+      $("#Laeq8SpectraLabel").text(Overall );*/
+    }
+    else if (call == 3){
+      document.getElementsByName('LamaxvSpectra')[0].value = strSpectra + " (" + Overall + ")"
+      /*document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
+      $("#LamaxvSpectraLabel").text(Overall);*/
+    }      
+    else if (call == 4){
+      document.getElementsByName('LamaxoSpectra')[0].value = strSpectra + " (" + Overall + ")"
+      /*document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
+      $("#LamaxoSpectraLabel").text(Overall );*/
+    }
   }
-  else if (call == 2){
-    document.getElementsByName('Laeq8Spectra')[0].value = strSpectra
-    document.getElementById('Laeq8SpectraLabel').value = Overall + " dB(A)"
-  }
-  else if (call == 3){
-    document.getElementsByName('LamaxvSpectra')[0].value = strSpectra
-    document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
-  }      
-  else if (call == 4){
-    document.getElementsByName('LamaxoSpectra')[0].value = strSpectra
-    document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
-  }
+  else
+  {
+    alert ("got here")
+    if (call==1){
+      document.getElementsByName('Laeq16Spectra')[0].value = ""
+    }
+    else if (call == 2){
+      document.getElementsByName('Laeq8Spectra')[0].value = ""
+    }
+    else if (call == 3){
+      document.getElementsByName('LamaxvSpectra')[0].value = ""
+    }      
+    else if (call == 4){
+      document.getElementsByName('LamaxoSpectra')[0].value = "" 
+    }
+   }
 }
-
+function Copy_Text()
+{
+  var copyText = document.getElementById("ShareString");
+  copyText.select();
+  copyText.setSelectionRange(0, 99999);
+  navigator.clipboard
+    .writeText(copyText.value)
+    .then(() => {
+      alert("successfully copied");
+    })
+    .catch(() => {
+      alert("something went wrong");
+    });;
+}
 function CalcSpectra(spectra)
 {
   //alert("CalcSpectra")
@@ -135,6 +182,7 @@ function FilterConfig(val)
           document.getElementById('QuantityMetric').innerHTML = "   "          
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def0
+          document.getElementById('qRow').style.visibility = "visible"          
           break;          
 
         case "Wall":
@@ -142,6 +190,7 @@ function FilterConfig(val)
           document.getElementById('QuantityMetric').innerHTML = "   "          
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def1
+          document.getElementById('qRow').style.visibility = "visible"          
           break;          
 
         case "Door":
@@ -149,6 +198,7 @@ function FilterConfig(val)
           document.getElementById('QuantityMetric').innerHTML = " m2"
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def2
+          document.getElementById('qRow').style.visibility = "visible"          
           break;
 
         case "OpenArea":
@@ -156,6 +206,7 @@ function FilterConfig(val)
             document.getElementById('QuantityMetric').innerHTML = "   "            
             document.getElementById('Quantity').disabled = true
             document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def3
+            document.getElementById('qRow').style.visibility = "hidden"
             break;
 
         case "Vent":
@@ -163,7 +214,8 @@ function FilterConfig(val)
             document.getElementById('QuantityMetric').innerHTML = "  mm2 "            
             document.getElementById('Quantity').disabled = false
             document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def4
-        break;
+            document.getElementById('qRow').style.visibility = "visible"          
+            break;
     }
 }
 

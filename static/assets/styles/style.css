@@ -13,7 +13,7 @@
 }
 
 .container {
-    max-width: 1520px;
+    max-width: 1820px;
     width: 100%;
     margin: auto;
 }
@@ -76,6 +76,10 @@ a {
 
 .c-orange {
     color: #EF5835;
+}
+
+.c-blue {
+    color: #3545ef;
 }
 
 .c-white {
@@ -450,7 +454,7 @@ a {
     margin-top: 24px;
 }
 
-.inputs_block1, .inputs_block3 {
+/*.inputs_block1, .inputs_block3 {
     max-width: 720px;
     width: 100%;
 }
@@ -460,6 +464,43 @@ a {
 }
 .inputs_block1, .inputs_block2 {
     margin-right: 20px;
+}*/
+
+/**.inputs_block1, .inputs_block3,.inputs_block5{
+    max-width: 700px;
+    width: 100%;
+}*/
+*.inputs_block1 {
+    min-width: 250;
+    border: #c22d2d;
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+*.inputs_block2 {
+    min-width: 250;    
+    border: #c22d2d;
+    display: inline-block;
+    text-align: left;
+    justify-content: left;
+}
+*.inputs_block3 {
+    min-width: 250;
+    border: #c22d2d;
+    display: inline-block;
+    text-align: left;
+    justify-content: left;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+*.noiselabel{
+    font-size:large;
+    font-weight: bold;
+    text-align: left;
+    display: inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .inputs_block2_title{
@@ -474,23 +515,96 @@ a {
     border-bottom-right-radius: 30px;
     border: 1px solid transparent;
     border-left: 1px solid grey;
-    height: 40px;
+    height: 50px;
     width: 70px;
     text-align: right;
 }
-.measure_noise_input_cont {
+/*.measure_noise_input_cont {
     width: 100%;
     margin-bottom: 18px;
-}
+}*/
 
 .measure_noise_input {
     color: #000000;
     margin-top: 8px;
     width: 100%;
     border: 1px solid #ABABAB;
-    border-radius: 360px;
-    padding: 9px 40px 9px 18px;
+    /*border-radius: 360px;*/
+    padding: 9px 40px 20px 18px;
 }
+.BackRed  {
+    background-color:lightcoral;
+}
+.BackGreen  {
+    background-color:rgb(173, 197, 173)
+}
+.BackYellow  {
+    background-color:yellow
+}
+
+.TopForm  {
+    font-size:medium;
+    padding: 9px 10px 9px 8px;
+    margin-top: 8px;
+}
+
+.TopFormBold  {
+    font-size:medium;
+    font-weight:bold;
+    padding: 9px 10px 9px 8px;
+    margin-top: 8px;
+}
+
+.TopFormCentre  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*border: 3px solid green;*/
+}
+
+.imageCols {
+    width:80%;
+    float:right;
+}
+
+.SpectraField  {
+    font-size:medium;
+    width: 320px;
+     /*color: #000000;
+    margin-top: 8px;
+    border: 1px solid #ABABAB;
+   border-radius: 360px;
+    padding: 9px 40px 9px 18px;
+    width: 100%;    width: 100%;*/
+}
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+  
 
 .measure_noise_select {
     margin-top: 9px;
@@ -503,7 +617,6 @@ a {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-
     /* Positions background arrow image */
     background-image: url("../../assets/images/arrow_down_grey.png");
     background-repeat: no-repeat;
@@ -560,7 +673,7 @@ a {
     border-bottom-right-radius: 30px;
     border: 1px solid transparent;
     border-left: 1px solid grey;
-    height: 40px;
+    height: 50px;
     width: 70px;
     text-align: right;
 }
@@ -599,7 +712,7 @@ a {
     cursor: pointer;
 }
 .submit_button_active{
-    background-color: #EF5835;
+    background-color: #358cef;
 }
 
 .result_block {
@@ -693,9 +806,9 @@ a {
 .copy_share_block{
     margin-bottom: 23px;
 }
-.send_email_block{
+/*.send_email_block{
 
-}
+}*/
 .send_email_block .share_input{
     max-width: 424px;
     width: 100%;
@@ -768,7 +881,6 @@ a {
 .about_container {
     margin-top: 40px;
     margin-bottom: 50px;
-    padding: 15px;
 }
 
 .d-flex {

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Search</title>
+<title>About</title>
 
 <script language="javascript" type="text/javascript">
 
@@ -12,19 +12,32 @@
 
 {% block body %}
 <div class="container">
-    <div class="about_container d-flex justify-content-space-between align-items-center flex-wrap">
-        <div class="about_container_main_pic">
-            <img src="{{url_for('static',filename='assets/images/about_pic.jpg')}}" alt="">
-        </div>
-        <div class="about_container_block1 d-flex fd-column">
-            <p class="home_container_block1_text1 fs-48 f-600 c-orange">OpenWindows</p>
-            <img src="{{url_for('static',filename='assets/images/home_pic2.png')}}" alt="">
-            <div class="fs-16">“OpenWindows is a web application whose purpose is to help in the specification of
-                glazing and ventilation for residences in England and Wales. Based on noise levels outside a dwelling
-                and the elements of the façade, it calculates the internal noise levels. It then compares those levels
-                them to guideline levels in  Professional Planning and Guidance (ProPG).   It is intended to be used by design teams,
-                local authorities and specifiers of glazing and ventilation. “
+    <div class="row" >
+        <p class="home_container_block1_text1 fs-48 f-600 c-blue">About Open Windows</p>
+        <div class = "col-6" style = "border:5px solid red; ">
+            <div class="fs-36">
+                <br>
+                <p> Welcome to the OpenWindows web application.</p>
+                <br>
+
+                <p>This is a free to use web application whose purpose is to assist design teams in the specification 
+                of glazing and ventilation for newly built and converted residences in England and Wales in places 
+                where noise intrusion is considered to be an issue. 
+
+                Based on average and impulsive noise levels outside the dwelling, which have been determined generally
+                by measurement surveys, the application allows the user to select a specification of glazing which will ensure that
+                the residents are not exposed to excessive noise levels inside a dwelling. In doing so, it allows the design team 
+                to take into account the effect of other elements of the building facade, notably the ventilation. </p>
+                <br>
+                <p>The web application was created by Sulltech Ltd.
+                </p>
+                <br>
+                <p>If you encounter problems or have any queries or suggestions please email me at info@sulltech.co.uk
+                </p>
             </div>
+        </div>
+        <div class = "col-6" style = "border:5px solid red; ">
+            <img class = "imageCols" src="{{url_for('static',filename='assets/images/window_PNG17665.png')}}" alt=""  >
         </div>
     </div>
 </div>

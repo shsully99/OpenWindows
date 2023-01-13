@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Contacts</title>
+
+<script language="javascript" type="text/javascript">
+
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="about_container d-flex justify-content-space-between align-items-center flex-wrap">
+        <div class="about_container_main_pic">
+            <img src="{{url_for('static',filename='assets/images/contact_us_pic.jpg')}}" alt="">
+        </div>
+        <div class="about_container_block1 d-flex fd-column">
+            <p class="home_container_block1_text1 fs-48 f-600 c-orange">Contacts</p>
+            <img src="{{url_for('static',filename='assets/images/home_pic2.png')}}" alt="">
+            <div class="contacts_block" style="margin-top: 20px">
+                <div class="fs-16">Company Name:<span>"Sulltech ltd"</span></div>
+                <div class="fs-16">Address: <span></span></div>
+                <div class="fs-16" >Tel: <span></span></div>
+                <div class="fs-16">Email: <span>info@sulltech.co.uk.</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

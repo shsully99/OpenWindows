@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Registration</title>
+
+<script language="javascript" type="text/javascript">
+
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="d-flex fd-column justify-content-center align-items-center">
+        <p class="welcome fs-48">Welcome</p>
+            <form action="/register"  method="POST">
+
+                <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
+                    <input type="text" require='true'  name="full_name" placeholder="Full Name" value = "{{ session['Username'] }}" class="input_text c-grey fs-16"/>
+                    <input type="email" require='true'  name="email" placeholder="Email" value = "{{ session['email'] }}" class="input_text c-grey fs-16"/>
+                    <div class="pass_block">
+                        <input type="password" require='true' name="password" placeholder="Password" class="input_pass c-grey fs-16 passwordInput"
+                               " id="passwordInput1"/>
+                        <img src="static/assets/images/not_show_pass.png" alt=""
+                             style="cursor: pointer" class="togglePassword">
+                    </div>
+                    <div class="pass_block">
+                        <input type="password" require='true'  name="confirm" placeholder="Confirm password"
+                               class="input_pass c-grey fs-16 confirmPasswordInput"
+                               id="passwordInput2"/>
+                        <img src="static/assets/images/not_show_pass.png" alt=""
+                             style="cursor: pointer" class="toggleConfirmPassword">
+                    </div>
+
+                    <button class="btn_registration c-white f-500 fs-16">Registration</button>
+                </form>
+            <div class="have_account fs-16">Already have an account? <span
+                    class="c-orange myBtnLogIn">log In</span></div>
+                    
+            {% if error %}
+                <p class ="welcome fs-36"><strong>Error:</strong> {{ error }}</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

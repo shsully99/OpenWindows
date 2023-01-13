@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <title>Home</title>
+    <link rel="stylesheet" href="../assets/styles/style.css">
+    <link rel="stylesheet" href="../assets/styles/responsive.css">
+</head>
+<body>
+<header>
+    <div class="header_container">
+        <div class="header_container_inner d-flex justify-content-space-between align-items-center">
+            <a href="HomePage.html" class="logo f-600 fs-24 c-orange">Logo</a>
+            <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
+                <div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>
+                <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
+                    <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="home_container d-flex justify-content-space-between align-items-center">
+        <div class="home_container_block1 d-flex fd-column">
+            <p class="home_container_block1_text1 fs-48 f-600">Measuring noise is</p>
+            <p class="home_container_block1_text2 fs-56 f-600 c-orange">not a problem</p>
+            <img src="../assets/images/home_pic2.png" alt="">
+            <div class="fs-16">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+                has been the industry's standard dummy text ever since the 1500s, when an unknown
+                printer took a galley of type and scrambled it to make a type specimen book. It has survived
+                not only five centuries, but also the leap into electronic typesetting, remaining essentially
+                unchanged.
+            </div>
+            <button class="Lets_start_button d-flex justify-content-center align-items-center">
+                <a href="" class="c-white f-500 fs-16">Lets start !</a></button>
+        </div>
+        <div class="home_container_main_pic">
+            <img src="../assets/images/home_main_pic.png" alt="">
+        </div>
+    </div>
+    <div id="myModalRegistration" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="HomePage.html" class="back_home d-flex align-items-center fs-16"><img
+                    src="../assets/images/back_page_arrow.png" alt="">Back to Home Page</a>
+            <div class="d-flex fd-column justify-content-center align-items-center">
+                <p class="welcome fs-48">Welcome</p>
+                <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
+                    <input type="text" placeholder="Full Name" class="input_text fs-16"/>
+                    <input type="email" placeholder="Email" class="input_text c-grey fs-16"/>
+                    <div class="pass_block">
+                        <input type="password" placeholder="Password" class="input_pass c-grey fs-16 passwordInput"
+                               id="passwordInput1"/>
+                        <img src="static/assets/images/not_show_pass.png" alt=""
+                             style="cursor: pointer" class="togglePassword">
+                    </div>
+                    <div class="pass_block">
+                        <input type="password" placeholder="Confirm password"
+                               class="input_pass c-grey fs-16 confirmPasswordInput"
+                               id="passwordInput2"/>
+                        <img src='static/images/not_show_pass.png" alt=""
+                             style="cursor: pointer" class="toggleConfirmPassword">
+                    </div>
+
+                    <button class="btn_registration myBtnLogIn c-white f-500 fs-16">Registration</button>
+                    <div class="have_account fs-16">Already have an account? <span
+                            class="c-orange myBtnLogIn">log In</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalLogIn" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="HomePage.html" class="back_home d-flex align-items-center fs-16"><img
+                    src="static/images/back_page_arrow.png" alt="">Back to Home Page</a>
+            <div class="d-flex fd-column justify-content-center align-items-center">
+                <p class="welcome fs-48">Welcome</p>
+                <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
+                    <input type="email" placeholder="Email" class="input_text c-grey fs-16">
+                    <div class="pass_block">
+                        <input type="password" placeholder="Password" class="input_pass c-grey fs-16 loginPasswordInput"
+                               id="passwordInput3"/>
+                        <img src="static/images/not_show_pass.png" alt=""
+                             style="cursor: pointer" class="toggleLoginPassword">
+                    </div>
+                    <div class="fs-16 d-flex justify-content-end myBtnForgetPass"
+                         style="margin-top: -10px; width: 100%; cursor: pointer">Forget password ?
+                    </div>
+                    <button class="btn_login"><a href="MeasureNoisePage.html" class="c-white f-500 fs-16">Log In</a>
+                    </button>
+                    <div class="have_account fs-16">Don't have an account? <span class="c-orange myBtnRegistration">Registration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalForgetPass" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <a href="HomePage.html" class="back_home d-flex align-items-center fs-16"><img
+                    src="static/images/back_page_arrow.png" alt="">Back to Home Page</a>
+            <div class="d-flex fd-column justify-content-center align-items-center">
+                <p class="welcome fs-48">Forgot password</p>
+                <p style="text-align: center">Please enter your email address so we can send you an email to reset your
+                    password.</p>
+                <div class="inputs_block d-flex fd-column justify-content-center align-items-center">
+                    <div class="d-flex fd-column  justify-content-end" style="margin-top: -20px">
+                        <label for="">Email Address</label>
+                        <input type="email" placeholder="Email" class="input_text c-grey fs-16">
+                    </div>
+                    <button class="btn_login c-white f-500 fs-16 myBtnCheckEmail">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalCheckEmail" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="d-flex fd-column justify-content-center align-items-center">
+                <p class="f-500 fs_20 c-orange" style="text-align: center">Please check your email address</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>

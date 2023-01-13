@@ -2,28 +2,6 @@ import math
 
 #from cv2 import SimpleBlobDetector_Params
 
-# Calculate noise for all elements 
-def calcnoiseall(selectedelements, strIncidentSpectra,gsVolume, gsRev):
-
-    #print ("def calcnoiseall(selectedelements, strIncidentSpectra,gsVolume, gsRev):" )
-    lTotalAntiLog  = 0.0 
-    sTemp = 0.0
-    
-    # Iterate over the selected element
-    for selectedelement in selectedelements:
-
-        if selectedelement["State"] == "Active":
-
-            sTemp = calcnoisesingle(selectedelement,
-                            strIncidentSpectra,
-                            gsVolume, 
-                            gsRev)
-        
-            lTotalAntiLog = lTotalAntiLog + pow (10 , (sTemp / 10))
-
-    print (f"Total is {lTotalAntiLog}")
-
-    return 10 * math.log(lTotalAntiLog,10)
 
 # Calculate noise for single element
 def calcnoisesingle (selectedelement,
@@ -60,10 +38,12 @@ def calcnoisesingle (selectedelement,
     print(f"rev {gsRev} vol {gsVolume} ")
 
     # For each frequency from 125 to 2000 Hz
-    iLp1 = gciMinSpectra
+    sInternalElementSpectra = [0.0,0.0,0.0,0.0,0.0]
     sTotal = 0.0
+    iLp1 = 0
     while iLp1  < gciMaxSpectra:
         sTemp = 0.0
+
         if (sIncident[iLp1]) > 0:  
             #print(type(sIncident[iLp1]))
             #print(type(selectedelement["FacadeDifference"]))
@@ -72,22 +52,26 @@ def calcnoisesingle (selectedelement,
             #print(type(gsVolume))                    
             #print(type(gsRev))                        
             if strMetric == "Rw":
+                #print (f'Rw + {selectedelement["Quantity"]}   {gsVolume}  {gsRev}' )
                 sTemp = sIncident[iLp1]  - selectedelement["FacadeDifference"] - sSpectra[iLp1] + (10 * math.log(selectedelement["Quantity"]/ gsVolume,10)) + 8 + (10 * math.log((gsRev/0.5),10) )
-                x = (10 * math.log(selectedelement["Quantity"]/ gsVolume,10)) + 8 + (10 * math.log((gsRev/0.5),10) )
-                print (f'Rw path {sIncident[iLp1]} {selectedelement["FacadeDifference"]} {sSpectra[iLp1]} {x} ')
+                #x = (10 * math.log(selectedelement["Quantity"]/ gsVolume,10)) + 8 + (10 * math.log((gsRev/0.5),10) )
+                #print (f'Rw path {sIncident[iLp1]} {selectedelement["FacadeDifference"]} {sSpectra[iLp1]} {x} ')
             else:
                 sTemp = sIncident[iLp1] - selectedelement["FacadeDifference"] - sSpectra[iLp1]- (10 * math.log(gsVolume,10)) + 18 + (10 * math.log(selectedelement["Quantity"],10))
-                print ("Dnew path")
+                #print ("Dnew path")
 
+        sInternalElementSpectra [iLp1]  = sTemp
         sTotal = sTotal + pow (10 , (sTemp / 10))
-
         iLp1 = iLp1 + 1
 
-    print (f" returning {sTotal} ")
-    print (10 * math.log(sTotal,10))
+ #   print (f" returning {sTotal}  ")
+#    print (10 * math.log(sTotal,10))
 
-    return 10 * math.log(sTotal,10)
+#   return 10 * math.log(sTotal,10), sInternalElementSpectra
 
+    sTotal =  10 * math.log(sTotal,10)
+    print (f" returning calcnoisesingle {sTotal} {sInternalElementSpectra} ")
+    return sTotal, sInternalElementSpectra
 
             
 

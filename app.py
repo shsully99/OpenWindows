@@ -53,7 +53,7 @@ import math
 from pathlib import Path
 from flask_login import login_user
 
-from noiseroutines import calcnoiseall
+#from noiseroutines import calcnoiseall
 from noiseroutines import calcnoisesingle
 from download import DownloadFile
 
@@ -62,6 +62,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import or_
 from flask import Flask, render_template, flash, redirect, request, session, logging, url_for,send_file
 from flask_login import LoginManager
+from flask import Response
+
 
 from datetime import datetime
 global gpElementData
@@ -167,6 +169,8 @@ def init_db():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
 
+    error = None
+
     form = LoginForm(request.form)
 
     print(form.validate)
@@ -179,7 +183,7 @@ def login():
 
             if check_password_hash(user.password, form.password.data):
 
-                flash('You have successfully logged in.', "success")
+                #flash('You have successfully logged in.', "success")
 
                 session['logged_in'] = True
 
@@ -190,9 +194,15 @@ def login():
 
             else:
 
-                flash('Username or Password Incorrect', "Danger")
 
-                return redirect(url_for('auth'))
+                #flash('Username or Password Incorrect', "Danger")
+
+                error = 'Username or Password Incorrect'
+
+                print ("login failed")
+
+                return render_template('logmein.html', form=form, error=error)
+                # return redirect(url_for('auth'))
 
 
     return render_template('/search.html', form=form)
@@ -200,11 +210,25 @@ def login():
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
 
+    error = None
+
     form = RegisterForm(request.form)
 
     print(form.data,'ggggggggggggggg')
 
-    if request.method == 'POST' and form.validate():
+    print(form.data["full_name"])
+    print(form.data["email"])
+
+    session["Username"] = form.data["full_name"]
+    session["email"] =  form.data["email"]
+
+    if request.method == 'POST':
+
+        print(form.data,'validated')
+
+        if form.data["password"] != form.data["confirm"]:
+            error = 'Error. passwords must match'
+            return render_template('registration.html', form=form,error=error)
 
         hashed_password = generate_password_hash(form.password.data, method='sha256')
 
@@ -228,6 +252,14 @@ def register():
 
         return render_template('register.html', form=form)
 
+
+#@app.route('/set_option', methods=['post'])
+#def set_option():
+#    print ("set option")
+#    session['val1'] = request.form.get('arg1')
+#    session['val2'] = request.form.get('arg2')
+#    return Response (status = 200)
+
 @app.route('/logout/')
 def logout():
     logout_user()
@@ -239,15 +271,16 @@ def logout():
 @login_manager.user_loader
 def load_user(user):
     return User.query.get(int(user))
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     print ("def index():")
     #first time in - set up for room details 
 
-    session["Laeq16"] = "Daytime L<sub>Aeq,16h</sub>"
-    session["Laeq8"] = "Night-time L<sub>Aeq,8h</sub>"
-    session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
-    session["LamaxO"] = "Overheating L<sub>AFmax</sub>"    
+    #session["Laeq16"] = "Daytime L<sub>Aeq,16h</sub>"
+    #session["Laeq8"] = "Night-time L<sub>Aeq,8h</sub>"
+    #session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
+    #session["LamaxO"] = "Overheating L<sub>AFmax</sub>"    
 
     if request.method == 'POST':
         print("In post method of index")
@@ -260,11 +293,17 @@ def index():
 
         print("In get method of index - never executed? ")
         strLevel = "Here is the level"
-        # strRet = SetupSessionVariables()
-        session["status"] = "RoomDetails"
-        session["elementtypeslist"] = ["Glazing", "Wall", "Door", "OpenArea", "Vent"]
-        return render_template('search.html')
+        strRet = ClearSessionVariables()
+       
+        return render_template('search.html', facadedetails= session["facadedetails"])
 
+
+@app.route('/registration/', methods=['GET'])
+def Userregistration():
+    print ("registration")
+    session["Username"] = ""
+    session["email"] = ""
+    return render_template('registration.html')    
 
 @app.route('/search', methods=['POST', 'GET'])
 def search():
@@ -272,7 +311,15 @@ def search():
 
     if request.method == 'POST':
         strRet = SetupSessionVariables()
-        print(f"*** In post method of search " + session["status"] )  
+        print(f"*** In post method of search " + strRet + session["status"] + str(session["gsFilterQuantity"]))  
+
+        if (strRet != "Success"):
+            print ("setup failed" + strRet)
+            return render_template('search.html', BadEntry = strRet,
+                                            facadedetails = session["facadedetails"],
+                                defaultquantitylist= session["defaultquantitylist"])
+
+
         # if (session["status"] == "RoomDetails"):
         #     # Validate RoomDetails - return error or show search display page
         #     strRet = SetupSessionVariables()
@@ -284,45 +331,14 @@ def search():
 
 
             # First time Search display, validate entries
-        session["gstrFilterElementType"] = request.form.get('elementtype')
-        if session["gstrFilterElementType"] != "OpenArea":
-            try:
-                session["gsFilterQuantity"] = float(request.form.get('Quantity'))
-            except:
-                strRet = "Enter quantity"
-                return render_template('search.html',BadEntry = strRet)
-
-            if (session["gsFilterQuantity"] == 0):
-                strRet = "Must be greater than 0 "
-                return render_template('search.html',BadEntry = strRet)
-
-        session["gsFacadeDifference"] = int(request.form.get('quietfacade'))
-
-        session["gstrFilterField"] = request.form.get('FilterField')
-
+    
         querySearch  = GetfromDataBase(1)
 
         df = SetupSRIs(querySearch)
 
         session["status"] = "SearchDisplay"
-        # New defaults for search
-
-        session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
-        if session["gstrFilterElementType"] == "Glazing":session["defaultquantitylist"][0] = session["gsFilterQuantity"]
-        elif session["gstrFilterElementType"] == "Wall":session["defaultquantitylist"][1] = session["gsFilterQuantity"]
-        elif session["gstrFilterElementType"] == "Door":session["defaultquantitylist"][2] = session["gsFilterQuantity"]
-        elif session["gstrFilterElementType"] == "OpenArea":session["defaultquantitylist"][3] = session["gsFilterQuantity"]
-        elif session["gstrFilterElementType"] == "Vent":session["defaultquantitylist"][4] = session["gsFilterQuantity"]
 
         session.modified = True
-
-        print('mtkkkkkkkkkkkkkkav',querySearch)
-
-        session['RoomDimensions'] =request.form.get('RoomDimensions')
-        session['Laeq16Spectra'] = request.form.get('Laeq16Spectra')
-        session['Laeq8Spectra'] = request.form.get('Laeq8Spectra')
-        session['LamaxvSpectra'] = request.form.get('LamaxvSpectra')
-        session['LamaxoSpectra'] = request.form.get('LamaxoSpectra')
 
         return render_template('search.html',
                                 df = df,
@@ -390,17 +406,25 @@ def change(id):
 #   Add an element 
 @app.route('/add/<int:id>', methods=['GET', 'POST'])
 def add(id):
-    print(f"def add({id}): ")    
+    print(f"def add({id}): ")  
+
+    if session["status"] == "ElementDisplay":
+        print ("Someone pressed refresh")
+        # If we are here in ElementDisplay mode then it means the user has pressed refresh - we do not want to add another element 
+        return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"], 
+                                    defaultquantitylist= session["defaultquantitylist"])
+      
     #if (session['selectedcount'] > 0 ):
     #    print(f"*** Count {len(session['selectedelements'])}")  
             
     myElement = ElementSRI.query.filter(ElementSRI.UniqueID == id).first()
-    print (myElement)
 
     elementLevels = []
     for i in range (0,len(session["facadedetails"])):
+        #if session["facadedetails"][i]["FacadeSpectra"] != "":
         elementLevels.append(dict(Metric=session["facadedetails"][i]["Metric"],
         Level = 0.0,
+        Spectra = [0.0,0.0,0.0,0.0,0.0,0.0],
         Percent = 0.0))
 
     sQuantity = 0.0
@@ -430,18 +454,22 @@ def add(id):
                         Hz2000=myElement.Hz2000,
                         elementLevels=elementLevels,
                         State="Active")
-    
-    for i in range (0,len(session["facadedetails"])):
-        facade = session["facadedetails"][i]
-        SingleLevel = calcnoisesingle (selectedelement, 
-                            facade["Spectra"],
-                            session["gsVolume"],
-                            session["gsRev"])
-
-        selectedelement["elementLevels"][i]["Level"] = SingleLevel
-       
 
     session["selectedelements"].append(selectedelement) 
+
+   
+    #for i in range (0,len(session["facadedetails"])):
+    #    if session["facadedetails"][i]["FacadeSpectra"] != "":
+    #        facade = session["facadedetails"][i]
+    #        SingleLevel, SpectraLevels = calcnoisesingle (selectedelement, 
+    #                            facade["FacadeSpectra"],
+    #                            session["gsVolume"],
+    #                            session["gsRev"])
+
+    #        selectedelement["elementLevels"][i]["Level"] = SingleLevel
+    #        selectedelement["elementLevels"][i]["Spectra"] = SpectraLevels            
+       
+    #session["selectedelements"].append(selectedelement) 
     #session['selectedcount'] = session['selectedcount'] + 1
 
     # The percentages have now changed so re-assign them to the array 
@@ -465,15 +493,38 @@ def download ():
 
     strFile = DownloadFile (session["selectedelements"],  session["facadedetails"], session["gsVolume"], session["gsRev"], ElementSRI)
 
-    return send_file (strFile, attachment_filename='Download.xlsx', as_attachment=True)
+    #return send_file (strFile, attachment_filename='Download.xlsx', as_attachment=True)
+    #return send_file (strFile, attachment_filename='Download.xlsx', as_attachment=True)
+    return send_file (strFile,  as_attachment=True)
+
 @app.route('/about/', methods=['GET'])
 def about ():
     return render_template('about.html')
 
+@app.route('/help/', methods=['GET'])
+def help ():
+    return render_template('help.html')
 
 @app.route('/contacts/', methods=['GET'])
 def contacts ():
     return render_template('contacts.html')
+
+@app.route('/logmein/', methods=['GET'])
+def logmein ():
+    print ("logmein")
+    return render_template('logmein.html')
+
+
+@app.route('/toggle/', methods=['GET', 'POST'])
+def toggle ():
+    print ("def toggle ():")
+    if session["status"] == "ElementDisplay":
+      
+        session["status"] = "SearchDisplay"
+    else:
+        session["status"] = "ElementDisplay"
+
+    return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"]) 
 
 # Someone with s shared link wants to see the elements displayed 
 @app.route('/automate', methods=['GET', 'POST'])
@@ -492,17 +543,17 @@ def automate():
     session["facadedetails"] = []
     metList = parsedict['MetricList'][0].rstrip(']').lstrip('[').split(',')
     spectraList = parsedict['SpectraList'][0].rstrip(']').lstrip('[').split(',')
-    session["facadedetails"] = []
+
 
     session["Laeq16"] = "Daytime L<sub>Aeq,16h</sub>"
     session["Laeq8"] = "Night-time L<sub>Aeq,8h</sub>"
     session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
     session["LamaxO"] = "Overheating L<sub>AFmax</sub>"  
 
-
     for i,j in zip(metList,spectraList):
         Metric = i.rstrip(" ").lstrip(" ").rstrip("'").lstrip("'")
         Spectra = j.rstrip(" ").lstrip(" ").rstrip("'").lstrip("'")
+        # Validate the spectra at this point 
         Label = ""
 
         if Metric == "Laeq16": Label="Daytime L<sub>Aeq,16h</sub>"
@@ -510,7 +561,20 @@ def automate():
         elif Metric == "LamaxV": Label = "Ventilation L<sub>AFmax</sub>"
         elif Metric == "LamaxO": Label = "Overheating L<sub>AFmax</sub>"  
 
-        facade = dict(Metric=Metric, Spectra=Spectra,Level=0.0,Label=Label)
+        # The spectra field should be blank
+        strDisplay = ""
+        sNoise = 0.0
+
+        if Spectra != "":
+            strRet = ValSpectra(Spectra)
+            # todo - sort out error here 
+            if strRet != "Validated":
+                render_template('search.html',BadEntry = strRet)    
+
+            strDisplay, sNoise = SetSpectra(Spectra)
+        
+        facade = dict(Metric=Metric, FacadeSpectra=Spectra,FacadeLevel=sNoise, FacadeDisplay = strDisplay, InternalSpectra="",InternalLevel=0.0, InternalDisplay="", Label=Label)
+
         session["facadedetails"].append(facade)
     
     session["selectedelements"] = []
@@ -532,31 +596,35 @@ def automate():
         elementLevels = []
 
         for i in range (0,len(session["facadedetails"])):
+            #if session["facadedetails"][i]["FacadeSpectra"] != "":
             elementLevels.append(dict(Metric=session["facadedetails"][i]["Metric"],
             Level = 0.0,
+            Spectra = [0.0,0.0,0.0,0.0,0.0,0.0],
             Percent = 0.0))
 
-        selectedelement = dict(ElementID=ElementID,
-                            Quantity=Quantity,
-                            ElementType=myElement.ElementType,
-                            ElementDescription=myElement.Description,
-                            FacadeDifference=FacDif,
-                            Hz125=myElement.Hz125,
-                            Hz250=myElement.Hz250,
-                            Hz500=myElement.Hz500,
-                            Hz1000=myElement.Hz1000,
-                            Hz2000=myElement.Hz2000,
-                            elementLevels=elementLevels,
-                            State="Active")
+            selectedelement = dict(ElementID=ElementID,
+                                Quantity=Quantity,
+                                ElementType=myElement.ElementType,
+                                ElementDescription=myElement.Description,
+                                FacadeDifference=FacDif,
+                                Hz125=myElement.Hz125,
+                                Hz250=myElement.Hz250,
+                                Hz500=myElement.Hz500,
+                                Hz1000=myElement.Hz1000,
+                                Hz2000=myElement.Hz2000,
+                                elementLevels=elementLevels,
+                                State="Active")
     
         for i in range (0,len(session["facadedetails"])):
-            facade = session["facadedetails"][i]
-            SingleLevel = calcnoisesingle (selectedelement, 
-                                facade["Spectra"],
-                                session["gsVolume"],
-                                session["gsRev"])
+            if session["facadedetails"][i]["FacadeSpectra"] != "":
+                facade = session["facadedetails"][i]
+                SingleLevel, InternalSpectra = calcnoisesingle (selectedelement, 
+                                    facade["FacadeSpectra"],
+                                    session["gsVolume"],
+                                    session["gsRev"])
 
-            selectedelement["elementLevels"][i]["Level"] = SingleLevel
+                selectedelement["elementLevels"][i]["Level"] = SingleLevel
+                selectedelement["elementLevels"][i]["Spectra"] = InternalSpectra
     
         session["selectedelements"].append(selectedelement) 
         #session['selectedcount'] = session['selectedcount'] + 1
@@ -568,7 +636,7 @@ def automate():
     # Loop over elememnts and update selected levelssession
     session["status"] = "ElementDisplay"
 
-    print ("Returning from autoimate ")
+    print ("Returning from automate ")
 
     return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
                                     defaultquantitylist=session["defaultquantitylist"])    
@@ -582,9 +650,9 @@ def share():
     MetricList = []
     SpectraList = []
 
-    for sMetric in session["facadedetails"]:
-        MetricList.append(sMetric["Metric"])        
-        SpectraList.append(sMetric["Spectra"])
+    for facade in session["facadedetails"]:
+        MetricList.append(facade["Metric"])        
+        SpectraList.append(facade["FacadeSpectra"])
 
     parsedict ["MetricList"] = MetricList
     parsedict["SpectraList"] = SpectraList
@@ -602,11 +670,15 @@ def share():
     parsedict["QuantityList"] = QuantityList
     parsedict["FacDifList"] = FacDifList
 
+    shareString = urlencode(parsedict)
+    shareString  = "/automate?" + shareString 
 
-    s = urlencode(parsedict)
-    print (s)
+    print (shareString )
 
-    return ("/automate?" + s)
+    session["status"] = "ShareDisplay"
+    return render_template('search.html',shareString=shareString, facadedetails=session["facadedetails"],defaultquantitylist= session["defaultquantitylist"])
+
+    #   return ("/automate?" + s)
     
 
 @app.route('/remove/<int:id>', methods=['GET', 'POST'])
@@ -614,33 +686,31 @@ def remove(id):
     print(f"*** In remove routine ")    
     #if (session['selectedcount'] > 0 ):
     #    print(f"*** Count {len(session['selectedelements'])}")    
-
+    bFound = False
     for selectedelement in session["selectedelements"]:
         if selectedelement["ElementID"] == id:
             session["selectedelements"].remove(selectedelement)
+            bFound = True
     #        session['selectedcount'] = session['selectedcount'] - 1
+
+    if bFound == False: 
+        # We have not found a match - most likely someone refreshed the browser after a delete and the URL from a delete was re-actioned 
+        print ("No match ")
+        return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
+                                    defaultquantitylist= session["defaultquantitylist"])
 
     # if we are down to 0 then knock it on the head 
     #if session['selectedcount'] == 0: 
     if len(session['selectedelements']) == 0: 
         for i in range (0,len(session["facadedetails"])):
-            session["facadedetails"][i].update({"Level":0.0})
-            
+            session["facadedetails"][i]["InternalLevel"] = 0.0
+            session["facadedetails"][i]["InternalDisplay"]= ""            
+
         # Go back to searching for elements 
         session["status"] = "SearchDisplay"
-        return render_template('search.html')
-
-    # for each metric recalc the sound level 
-    for i in range (0,len(session["facadedetails"])):
-        facade = session["facadedetails"][i]
-        sNoise = calcnoiseall (session["selectedelements"], 
-                            facade["Spectra"],
-                            session["gsVolume"],
-                            session["gsRev"])
-        
-        session["facadedetails"][i].update({"Level":sNoise})
-
-        print (f'Total Noise level for {i} is {sNoise})')
+        #return render_template('search.html')
+        return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
+                                    defaultquantitylist= session["defaultquantitylist"])
 
     # The percentages have now changed so re-assign them to the array 
     SetupTotals()
@@ -652,10 +722,166 @@ def remove(id):
                                     defaultquantitylist= session["defaultquantitylist"])
 
 # Set up global variables from the user entries
+def ClearSessionVariables():
+
+    print ("def clear sessionvaribles")
+    #session["gstrRoomType"] = request.form.get('roomtype')
+
+    # Check axh for Room Dimensions and assign variables accordingly
+    #print( request.form.get('RoomDimensions'),'ssssssssss')
+    #strRD = request.form.get('RoomDimensions').split("x")
+    ##print(strRD)
+    #if (len(strRD) != 2 ):
+    #    return "Error. Enter Room Dimensions in format axh where a = floor area isetupsessionn metres  and h = height in metres"
+
+    #if math.isnan(float(strRD[0])) or math.isnan(float(strRD[1])):
+    #    #print("except " + strRD[0] + "/" + strRD[1])
+    #    return "Error. Enter Room Dimensions in format axxx h where a = floor area in metres  and h = height in metres"
+ 
+    session["gsArea"] = 7.5
+    session["gsHeight"] = 2.4
+    session["gsVolume"] = 18.0
+    session['RoomDimensions'] = "7.5x2.4"
+    #session["RoomDimensions"] = ""
+    session["RoomDimensionsLabel"] = "18 m3"
+
+    # Hardcode for now 
+    session["gsRev"] = 0.5 
+
+    session["Laeq16"] = "Daytime L<sub>Aeq,16h</sub>"
+    session["Laeq8"] = "Night-time L<sub>Aeq,8h</sub>"
+    session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
+    session["LamaxO"] = "Overheating L<sub>AFmax</sub>"    
+
+    session["facadedetails"] = []
+    facade = dict(Metric="Laeq16", FacadeSpectra="46.0-46.0-52.0-50.0-45.0",FacadeLevel=56.0, FacadeDisplay = "46.0-46.0-52.0-50.0-45.0 (56.0)", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["Laeq16"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectraA="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["Laeq8"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["LamaxV"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["LamaxO"])
+    session["facadedetails"].append(facade)
+    
+    session["selectedelements"] = []
+
+    session["gstrFilterElementType"] = "Glazing"
+    session["gsFilterQuantity"] = 2
+
+    session["elementtypeslist"] = ["Glazing","Wall","Door","OpenArea","Vent"]
+    session["defaultquantitylist"] = [2, 10 , 2,0,2500]
+
+    print (session["defaultquantitylist"])
+
+    session["gsFacadeDifference"]= 0 
+    session["gstrFilterField"] = ""
+
+    session['Laeq16Spectra'] = ""
+    session['Laeq8Spectra']  = ""
+    session['LamaxvSpectra']  = ""
+    session['LamaxoSpectra']  = ""
+
+    session['Laeq16SpectraLabel']  = ""
+    session['Laeq8SpectraLabel']  = ""
+    session['LamaxvSpectraLabel']  = ""
+    session['LamaxoSpectraLabel']  = ""
+    session["status"] = "RoomDetails"
+    session["elementtypeslist"] = ["Glazing", "Wall", "Door", "OpenArea", "Vent"]
+
+    return "Success"
+
 def SetupSessionVariables():
 
     print ("def setupsessionvaribles")
+
     #session["gstrRoomType"] = request.form.get('roomtype')
+    iCount = 0
+
+    strText = request.form.get('Laeq16Spectra')
+    if strText != "":
+        strInput = strText.split()
+        iCount = iCount + 1
+        session["facadedetails"][0]["FacadeSpectra"] = strInput[0]
+        session["facadedetails"][0]["FacadeLevel"] = strInput[1]
+        session["facadedetails"][0]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strError = ValSpectra(strInput[0])
+        if strError != "Validated":
+            return strError
+    else:
+        session["facadedetails"][0]["FacadeSpectra"] = ""
+        session["facadedetails"][0]["FacadeLevel"] = ""
+        session["facadedetails"][0]["FacadeDisplay"] = ""
+        session["facadedetails"][0]["InternalSpectra"] = ""
+        session["facadedetails"][0]["InternalLevel"] = 0.0
+        session["facadedetails"][0]["InternalDisplay"] = ""
+
+    strText = request.form.get('Laeq8Spectra')
+    if strText != "":
+        strInput = strText.split()
+        iCount = iCount + 1
+        session["facadedetails"][1]["FacadeSpectra"] = strInput[0]
+        session["facadedetails"][1]["FacadeLevel"] = strInput[1]
+        session["facadedetails"][1]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strError = ValSpectra(strInput[0])
+        if strError != "Validated":
+            return strError
+    else:
+        session["facadedetails"][1]["FacadeSpectra"] = ""
+        session["facadedetails"][1]["FacadeLevel"] = ""
+        session["facadedetails"][1]["FacadeDisplay"] = ""
+        session["facadedetails"][1]["InternalSpectra"] = ""
+        session["facadedetails"][1]["InternalLevel"] = 0.0
+        session["facadedetails"][1]["InternalDisplay"] = ""
+
+
+    strText =  request.form.get('LamaxvSpectra')
+    if strText != "":
+        strInput = strText.split()
+        iCount = iCount + 1
+        session["facadedetails"][2]["FacadeSpectra"] = strInput[0]
+        session["facadedetails"][2]["FacadeLevel"] = strInput[1]
+        session["facadedetails"][2]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strError = ValSpectra(strInput[0])
+        if strError != "Validated":
+            return strError
+    else:
+        session["facadedetails"][2]["FacadeSpectra"] = ""
+        session["facadedetails"][2]["FacadeLevel"] = ""
+        session["facadedetails"][2]["FacadeDisplay"] = ""
+        session["facadedetails"][2]["InternalSpectra"] = ""
+        session["facadedetails"][2]["InternalLevel"] = 0.0
+        session["facadedetails"][2]["InternalDisplay"] = ""
+
+
+    strText =  request.form.get('LamaxoSpectra')
+    if strText != "":
+        strInput = strText.split()
+        iCount = iCount + 1
+        session["facadedetails"][3]["FacadeSpectra"] = strInput[0]
+        session["facadedetails"][3]["FacadeLevel"] = strInput[1]
+        session["facadedetails"][3]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strError = ValSpectra(strInput[0])
+        if strError != "Validated":
+            return strError
+    else:
+        session["facadedetails"][3]["FacadeSpectra"] = ""
+        session["facadedetails"][3]["FacadeLevel"] = ""
+        session["facadedetails"][3]["FacadeDisplay"] = ""
+        session["facadedetails"][3]["InternalSpectra"] = ""
+        session["facadedetails"][3]["InternalLevel"] = 0.0
+        session["facadedetails"][3]["InternalDisplay"] = ""
+
+    if iCount == 0:
+        return "Error. there must be at last one entry for spectra."
+        print ("No Spectra")
+
 
     # Check axh for Room Dimensions and assign variables accordingly
     print( request.form.get('RoomDimensions'),'ssssssssss')
@@ -678,37 +904,59 @@ def SetupSessionVariables():
 
     # Hardcode for now 
     session["gsRev"] = 0.5 
-
-    session["facadedetails"] = []
+   
+    #session["facadedetails"] = []
     
-    mystr = request.form.get('Laeq16Spectra')
-    if mystr != "":
-        facade = dict(Metric="Laeq16", Spectra=mystr,Level=0.0,Label=session["Laeq16"])
-        session["facadedetails"].append(facade)
+    # set up facade details arrau 
+    #mystr = request.form.get('Laeq16Spectra')
+    #if mystr != "":
+    #    facade = dict(Metric="Laeq16", Spectra=mystr,Level=0.0,Label=session["Laeq16"])
+    #    session["facadedetails"].append(facade)
 
-    mystr = request.form.get('Laeq8Spectra')
-    if mystr != "":
-        facade = dict(Metric="Laeq8", Spectra=mystr,Level=0.0,Label=session["Laeq8"])
-        session["facadedetails"].append(facade)
+    #mystr = request.form.get('Laeq8Spectra')
+    #if mystr != "":
+    #    facade = dict(Metric="Laeq8", Spectra=mystr, FacadeSpectra=mystr,Level=0.0,Label=session["Laeq8"])
+    #    session["facadedetails"].append(facade)
 
-    mystr = request.form.get('LamaxvSpectra')
-    if mystr != "":
-        facade = dict(Metric="LamaxV", Spectra=mystr,Level=0.0,Label=session["LamaxV"])
-        session["facadedetails"].append(facade)
+    #mystr = request.form.get('LamaxvSpectra')
+    #if mystr != "":
+    #    facade = dict(Metric="LamaxV",  Spectra=mystr,Level=0.0,Label=session["LamaxV"])
+    #    session["facadedetails"].append(facade)
 
-    mystr = request.form.get('LamaxoSpectra')
-    if mystr != "":
-        facade = dict(Metric="LamaxO", Spectra=mystr,Level=0.0,Label=session["LamaxO"])
-        session["facadedetails"].append(facade)
+    #mystr = request.form.get('LamaxoSpectra')
+    #if mystr != "":
+    #    facade = dict(Metric="LamaxO", Spectra=mystr,Level=0.0,Label=session["LamaxO"])
+    #    session["facadedetails"].append(facade)
     
     # check format is 99.9-99.9-99.9-99.9-99.9-99.9
-    for facade in session["facadedetails"]:
-        for str in facade["Spectra"].split('-'):
-            if(math.isnan(float(str))):
-                return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9"
 
-    if len(session["facadedetails"]) == 0:
-        return "Error. there must be at last one entry for spectra."
+
+    session['RoomDimensions'] = request.form.get('RoomDimensions')
+    session['RoomDimensionsLabel'] = request.form.get('RoomDimensionsLabel')
+
+    # First time Search display, validate entries
+    session["gstrFilterElementType"] = request.form.get('elementtype')
+    if session["gstrFilterElementType"] != "OpenArea":
+        try:
+            session["gsFilterQuantity"] = float(request.form.get('Quantity'))
+        except:
+            return ("Error. Enter quantity")
+
+        if (session["gsFilterQuantity"] == 0):
+            return ("Error. Quantity must be greater than 0")
+
+    session["gsFacadeDifference"] = int(request.form.get('quietfacade'))
+
+    session["gstrFilterField"] = request.form.get('FilterField')
+
+    # New defaults for search
+
+    session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
+    if session["gstrFilterElementType"] == "Glazing":session["defaultquantitylist"][0] = session["gsFilterQuantity"]
+    elif session["gstrFilterElementType"] == "Wall":session["defaultquantitylist"][1] = session["gsFilterQuantity"]
+    elif session["gstrFilterElementType"] == "Door":session["defaultquantitylist"][2] = session["gsFilterQuantity"]
+    elif session["gstrFilterElementType"] == "OpenArea":session["defaultquantitylist"][3] = session["gsFilterQuantity"]
+    elif session["gstrFilterElementType"] == "Vent":session["defaultquantitylist"][4] = session["gsFilterQuantity"]
 
     print("After setup")
     print(session["facadedetails"])
@@ -718,22 +966,40 @@ def SetupSessionVariables():
     #    print(f"*** Count {len(session['selectedelements'])}")    
     
     #session["SelectedCount"] = 0;
-    session["selectedelements"] = []
 
-    session["gstrFilterElementType"] = "Glazing"
-    # 1/4 of wall area
-    session["gsFilterQuantity"] = session["gsArea"]/2/4
-
-    session["elementtypeslist"] = ["Glazing","Wall","Door","OpenArea","Vent"]
-    session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
-
-    print (session["defaultquantitylist"])
-
-    session["gsFacadeDifference"]= 0 
-    session["gstrFilterField"] = ""
     session.modified = True
 
     return "Success"
+
+
+def ValSpectra(strSpectra):
+    print ("def ValSpectra")
+    print (strSpectra)
+    for str in strSpectra.split('-'):
+        if(math.isnan(float(str))):
+            return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9"
+    
+    return "Validated"
+
+def SetSpectra (strSpectra):
+
+    print ("def SetSpectra")    
+
+    # Receives a spectra string e.g. "46.0-46.0-52.0-50.0-45.0 (56.0)" which has been validated and returns 
+    # a display string "46.0-46.0-52.0-50.0-45.0 (56.0) and a total e.g. 56"
+
+    sAntiLogTot = 0.0
+
+    for mystr in strSpectra.split('-'):
+        if(math.isnan(float(mystr))):
+            return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9"
+        print (mystr)
+        sAntiLogTot = sAntiLogTot + pow (10 , (float(mystr) / 10))  
+
+    sTot = round(10 * math.log(sAntiLogTot,10) ,1)
+    strDisplayString  = strSpectra + " (" + str(sTot) + ")"
+
+    return strDisplayString, sTot
 
 def GetfromDataBase(page):
     # Read from thee database for a page 
@@ -754,8 +1020,9 @@ def SetupSRIs (PageofElements):
     df = pandas.DataFrame()
 
     for facade in session["facadedetails"]:
-        tstr = facade["Metric"]
-        df[tstr] =  0.0
+        if facade["FacadeSpectra"] != "":
+            tstr = facade["Metric"]
+            df[tstr] =  0.0
     df['UniqueID'] = 0.0
     
     i=0
@@ -789,21 +1056,21 @@ def SetupSRIs (PageofElements):
                             Hz2000=Row.Hz2000,
                             State="Active")
 
-        for facadedetails in session["facadedetails"]:
+        for facade in session["facadedetails"]:
+            if facade["FacadeSpectra"] != "":
+                sNoise, sSpectra = calcnoisesingle (selectedelement, 
+                                    facade["FacadeSpectra"],
+                                    session["gsVolume"],
+                                    session["gsRev"])
+                
+                #Row[facadedetails["Metric"]] = sNoise
+                # todo tidy up 
+                tstr = facade["Metric"]
 
-            sNoise = calcnoisesingle (selectedelement, 
-                                facadedetails["Spectra"],
-                                session["gsVolume"],
-                                session["gsRev"])
-            
-            #Row[facadedetails["Metric"]] = sNoise
-            # todo tidy up 
-            tstr = facadedetails["Metric"]
-
-            # Show the level with the "new" nosie added
-            lTotalAntiLog =  pow (10 , (facadedetails["Level"] / 10)) + pow (10 , (sNoise / 10))                
-            print (f' snoise {sNoise} facadedetailsLevel {facadedetails["Level"] } ' )
-            df.loc[i,[tstr]] = 10 * math.log(lTotalAntiLog,10)
+                # Show the level with the "new" nosie added
+                lTotalAntiLog =  pow (10 , (facade["InternalLevel"] / 10)) + pow (10 , (sNoise / 10))                
+                print (f' snoise {sNoise} facadedetailsLevel {facade["InternalLevel"] } ' )
+                df.loc[i,[tstr]] = 10 * math.log(lTotalAntiLog,10)
             
         df.loc[i,['UniqueID']] = Row.UniqueID        
 
@@ -822,27 +1089,124 @@ def SetupTotals():
     
     print ("def SetupTotals():")
 
-    # We have have added, modded or turned off an element so recalculate the totals
+    # for each facade detail recalculate the sound level for all of the elements
     for i in range (0,len(session["facadedetails"])):
-        sAntiLog = 0.0
-        for j in range (0,len(session["selectedelements"])):
-            if session["selectedelements"][j]["State"] == "Active":            
-                sElementLevel = session["selectedelements"][j]["elementLevels"][i]["Level"] 
-                sAntiLog = sAntiLog + pow (10, sElementLevel/10)
-        session["facadedetails"][i]["Level"] = 10 * math.log(sAntiLog,10)
- 
+
+        if session["facadedetails"][i]["FacadeSpectra"] != "":
+
+            #lTotalAntiLog  = 0.0 
+            #sTemp = 0.0
+
+            #sAllSpectra  = [0.0, 0.0, 0.0, 0.0, 0.0]
+            # Iterate over the selected elements
+            j = 0
+            for j in range (0,len(session["selectedelements"])):
+
+                if session["selectedelements"][j]["State"] == "Active":
+
+                    sTotalElement, sInternalSpectraElement = calcnoisesingle(session["selectedelements"][j],
+                                    session["facadedetails"][i]["FacadeSpectra"],
+                                    session["gsVolume"], 
+                                    session["gsRev"])
+                
+                    #j=0
+                    #for j in range(0,len(sAllSpectra)):
+                    #    sAllSpectra[j] = sAllSpectra[j] + pow (10 , (sInternalSpectraElement[j] / 10))
+                    
+                    session["selectedelements"][j]["elementLevels"][i]["Level"] = sTotalElement
+                    session["selectedelements"][j]["elementLevels"][i]["Spectra"] = sInternalSpectraElement
+
+    gciMaxSpectra =5
+
+    # We have have added, modded, removed or turned off an element so recalculate the totals based on the values of the elements array
+    for i in range (0,len(session["facadedetails"])):
+        if session["facadedetails"][i]["FacadeSpectra"] != "":
+            sAntiLogOverall = 0.0
+            sAntiLogSpectra = [0.0,0.0,0.0,0.0,0.0]
+            for j in range (0,len(session["selectedelements"])):
+                if session["selectedelements"][j]["State"] == "Active":            
+                    sElementLevel = session["selectedelements"][j]["elementLevels"][i]["Level"] 
+                    sElementSpectra = session["selectedelements"][j]["elementLevels"][i]["Spectra"]                     
+                    print (f" Looping {sElementLevel} {sElementSpectra}")
+                    iLp1 = 0
+                    while iLp1  < gciMaxSpectra:
+                        sAntiLogSpectra[iLp1] = sAntiLogSpectra[iLp1]+ pow (10, sElementSpectra[iLp1]/10)
+                        iLp1+=1
+
+                    sAntiLogOverall = sAntiLogOverall + pow (10, sElementLevel/10)
+
+            session["facadedetails"][i]["InternalLevel"] = 10 * math.log(sAntiLogOverall,10)
+            session["facadedetails"][i]["InternalSpectra"], session["facadedetails"][i]["InternalDisplay"] = AntiLogSpectraToString(sAntiLogSpectra)
+            
+            session["facadedetails"][i]["facadeBackColourClass"] = SetBackColourClass(session["facadedetails"][i]["InternalLevel"],
+                                                                                      session["facadedetails"][i]["Metric"])
+            session["facadedetails"][i]["InternalLevel"]
+
+
+            print ( session["facadedetails"][i]["InternalSpectra"])
+            print (session["facadedetails"][i]["InternalDisplay"])
+
     # Called after the selected elements array has changed to update the percentages on each element.     
-    # Also a good time to determine whether we have a 
-
+    # Also a good time to 0 out unuued spectra
+    print ("-------------------------------")
     for i in range (0,len(session["facadedetails"])):
-        sTotal = session["facadedetails"][i]["Level"]
-        for j in range (0,len(session["selectedelements"])):
-            if session["selectedelements"][j]["State"] == "Active":
-                sElementLevel = session["selectedelements"][j]["elementLevels"][i]["Level"]
-                session["selectedelements"][j]["elementLevels"][i]["Percent"] = round((pow (10 , (sElementLevel / 10)) / pow (10 , (sTotal / 10)))* 100,1)
-            else:
-                session["selectedelements"][j]["elementLevels"][i]["Percent"] = 0
+        if session["facadedetails"][i]["FacadeSpectra"] != "":
+            sTotal = session["facadedetails"][i]["InternalLevel"]
+            for j in range (0,len(session["selectedelements"])):
+                if session["selectedelements"][j]["State"] == "Active":
+                    sElementLevel = session["selectedelements"][j]["elementLevels"][i]["Level"]
+                    session["selectedelements"][j]["elementLevels"][i]["Percent"] = round((pow (10 , (sElementLevel / 10)) / pow (10 , (sTotal / 10)))* 100,1)
+                else:
+                    session["selectedelements"][j]["elementLevels"][i]["Percent"] = 0
 
+    print ("return SetupTotals():")
+
+    return 
+
+def AntiLogSpectraToString(sAntiLogSpectra):
+    # Receives an array of 5 antilogs and returns an array of 5 logs  and disply string
+    gciMaxSpectra = 5
+
+    sInternalSpectra = [0.0,0.0,0.0,0.0,0.0]
+    strInternalDisplay = ""
+    sAntiLogTot = 0.0
+
+    iLp1 = 0
+    while iLp1  < gciMaxSpectra:
+        sInternalSpectra[iLp1] = 10 * math.log(sAntiLogSpectra[iLp1],10)
+        if iLp1 > 0: 
+            strInternalDisplay = strInternalDisplay + "-"
+        strInternalDisplay = strInternalDisplay + str(round(sInternalSpectra[iLp1],1))
+        sAntiLogTot += sAntiLogSpectra[iLp1]
+        iLp1 = iLp1 + 1 
+    
+    strInternalDisplay = strInternalDisplay + " (" + str(round(10 * math.log(sAntiLogTot,10),1)) + ")"
+
+    return sInternalSpectra, strInternalDisplay
+
+def SetBackColourClass(sLevel, strMetric):
+    # Depending on the metric and the level - set the background colour to alert the user 
+    if (strMetric) == "Laeq16":
+        if sLevel > 35:
+            strBackColor = "BackRed"
+        else:
+            strBackColor = "BackGreen"
+    elif (strMetric) == "Laeq8":
+        if sLevel > 30:
+            strBackColor = "BackRed"
+        else:
+            strBackColor = "BackGreen"            
+    elif (strMetric) == "LamaxV":
+        if sLevel > 45:
+            strBackColor = "BackRed"
+        else:
+            strBackColor = "BackGreen"
+    elif (strMetric) == "LamaxO":
+        if sLevel > 60:
+            strBackColor = "BackRed"
+        else:
+            strBackColor = "BackGreen"            
+    return strBackColor
 
 if __name__ == "__main__":
     app.jinja_env.auto_reload = True
@@ -850,7 +1214,4 @@ if __name__ == "__main__":
     # with app.app_context():
     #     init_db()
 
-
     app.run(debug=True)
-
-
