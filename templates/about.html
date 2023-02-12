@@ -12,32 +12,135 @@
 
 {% block body %}
 <div class="container">
-    <div class="row" >
-        <p class="home_container_block1_text1 fs-48 f-600 c-blue">About Open Windows</p>
-        <div class = "col-6" style = "border:5px solid red; ">
-            <div class="fs-36">
-                <br>
-                <p> Welcome to the OpenWindows web application.</p>
-                <br>
-
-                <p>This is a free to use web application whose purpose is to assist design teams in the specification 
-                of glazing and ventilation for newly built and converted residences in England and Wales in places 
-                where noise intrusion is considered to be an issue. 
-
-                Based on average and impulsive noise levels outside the dwelling, which have been determined generally
-                by measurement surveys, the application allows the user to select a specification of glazing which will ensure that
-                the residents are not exposed to excessive noise levels inside a dwelling. In doing so, it allows the design team 
-                to take into account the effect of other elements of the building facade, notably the ventilation. </p>
-                <br>
-                <p>The web application was created by Sulltech Ltd.
-                </p>
-                <br>
-                <p>If you encounter problems or have any queries or suggestions please email me at info@sulltech.co.uk
-                </p>
+    <div class = "measurement_result_block" >
+        <div class = "container measure_noise_block_inner">
+            <div class = "row">
+                <p></p>
+                <p class="home_container_block1_text1 fs-24 f-600 c-blue">About Open Windows</p>
+                <div class = "col-6" style = "vertical-align:middle; font-size: 20px;">
+                    <p>This is a free to use web application whose purpose is to assist in the specification 
+                    of glazing and ventilation for newly built and converted residences in England and Wales, in places 
+                    where noise intrusion is considered to be an issue. 
+                    </p>
+                    <br>
+                    <p>
+                    It is intended principally for design teams involved in the specification of glazing and ventilation as well as other 
+                    practicioners, such as Environmental Health Officers who wish to ascertain that the design adequately protect 
+                    residents from excessive noise internally. 
+                    </p>
+                    <br>
+                    <p>
+                    Based on the levels of noise outside a dwelling, which have been determined generally
+                    by measurement surveys, predictive modelling (or a combination of both), the application allows the user to select 
+                    a specification of glazing which will ensure that the residents are not exposed to excessive noise levels inside a dwelling. In doing so, it allows the design team 
+                    to take into account the effect of other elements of the building facade, notably the ventilation. </p>
+                    </p>
+                    <br>
+                    <p>The web application was created by Sulltech Ltd. 
+                    </p>
+                    <br>
+                    <p>If you encounter problems or have any queries or suggestions please email me at info@sulltech.co.uk
+                    </p>
+                </div>
+                <div class = "col-6"> 
+                    <img class = "imageCols" src="{{url_for('static',filename='assets/images/window_PNG17665.png')}}" alt=""  style = "width: 40%; height:auto;" >
+                </div>
             </div>
         </div>
-        <div class = "col-6" style = "border:5px solid red; ">
-            <img class = "imageCols" src="{{url_for('static',filename='assets/images/window_PNG17665.png')}}" alt=""  >
+        <!-- <div class = "col-6" style = "border:5px solid red; "> --> 
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class = "measurement_result_block" >
+        <div class = "container measure_noise_block_inner">
+            <div class = "row">
+                <div class = "col-6">     
+                    <img  src="{{url_for('static',filename='assets/images/AVOG.png')}}" alt="" style= "width:80%"   >
+                    <br>
+                    <img  src="{{url_for('static',filename='assets/images/BS8233.png')}}" alt="" style= "width:80%"   >
+                    <br>
+                    <img  src="{{url_for('static',filename='assets/images/AVOG2Stage.png')}}" alt="" style= "width:80%"   >
+
+                </div>
+                <div class = "col-6" style = "vertical-align:middle; font-size: 20px;">                
+                    <p class="home_container_block1_text1 fs-24 f-600 c-blue">Overview</p>
+                    <p>
+                        When a new dwelling is formed it is necessary to design the building envelope so that 
+                        residents are not exposed to excessive noise intrusion from external noise sources which in the UK is most commonly
+                        road traffic.  Since the windows are the element of a room's facade offering  the least resistance to noise ingress, 
+                        windows must  be specified to ensure that that they resist noise adequately. Generally 
+                        the two factors affecting a window's performance are the thickness of its  glazing (thicker the better) 
+                        and in the case of secondary or double glazing the distance of the void between the panes (the greater the better).
+                        Residents however, will generally prefer the option of opening windows to ventilate their rooms (but also 
+                        for  for other reasons). 
+                        Once a window is open sufficiently for any of these reasons, it is the opening in the window that becomes the 
+                        most significant source of noise ingress. So when specifying the glazing one should aim to achieve satisfactory 
+                        levels for residents with windows at least partially open . If satisfactory  internal levels cannot be achieved 
+                        by such means then the "next best" is to try and  achieve this with trickle and wall vents, though many of them 
+                        are likely to be necessary for sufficient background ventilation. If noise levels excessive with trickle vents  
+                        then  designers must look to other strategies such as facade redesign, re-orientation of rooms 
+                        away from noise sources or, as generally takes place in the UK, use of a mechanical ventilation system
+                        to provide background ventilation to residents
+                    </p>
+                    <br>
+                    <p>
+                        With glazing and ventilation decided one must still consider the effects of overheating on residents. 
+                        The M+E team may assume that overheating be controlled by the opening of windows. However, if a room is 
+                        subjected to high noise levels then opening a window to control overheating will result in the 
+                        residents being exposed to excessive noise levels. The effect will be greater on south-facing facade (where solar 
+                        gain is greater) than on a north-facing one, greater on a facade facing a noise source than one shielded from a noise 
+                        source and greater in south of England and London that the north due to temperature differences. Again, as with 
+                        ventilation, physical design measures may help (reduced glazing areas, windows shutter) and again a last resort 
+                        a mechanical solution may be reqiored.
+                        These issues have been contended with by desgin teams for many years, often unsatisfactily and it is accepted that
+                        in many new dwellings occupants may have to make an undesirable choice between acoustic quality or indoor air quality 
+                        and thermal comfort. 
+                        </p>
+                        <br>
+                        <p>
+                        In January 2020,  the IOA and ANC jointly published the Acoustics Ventilation and Overheating Design Guide(AVOG). 
+                        The aim of this was to provide an integrated approach to the design of new dwellings with respect to noise intrusion 
+                        from external sources, the need for ventilation and the need to avoid overheating. 
+                        The document proposes that in the first instance designers should specify glazing and ventilation to ensure adequate 
+                        noise levels internally. The two "metrics" it refers to are the 16 hour daytime average noise level (L<sub>Aeq16hours</sub>) and 
+                        the 8 hour night-time average noise level (L<sub>Aeq8hours</sub>). 
+                        </p>
+                        <p>
+                        For daytime a design target is given of L<sub>Aeq16h</sub> 35 dBA in living rooms and bedrooms and Laeq 16h 40 dBA 
+                        in dining rooms. 
+                        </p>
+                        <p>
+                        For night-time bedrooms a design target is given of LAeq,8gh 30 dBA and in addition the 10th highest maximum noise 
+                        level Lamax should not exceed LAmax 45 dB to avoid sleep distrubance. 
+                        </p>
+                        <p>
+                        These levels are generally determined by measurement survey at the location of the survey or estimated by predictive
+                        modelling methods. 
+                        </p>
+                        <p>
+                        For the consideration of overheating a 2 stage assessment is recommended, average noise levels are relaxed for the
+                        overheating condition inside a dwelling, given that it is deemed to occur less frequently. 
+                        An additonal measure for night-time maximum noise level that may be typically achieved. A single noise event above 
+                        L<sub>Amax</sub> 65 dBA within a bedroom may  cause an awwakening. 
+                        So, taking the above into consideration, a design team specifying glazing and determining a ventilation/overheating 
+                        strategy for a bedroom will need to know what the noise level will be inside a room for their design for all 4 of 
+                        those noise criteria.  And of course they may  additionally need to know what those criteria will be with the windows 
+                        open, which is the "ideal" state to achieve (other factors permtting). 
+                        </p>
+                        <p>
+                        This web app allows user to calcualte the effect on each of these internal levels for a particular facade.
+                        In addition it permits these to be shared with other members of the design team. It should also permit
+                        It was developed by Sean Sullivan of Sulltech Ltd and it is currently intended as a free to use piece of software. 
+                        If it is successful itmay be followed by a more comprehensive software application. 
+                        </p>
+                        <p>
+                        The database of element sound insulation has been assembled using data from publicly avaialble sources. 
+                        The calculation method used is from calculated according to BS EN 12354-3 and BS 8233 and is the usual 
+                        method used to estimate internal noise ingress in by practicioners in the UK. 
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

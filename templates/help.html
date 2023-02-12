@@ -12,65 +12,81 @@
 
 {% block body %}
 <div class="container">
-    <div class="container">
-        <div class="row" >
-            <p class="home_container_block1_text1 fs-48 f-600 c-blue">Help for entry fields</p>
-            <div class = "col-6" >
-                <p class = "TopForm">One can enter up to four types of noise levels which the facade is exposed to.
-                    The first are energy "average" noise levels over a 16 hour daytime period and an 8 hour night-time period.  
-                    The second two represent "impulsive" noise. The first for ventilation is assumed to be the 10th highest maximum to occur 
-                    in a night-time period and the second for ventilation is the highest.  Enter either an overall level in dB(A) in the format nn.n or the
-                    spectra in tne format nn.n/nn.n/nn.n/nn.n/nn.n where each element of the delimited list Represents the level at each octave band between 125 and 200 Hz.  </p>
+    <div class = "measurement_result_block" >
+        <div class = "container measure_noise_block_inner">
+            <div class = "row">
+                <p></p>
+                <p class="home_container_block1_text1 fs-24 f-600 c-blue">Help for entry fields</p>
+
+                <div class = "col-6" >
+                    <p class = "TopForm">One can enter up to four types of noise levels which the facade is exposed to.
+                            The first are energy "average" noise levels over a 16 hour daytime period and an 8 hour night-time period.  
+                            The second two represent "impulsive" noise. The first for ventilation is assumed to be the 10th highest maximum to occur 
+                            in a night-time period and the second for ventilation is the highest.  Enter either an overall level in dB(A) in the format nn.n or the
+                            spectra in tne format nn.n/nn.n/nn.n/nn.n/nn.n where each element of the delimited list Represents the level at each octave band between 125 and 200 Hz.  </p>
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpNoiseEntry.png')}}" alt="" > 
+                </div>
             </div>
-            <div class = "col-6" >
-                <img src="{{url_for('static',filename='assets/images/HelpNoiseEntry.png')}}" alt=""  > 
+            <br><hr><br>
+            <div class = "row">
+                <div class = "col-6"  ">
+                    Enter either a volume in m3 OR area (m2)x height (m) or 3 dimensions (length (m) x width (m) x height (m) )
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpRoomDimensions.png')}}" alt=""  > 
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row" >
-            <div class = "col-6"  ">
-                Enter either a volume in m3 OR area (m2)x height (m) or 3 dimensions (length (m) x width (m) x height (m) )
+            <br><hr><br>
+            <div class="row" >
+                <div class = "col-6"  ">
+                    From drop-down list enter the type of element you wish to include on the facade. 
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpType.png')}}" alt=""  > 
+                </div>
             </div>
-            <div class = "col-6"  ">
-                <img src="{{url_for('static',filename='assets/images/HelpRoomDimensions.png')}}" alt=""  > 
+            <br><hr><br>
+            <div class="row" >
+                <div class = "col-6"  ">
+                    Enter the area of facade of the element or equivalent area for ventilation elements. 
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpArea.png')}}" alt=""  > 
+                </div>
             </div>
-        </div>
-        <br>
-        <div class="row" >
-            <div class = "col-6"  ">
-                From drop-down list enter the type of element you wish to include on the facade. 
-            </div>
-            <div class = "col-6"  ">
-                <img src="{{url_for('static',filename='assets/images/HelpType.png')}}" alt=""  > 
-            </div>
-        </div>
-        <br>
-        <div class="row" >
-            <div class = "col-6"  ">
-                Enter the area of facade of the element or equivalent area for ventilation elements. 
-            </div>
-            <div class = "col-6"  ">
-                <img src="{{url_for('static',filename='assets/images/HelpArea.png')}}" alt=""  > 
-            </div>
-        </div>
-        <br>
-        <div class="row" >
-            <div class = "col-6"  ">
-                If this element is placed on a quieter facade than enter the number of deciBels quiter. 
-            </div>
-            <div class = "col-6"  ">
-                <img src="{{url_for('static',filename='assets/images/HelpQuieterFacade.png')}}" alt=""  > 
-            </div>
+            <br><hr><br>
+            <div class="row" >
+                <div class = "col-6"  ">
+                    If this element is placed on a quieter facade than enter the number of deciBels quiter. 
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpQuieterFacade.png')}}" alt=""  > 
+                </div>
+            </div>    
+            <br><hr><br>
+            <div class="row" >
+                <div class = "col-6"  ">
+                   Filter out elements that do not inclide keywords entered here. 
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/HelpFilter.png')}}" alt=""  > 
+                </div>
+            </div>        
         </div>        
-        <br>
-        <div class="row" >
-            <div class = "col-6"  ">
-               Filter out elements that do not inclide keywords entered here. 
-            </div>
-            <div class = "col-6"  ">
-                <img src="{{url_for('static',filename='assets/images/HelpFilter.png')}}" alt=""  > 
-            </div>
-        </div>        
-    </div>
+    </div>        
 </div>
 {% endblock %}

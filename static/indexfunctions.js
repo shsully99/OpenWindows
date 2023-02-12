@@ -45,7 +45,7 @@ function ValRoomDimensions(val)
   sVol = (parseFloat(sVol)).toFixed(1)
   document.getElementsByName('RoomDimensions')[0].value = sArea + "x"  + sHeight
   $("#RoomDimensionsLabel").text(sVol + " m3");
-  $(document).ready()
+  /*$(document).ready()
   {
     var val1 = 1
     var val2 = 2
@@ -54,7 +54,7 @@ function ValRoomDimensions(val)
       type: "POST",
       data: {arg1:val1, arg2:val2}
     });
-  };
+  };*/
   /*document.getElementById('RoomDimensionsLabel').value = "   " + sVol + " m3"*/
 }
 
@@ -91,40 +91,51 @@ function ValSpectra(val, call)
   }
   // else assume user has entered value - set up defailt spectra 
   else  if (typeof(val) == Number || !isNaN(parseFloat(val))) {
-    spectra[0] = val - 10
-    spectra[1] = val - 10
-    spectra[2] = val - 4
-    spectra[3] = val - 6
-    spectra[4] = val - 11
+    if (call == 1 || call == 2) 
+    {
+      spectra[0] = val - 10;
+      spectra[1] = val - 10;
+      spectra[2] = val - 4;
+      spectra[3] = val - 6;
+      spectra[4] = val - 11;
+    }
+    else
+    {
+      spectra[0] = val - 14;
+      spectra[1] = val - 8;
+      spectra[2] = val - 4;
+      spectra[3] = val - 5;
+      spectra[4] = val - 12;
+    }
+    
     Overall = parseFloat(val).toFixed(1);
     strSpectra = spectra[0].toFixed(1) + "-" +spectra[1].toFixed(1)  + "-" +spectra[2].toFixed(1)  + "-" + spectra[3].toFixed(1)  + "-" +spectra[4].toFixed(1) 
   }
   if (Overall >0)
   {
     if (call==1){
-      document.getElementsByName('Laeq16Spectra')[0].value =  strSpectra   + " (" + Overall + ")"
+      document.getElementsByName('Laeq16Spectra')[0].value =  Overall + " (" + strSpectra  + ")"
       /*document.getElementByID('Laeq16SpectraLabel').innerText = Overall + " dB(A)"
       $("#Laeq16SpectraLabel").text(Overall);*/
     }
     else if (call == 2){
-      document.getElementsByName('Laeq8Spectra')[0].value = strSpectra + " (" + Overall + ")"
+      document.getElementsByName('Laeq8Spectra')[0].value = Overall + " (" + strSpectra  +  ")"
     /* document.getElementByID('Laeq8SpectraLabel').value = Overall + " dB(A)"
       $("#Laeq8SpectraLabel").text(Overall );*/
     }
     else if (call == 3){
-      document.getElementsByName('LamaxvSpectra')[0].value = strSpectra + " (" + Overall + ")"
+      document.getElementsByName('LamaxvSpectra')[0].value = Overall + " (" + strSpectra  + ")"
       /*document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
       $("#LamaxvSpectraLabel").text(Overall);*/
     }      
     else if (call == 4){
-      document.getElementsByName('LamaxoSpectra')[0].value = strSpectra + " (" + Overall + ")"
+      document.getElementsByName('LamaxoSpectra')[0].value = Overall + " (" + strSpectra  + ")"
       /*document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
       $("#LamaxoSpectraLabel").text(Overall );*/
     }
   }
   else
   {
-    alert ("got here")
     if (call==1){
       document.getElementsByName('Laeq16Spectra')[0].value = ""
     }
@@ -166,7 +177,7 @@ function CalcSpectra(spectra)
     //sTot=sTot+ (10 * Math.log10(parseFloat(spectra[i])));
     fVal = parseFloat(spectra[iLoop])
     sTot=sTot+ Math.pow(10,  (fVal/10));
-  }
+  }FilterConfig
   sTot1 = 10* Math.log10(sTot);
   //alert ("sTot1 "+ sTot1)
   return sTot1.toFixed(1);
@@ -174,20 +185,20 @@ function CalcSpectra(spectra)
 
 function FilterConfig(val)
 {
-   
     switch(val)
     {
+
         case "Glazing":
-          document.getElementById('QuantityLabel').innerHTML = " Quantity"
-          document.getElementById('QuantityMetric').innerHTML = "   "          
+          document.getElementById('QuantityLabel').innerHTML = " Area"
+          //document.getElementById('QuantityMetric').innerHTML = "   "          
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def0
           document.getElementById('qRow').style.visibility = "visible"          
           break;          
 
         case "Wall":
-          document.getElementById('QuantityLabel').innerHTML  = " Quantity"   
-          document.getElementById('QuantityMetric').innerHTML = "   "          
+          document.getElementById('QuantityLabel').innerHTML  = " Area"   
+          //document.getElementById('QuantityMetric').innerHTML = "   "          
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def1
           document.getElementById('qRow').style.visibility = "visible"          
@@ -195,7 +206,7 @@ function FilterConfig(val)
 
         case "Door":
           document.getElementById('QuantityLabel').innerHTML = " Area"
-          document.getElementById('QuantityMetric').innerHTML = " m2"
+          //document.getElementById('QuantityMetric').innerHTML = " m2"
           document.getElementById('Quantity').disabled = false 
           document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def2
           document.getElementById('qRow').style.visibility = "visible"          
@@ -203,15 +214,15 @@ function FilterConfig(val)
 
         case "OpenArea":
             document.getElementById('QuantityLabel').innerHTML = "                "
-            document.getElementById('QuantityMetric').innerHTML = "   "            
+            //document.getElementById('QuantityMetric').innerHTML = "   "            
             document.getElementById('Quantity').disabled = true
             document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def3
             document.getElementById('qRow').style.visibility = "hidden"
             break;
 
         case "Vent":
-            document.getElementById('QuantityLabel').innerHTML = " Minimum Equivalent Area"
-            document.getElementById('QuantityMetric').innerHTML = "  mm2 "            
+            document.getElementById('QuantityLabel').innerHTML = "Equivalent Area"
+            //document.getElementById('QuantityMetric').innerHTML = "  mm2 "            
             document.getElementById('Quantity').disabled = false
             document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def4
             document.getElementById('qRow').style.visibility = "visible"          

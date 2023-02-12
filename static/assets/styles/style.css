@@ -24,7 +24,7 @@ a {
 .f-400{
     font-weight: 400;
 }
-.f-600 {
+.c-blue {
     font-weight: 600;
 }
 
@@ -79,7 +79,15 @@ a {
 }
 
 .c-blue {
-    color: #3545ef;
+    color: #2b03bd;
+}
+
+.c-black {
+    color: #0b0b0b;
+}
+
+.c-blue {
+    color: #2b03bd;
 }
 
 .c-white {
@@ -432,23 +440,26 @@ a {
 }
 
 .measure_noise_block {
-    margin-top: 36px;
-    width: 100%;
+    /*margin-top: 36px;*/
+    margin-top: 1%x;
+    width: 95%;
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
+    border-radius: 16px;  
+    /*border-radius: 1%;*/
 }
+
 
 .measurement_result_block {
     box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.15);
-    border-radius: 16px;
-    margin-top: 16px;
-    margin-bottom: 50px;
-    height: 527px;
+    border-radius: 16px; /*  16px;  */
+    margin-top: 16px; /* 16px; */
+    margin-bottom: 16px; /* 16px; */
+    /*height: 527px;*/
 }
 
-.measure_noise_block_inner {
-    padding: 22px 32px 58px;
-}
+*.measure_noise_block_inner {
+    padding: 22px 32px 22px;
+}*
 
 .inputs_blocks {
     margin-top: 24px;
@@ -533,13 +544,29 @@ a {
     padding: 9px 40px 20px 18px;
 }
 .BackRed  {
-    background-color:lightcoral;
+    background-color:rgb(255,204,204  );
 }
 .BackGreen  {
-    background-color:rgb(173, 197, 173)
+    background-color:rgb(204,255,204  )
 }
 .BackYellow  {
-    background-color:yellow
+    background-color: rgb(255,55,204  );
+}
+.pagination {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 2px 2px 2px 2px;    
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.TopFormPage  {
+    margin-top: 8px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .TopForm  {
@@ -577,6 +604,9 @@ a {
     padding: 9px 40px 9px 18px;
     width: 100%;    width: 100%;*/
 }
+
+
+
 
 /* Tooltip container */
 .tooltip {
@@ -686,7 +716,7 @@ a {
 
 .clear_block {
     border-bottom: 1px solid #EF5835;
-    padding-bottom: 22px;
+    padding-bottom: 11px;
 }
 
 .clear_button {
@@ -702,17 +732,21 @@ a {
 }
 
 .submit_button {
+    margin-top: 10px;
+    /*padding-bottom: 10px;*/
     max-width: 720px;
-    width: 100%;
+    width: 80%; /*100%;*/
+    height: 80%; 
     padding: 10px;
     background: #ABABAB;
-    border-radius: 360px;
+    border-radius: 36px; /* 360px;  "/
     border: none;
-    margin-top: 45px;
+    /*margin-top: 45px;*/
     cursor: pointer;
 }
 .submit_button_active{
-    background-color: #358cef;
+    background-color: rgb(204,236,255);
+    /*background-color:rgb(204,255,255  );*/
 }
 
 .result_block {
@@ -720,12 +754,12 @@ a {
 }
 
 .result_block div {
-    height: 200px;
+    /*height: 200px;*/
     align-items: center;
 }
 
 #customers {
-    margin-top: 24px;
+    /*margin-top: 24px;*/
     border-collapse: collapse;
     width: 100%;
 }
@@ -834,13 +868,6 @@ a {
     margin-top: 0px;
     color: white;
 
-}
-.pagination {
-    margin-top: 10px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 .about {
     margin-right: 30px;

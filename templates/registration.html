@@ -34,11 +34,15 @@
 
                     <button class="btn_registration c-white f-500 fs-16">Registration</button>
                 </form>
+                <div class="have_account fs-16">Already have an account? <a href="/logmein/">LogIn</a>
+                </div>
+            <!--     <button class="about fs-16 f-500"><a href="/logmein/">LogIn</a></button>
             <div class="have_account fs-16">Already have an account? <span
-                    class="c-orange myBtnLogIn">log In</span></div>
+                    class="c-orange myBtnLogIn">log In</span></div> -->
                     
             {% if error %}
-                <p class ="welcome fs-36"><strong>Error:</strong> {{ error }}</p>
+                <br>
+                <p class ="welcome fs-48"><strong> {{ error }} </strong> </p>
             {% endif %}
 
         </div>
