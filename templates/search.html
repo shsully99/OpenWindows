@@ -31,7 +31,7 @@
     $(document).ready(
         function(){
             $('[data-bs-toggle="popover"]').popover({ container: 'body' });   
-        });
+        })
     
     $('.popover-dismiss').popover({
         trigger: 'focus'
@@ -62,12 +62,15 @@
             <div class = "container measure_noise_block_inner">
                 <div class = "row">
                     <div class = "col-3 " >
-                        <label class = "TopFormBold"> Type of Noise </label>                    
+                        <label class = "TopFormBold">Facade Noise  </label>                    
                     </div>                        
                     <div class = "col-5 " >
-                        <label class = "TopFormBold"> Facade Noise Level dB(A)</label>
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Free-field noise level at the facade.  " data-bs-content="For at least one one of the four metrics shown below, enter the value of the overall noise level or spectra for 125-2000 Hz, separated by tabs or dashes."> ? </a> 
+                        <label class = "TopFormBold">Level </label>
+                        <label class = "TopFormBold">     Spectra dB(A) </label>
+
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Free-field noise level at the facade.  " data-bs-content="Enter the value of the overall noise level in the left hand box OR spectra for 125-2000 Hz in the right, separated by tabs or dashes."> ? </a> 
                     </div>                        
+                  
                     <div class = "col-4 " >
                         {% if session["selectedelements"]|length > 0 %}
                             <label class = "TopFormBold"> Estimated Internal Noise Level dB(A)</label>
@@ -77,16 +80,20 @@
                 </div>                        
                 <div class = "row">
                     {% set facade = facadedetails[0] %}                     
-                    <div class = "col-3 " ><span>
+                    <div class = "col-3 " >
                         <label class = "TopForm"> {{ facade.Label|safe }} </label>
-                        <!--<a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Daytime average noise level at the facade.  " data-bs-content=" Enter value of overall noise level or spectra for 125-2000 Hzseparated by tabs or dashes."> ? </a> -->
-                        <!--<a href="#" data-bs-toggle="popover" title="Popover Header" data-bs-content="Some content inside the popover">Toggle popover</a>-->
-                    </span></div>
-                    <div class = "col-5 "  >
-                        <input type="text" name="Laeq16Spectra" id="Laeq16Spectra" class = "TopForm SpectraField"
-                        onchange="ValSpectra(this.value,1)" 
-                        placeholder="Spectra 125 - 2000 Hz"
-                        value="{{ facade.FacadeDisplay }}">
+                    </div>
+                    <div class = "col-5 " >
+                        <span>
+                            <input type="text" name="Laeq16Level" id="Laeq16Level" class = "TopForm SpectraLeft"
+                            onchange="ValLevel(this.value,1)" 
+                            value="{{ facade.FacadeLevel }}"
+                            {{ session["disabled"] }} >                        
+                            <input type="text" name="Laeq16Spectra" id="Laeq16Spectra" class = "TopForm SpectraRight"
+                            onchange="ValSpectra(this.value,1)" 
+                            value="{{ facade.FacadeSpectra }}"
+                            {{ session["disabled"] }} >
+                        </span>
                     </div>
                     <div class = "col-4"  >
                         {% if session["selectedelements"]|length > 0 %}
@@ -96,15 +103,20 @@
                 </div>
                 <div class = "row">
                     {% set facade = facadedetails[1] %}                    
-                    <div class = "col-3 "><span>
+                    <div class = "col-3 ">
                         <label class = "TopForm"> {{ facade.Label|safe }} </label>
-                        <!-- <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Night-time average noise level at the facade.  " data-bs-content=" Enter value of overall noise level or spectra for 125-2000 Hz separated by tabs or dashes."> ? </a> -->
-                    </span></div>
+                    </div>
                     <div class = "col-5"  >
-                        <input name="Laeq8Spectra" onchange="ValSpectra(this.value,2)" class = "TopForm SpectraField"
-                        id="Laeq8Spectra" type="text" 
-                        placeholder="Spectra  125 - 2000 Hz"
-                          value="{{ facade.FacadeDisplay }}">
+                        <span>
+                            <input type="text" name="Laeq8Level" id="Laeq8Level" class = "TopForm SpectraLeft"
+                            onchange="ValLevel(this.value,2)" 
+                            value="{{ facade.FacadeLevel }}" 
+                            {{ session["disabled"] }} >                        
+                            <input type="text" name="Laeq8Spectra" id="Laeq8Spectra" class = "TopForm SpectraRight"
+                            onchange="ValSpectra(this.value,2)" 
+                            value="{{ facade.FacadeSpectra }}"
+                            {{ session["disabled"] }} >
+                        </span>
                     </div>
                     <div class = "col-4"  >
                         {% if session["selectedelements"]|length > 0 %}
@@ -114,16 +126,20 @@
                 </div>
                 <div class = "row">
                     {% set facade = facadedetails[2] %}                    
-                    <div class = "col-3 "><span>
+                    <div class = "col-3 ">
                         <label class = "TopForm">  {{ facade.Label|safe }} </label>
-                        <!-- <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Maximum noise level at facade. The 10th highest level exceeded. " data-bs-content=" Enter value of overall noise level or spectra for 125-2000 Hz separated by tabs or dashes."> ? </a> -->
-                    </span></div>
+                    </div>
                     <div class = "col-5" >
-                        <input name="LamaxvSpectra" id="LamaxvSpectra" 
-                        class = "TopForm SpectraField"
-                        onchange="ValSpectra(this.value,3)" type="text"
-                        placeholder="Spectra 125 - 2000 Hz"
-                          value="{{ facade.FacadeDisplay }}">
+                        <span>
+                            <input type="text" name="LamaxvLevel" id="LamaxvLevel" class = "TopForm SpectraLeft"
+                            onchange="ValLevel(this.value,3)" 
+                            value="{{ facade.FacadeLevel }}"
+                            {{ session["disabled"] }} >                        
+                            <input type="text" name="LamaxvSpectra" id="LamaxvSpectra" class = "TopForm SpectraRight"
+                            onchange="ValSpectra(this.value,3)" 
+                            value="{{ facade.FacadeSpectra }}"
+                            {{ session["disabled"] }} >
+                        </span>
                     </div>
                     <div class = "col-4"  >
                         {% if session["selectedelements"]|length > 0 %}
@@ -135,14 +151,18 @@
                     {% set facade = facadedetails[3] %}                    
                     <div class = "col-3" class = "TopForm"><span></span>
                         <label class = "TopForm"> {{ facade.Label|safe }} </label>
-                        <!-- <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Maximum noise level at facade. The  highest level usually exceeded.   " data-bs-content=" Enter value of overall noise level or spectra for 125-2000 Hz separated by tabs or dashes."> ? </a> -->
                     </span></div>
                     <div class = "col-5">
-                        <input name="LamaxoSpectra" id="LamaxoSpectra"
-                        class = "TopForm SpectraField"
-                        onchange="ValSpectra(this.value,4)" type="text"
-                        placeholder="Spectra 125 - 2000 Hz"
-                          value="{{ facade.FacadeDisplay }}">
+                        <span>
+                            <input type="text" name="LamaxoLevel" id="LamaxoLevel" class = "TopForm SpectraLeft"
+                            onchange="ValLevel(this.value,4)" 
+                            value="{{ facade.FacadeLevel }}"
+                            {{ session["disabled"] }}>                        
+                            <input type="text" name="LamaxoSpectra" id="LamaxoSpectra" class = "TopForm SpectraRight"
+                            onchange="ValSpectra(this.value,4)" 
+                            value="{{ facade.FacadeSpectra }}"
+                            {{ session["disabled"] }}>
+                        </span>
                     </div>
                     <div class = "col-4"  >
                         {% if session["selectedelements"]|length > 0 %}
@@ -150,33 +170,11 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class = "row" >
-                    <div class = "col-3"  >
-                        <!-- Share  --> 
-                        {% if current_user.is_authenticated %}                    
-                            {% if session["selectedelements"]|length > 0 %}
-                                <button class="submit_button submit_button_active c-black "><a href="/share">Share</a></button>
-                            {% endif %}
-                        {% endif %}
-                    </div> 
-                    <div class = "col-3"  >
-                        <!-- Download  --> 
-                        {% if current_user.is_authenticated %}                    
-                            {% if session["selectedelements"]|length > 0 %}
-                                <button class="submit_button submit_button_active c-black"><a href="/download">Download</a></button>
-                            {% endif %}
-                        {% endif %}
-                    </div> 
-                    <div class = "col-3"  >
-                        <!-- Toggle Display elements and searchj results --> 
-                        {% if session["selectedelements"]|length > 0 %}
-                            <button class="submit_button submit_button_active c-black "><a href="/showresults">Show Selected</a></button>
-                        {% endif %}
-                    </div> 
-                    <div class = "col-3"  >
-                        <button type="submit" value="Submit" class="submit_button submit_button_active c-black "> Search </button>
+                <!-- <div class = "row ">
+                    <div class = "col-8 shortline">
                     </div>
-                </div>
+                </div> -->
+
             </div>
         </div>
             <!-- <div class = "col-8 measurement_result_block" style = "border:5px solid red; ">
@@ -202,7 +200,8 @@
                             placeholder="Enter floor area(m2) x height(m), alternatively length"
                             class = "TopForm"
                             onchange="ValRoomDimensions(this.value)"
-                            value="{{ session['RoomDimensions']}}">
+                            value="{{ session['RoomDimensions']}}"
+                            {{ session["disabled"] }}>
                             <!-- <label class = "TopForm" for = "" name="RoomDimensionsLabel" id="RoomDimensionsLabel" 
                             value = "{{ session['RoomDimensionsLabel']}}"" >  </label>-->
                         </span> 
@@ -249,7 +248,7 @@
                 <div class="row">
                     <div class = "col-5"><span>
                         <label class = "TopForm">Quieter Facade</label>
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Quieter Facade" data-bs-content="If this element is exposed to lower levels than the facade levels entered on right select the difference in noise level from the dropdown. ">?</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Quieter Facade" data-bs-content="If this element is exposed to lower levels than the facade levels you entered on the left select the difference in noise level from the dropdown. ">?</a>
                     </span></div> 
                     <div class = "col-7">
                         <select name="quietfacade" class = "TopForm" >
@@ -271,7 +270,7 @@
                 <div class="row">
                     <div class = "col-5"><span>
                         <label class = "TopForm">Filter</label>
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title=Filter" data-bs-content="Enter keyword to filter elements in element database.">?</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title=Filter" data-bs-content="Enter keyword to filter elements during an element search.">?</a>
                     </span></div> 
                     <div class = "col-7">
                         <input type="text"  name="FilterField"
@@ -279,6 +278,17 @@
                                class = "TopForm"
                                placeholder="Enter keyword"/>
                     </div>                                           
+                </div>
+                <div class="row">                
+                    <div class = "col-7"  >
+                        <!-- Toggle Display elements and searchj results --> 
+                        {% if session["selectedelements"]|length > 0 %}
+                            <button class="submit_button submit_button_active c-black "><a href="/showresults">Show Selected</a></button>
+                        {% endif %}
+                    </div> 
+                    <div class = "col-5"  >
+                        <button type="submit" value="Submit" class="submit_button submit_button_active c-black "> Search </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -314,23 +324,43 @@
 
 {% elif session["status"] == "ShareDisplay" and shareString is defined %}
 <div class="container">
-
      <div class="TopFormCentre"> 
        <!-- <div class="row" >
             <div class = "col-12" style = "border:5px solid red; "> -->
                 <div >
                     <br>
-                    <p > Copy the link below to clipboard and send it to someone you love</p>
+                    <p > Copy the link below to clipboard/p>
                     <br>
                     <button id="shareCopy"  onclick = "Copy_Text()" > Copy text to clipboard  </button>
                     <br>
                     <br>
                     <textarea rows="5" cols="150" id="ShareString"> {{ shareString }} </textarea>
-    
+   
                 </div>
+               
         <!--    </div>
         </div> -->
     </div>
+</div>
+
+<div class="container">
+    <div class="TopFormCentre"> 
+      <!-- <div class="row" >
+           <div class = "col-12" style = "border:5px solid red; "> -->
+               <div >
+                   <br>
+                   <p > Copy the link below to clipboard/p>
+                   <br>
+                   <button id="shareCopy"  onclick = "Paste_Text()" > Paste text to clipboard  </button>
+                   <br>
+                   <br>
+                   <textarea rows="5" cols="150"  </textarea>
+  
+               </div>
+              
+       <!--    </div>
+       </div> -->
+   </div>
 </div>
 
 {% elif session["status"] == "SearchDisplay" and querySearch is defined %}
@@ -397,6 +427,7 @@
                             <tr class="TopForm"> 
                                 <th>Spectra</th>
                                 <th>Description</th>
+                                <th>URL</th>
                                 {% for facade in facadedetails %}
                                     {% if facade.FacadeSpectra != "" %}                                
                                         <th><span>
@@ -417,6 +448,7 @@
                                 <td>{{ row.Hz125|string + "/" + row.Hz250|string + "/" + row.Hz500|string + "/" +
                                     row.Hz1000|string + "/" + row.Hz2000|string }}
                                 <td>{{ row.Description }}</td>
+                                <td>{{ row.URL }}</td>
                                 {% if df is defined %}
                                     {% for key, dfrow in df.iterrows() %}
                                         {% if row.UniqueID == dfrow.UniqueID %}
@@ -442,14 +474,20 @@
 
 {% elif session["status"] == "ElementDisplay" and selected is defined %}
     <div class="container">
+
         <div class="row">
         <div class="measurement_result_block" >
-            <div class="measure_noise_block_inner">        
-               <div class="d-flex justify-content-space-between align-items-center clear_block">
-                    <span class="TopFormBold TopFormCentre">Selected Elements - Click Remove to deselect</span>
-                </div>
-
-                <!-- <div class="row"> -->
+            <div class="measure_noise_block_inner">
+                <div class="row">
+                    <div class = "col-3"  >
+                        <a class="about"  href="/share">Share</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Share" class="about" data-bs-content="Click Share to send the results electronically">?</a>
+                    </div> 
+                    <div class = "col-3"  >
+                        <a class="about" href="/download">Download</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Download" class="about" data-bs-content="Click  download this selection as a spreadsheet">?</a>
+                    </div> 
+                </div>                
                 <div>
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <tr>

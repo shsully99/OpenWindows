@@ -14,87 +14,99 @@
 <div class="container">
     <div class = "measurement_result_block" >
         <div class = "container measure_noise_block_inner">
+
+            <p class="home_container_block1_text1 fs-24 f-600 c-black">About Open Windows</p>
+            <br>      
+
             <div class = "row">
-                <p></p>
-                <p class="home_container_block1_text1 fs-24 f-600 c-blue">About Open Windows</p>
+                           
+                <div class = "col-3" >
+                    <img  src="{{url_for('static',filename='assets/images/ProPG.png')}}" alt="" style= "width:80%"   >
+                </div>
                 <div class = "col-6" style = "vertical-align:middle; font-size: 20px;">
-                    <p>This is a free to use web application whose purpose is to assist in the specification 
-                    of glazing and ventilation for newly built and converted residences in England and Wales, in places 
-                    where noise intrusion is considered to be an issue. 
+                    <p>
+                        In recent year the following documents have been published which offer guidance on achieving 
+                        good acoustics within new residential dwellings.
                     </p>
-                    <br>
+                    <ul>
+                        <li><a class = "c-blue" href = "https://www.ioa.org.uk/sites/default/files/14720%20ProPG%20Main%20Document.pdf">
+                            Professional Practice Guidance on Planning & Noise (ProPG)</a> for new residential development (2017)</a> </li>
+                        <br>
+                        <li><a class = "c-blue" href = "https://www.ioa.org.uk/sites/default/files/anc_-_ioa_avo_residential_design_guide_january_2020_v1.1_12_feb_2020_2.pdf">
+The Acoustics Ventilation and Overheating Design Guide (AVOG)</a></li>
+                    </ul>          
+        
+                    These documents detail the following guideline maximum limits for noise in dwelling rooms. 
+                    <ul>
+                        <li>Average noise levels within living rooms and bedroom rooms not to exceed L<sub>Aeq16h</sub> 35 dB(A)
+                        in the daytime.</li>
+        
+                        <li>Average noise levels within bedrooms not to exceed  L<sub>Aeq16h</sub> 30 dB(A) in the night-time.</li>
+                        
+                        <li>Impulsive noise levels within bedrooms not to exceed L<sub>Amax</sub> 45 dB(A) more than 10 times in a night
+                        or Laeq ? dBA once. </li>
+                    </ul>
+                        The principal aim of this web application is enable practicioners to achieve or better these design targets. 
+                        Users can calculate the effect on internal noise of using different elements of a rooms facade, then download the 
+                        results or share them with other users. 
+                    </p>
                     <p>
                     It is intended principally for design teams involved in the specification of glazing and ventilation as well as other 
                     practicioners, such as Environmental Health Officers who wish to ascertain that the design adequately protect 
                     residents from excessive noise internally. 
                     </p>
-                    <br>
-                    <p>
-                    Based on the levels of noise outside a dwelling, which have been determined generally
-                    by measurement surveys, predictive modelling (or a combination of both), the application allows the user to select 
-                    a specification of glazing which will ensure that the residents are not exposed to excessive noise levels inside a dwelling. In doing so, it allows the design team 
-                    to take into account the effect of other elements of the building facade, notably the ventilation. </p>
-                    </p>
-                    <br>
-                    <p>The web application was created by Sulltech Ltd. 
-                    </p>
-                    <br>
-                    <p>If you encounter problems or have any queries or suggestions please email me at info@sulltech.co.uk
+                    <p>The web application was created by Sulltech Ltd as an educational project. If you encounter problems or have any queries or suggestions 
+                    please email info@sulltech.co.uk
                     </p>
                 </div>
-                <div class = "col-6"> 
-                    <img class = "imageCols" src="{{url_for('static',filename='assets/images/window_PNG17665.png')}}" alt=""  style = "width: 40%; height:auto;" >
+                <div class = "col-3" >
+                    <img  src="{{url_for('static',filename='assets/images/AVOG.png')}}" alt="" style= "width:80%"   >
                 </div>
             </div>
         </div>
-        <!-- <div class = "col-6" style = "border:5px solid red; "> --> 
     </div>
     <br>
     <br>
     <br>
     <div class = "measurement_result_block" >
         <div class = "container measure_noise_block_inner">
+
+            <p class="home_container_block1_text1 fs-24 f-600 c-black">Overview</p>
+            <br>  
             <div class = "row">
-                <div class = "col-6">     
-                    <img  src="{{url_for('static',filename='assets/images/AVOG.png')}}" alt="" style= "width:80%"   >
-                    <br>
+                <div class = "col-3">     
                     <img  src="{{url_for('static',filename='assets/images/BS8233.png')}}" alt="" style= "width:80%"   >
                     <br>
-                    <img  src="{{url_for('static',filename='assets/images/AVOG2Stage.png')}}" alt="" style= "width:80%"   >
-
                 </div>
                 <div class = "col-6" style = "vertical-align:middle; font-size: 20px;">                
-                    <p class="home_container_block1_text1 fs-24 f-600 c-blue">Overview</p>
                     <p>
                         When a new dwelling is formed it is necessary to design the building envelope so that 
                         residents are not exposed to excessive noise intrusion from external noise sources which in the UK is most commonly
-                        road traffic.  Since the windows are the element of a room's facade offering  the least resistance to noise ingress, 
-                        windows must  be specified to ensure that that they resist noise adequately. Generally 
-                        the two factors affecting a window's performance are the thickness of its  glazing (thicker the better) 
+                        road traffic.  Since the windows are the element of a room's facade offering the least resistance to noise ingress, 
+                        windows must be specified to ensure that that they resist noise adequately. Generally 
+                        the two factors affecting a window's performance are the thickness of its glazing (thicker the better) 
                         and in the case of secondary or double glazing the distance of the void between the panes (the greater the better).
-                        Residents however, will generally prefer the option of opening windows to ventilate their rooms (but also 
-                        for  for other reasons). 
-                        Once a window is open sufficiently for any of these reasons, it is the opening in the window that becomes the 
-                        most significant source of noise ingress. So when specifying the glazing one should aim to achieve satisfactory 
-                        levels for residents with windows at least partially open . If satisfactory  internal levels cannot be achieved 
-                        by such means then the "next best" is to try and  achieve this with trickle and wall vents, though many of them 
-                        are likely to be necessary for sufficient background ventilation. If noise levels excessive with trickle vents  
-                        then  designers must look to other strategies such as facade redesign, re-orientation of rooms 
+                        Residents will generally prefer the option of opening windows to ventilate their rooms (but also 
+                        for other reasons). 
+                        With a window partially open, it is the opening in the window that becomes the 
+                        most significant source of noise ingress. So, when specifying the glazing one should aim to achieve satisfactory 
+                        levels for residents with windows at least partially open. If satisfactory internal levels cannot be achieved 
+                        by such means then the "next best" is to ventilate with trickle and wall vents, though many of them 
+                        are likely to be necessary for sufficient background ventilation. If noise levels are excessive with trickle vents  
+                        then designers must look to other strategies such as facade redesign, re-orientation of rooms 
                         away from noise sources or, as generally takes place in the UK, use of a mechanical ventilation system
-                        to provide background ventilation to residents
+                        to provide background ventilation to residents.
+
                     </p>
                     <br>
                     <p>
                         With glazing and ventilation decided one must still consider the effects of overheating on residents. 
                         The M+E team may assume that overheating be controlled by the opening of windows. However, if a room is 
                         subjected to high noise levels then opening a window to control overheating will result in the 
-                        residents being exposed to excessive noise levels. The effect will be greater on south-facing facade (where solar 
-                        gain is greater) than on a north-facing one, greater on a facade facing a noise source than one shielded from a noise 
-                        source and greater in south of England and London that the north due to temperature differences. Again, as with 
-                        ventilation, physical design measures may help (reduced glazing areas, windows shutter) and again a last resort 
-                        a mechanical solution may be reqiored.
-                        These issues have been contended with by desgin teams for many years, often unsatisfactily and it is accepted that
-                        in many new dwellings occupants may have to make an undesirable choice between acoustic quality or indoor air quality 
+                        residents being exposed to excessive noise levels. The effect will be greater on south-facing façade
+                        than on a north-facing one, greater on a facade facing a noise source than one shielded from a noise 
+                        source and greater in south of England and London that the north. As with ventilation, physical design measures may help (reduced glazing areas, windows shutter) and again a last resort mechanical solution may be required.
+                       	In many new dwellings occupants may have to make an undesirable choice between acoustic quality or indoor air quality 
                         and thermal comfort. 
                         </p>
                         <br>
@@ -111,7 +123,7 @@
                         in dining rooms. 
                         </p>
                         <p>
-                        For night-time bedrooms a design target is given of LAeq,8gh 30 dBA and in addition the 10th highest maximum noise 
+                        For night-time bedrooms a design target is given of L<sub>Aeq8hours</sub> 30 dBA and in addition the 10th highest maximum noise 
                         level Lamax should not exceed LAmax 45 dB to avoid sleep distrubance. 
                         </p>
                         <p>
@@ -139,6 +151,9 @@
                         The calculation method used is from calculated according to BS EN 12354-3 and BS 8233 and is the usual 
                         method used to estimate internal noise ingress in by practicioners in the UK. 
                     </p>
+                </div>
+                <div class = "col-3">     
+                    <img  src="{{url_for('static',filename='assets/images/AVOG2Stage.png')}}" alt="" style= "width:80%"   >
                 </div>
             </div>
         </div>

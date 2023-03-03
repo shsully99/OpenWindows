@@ -58,6 +58,118 @@ function ValRoomDimensions(val)
   /*document.getElementById('RoomDimensionsLabel').value = "   " + sVol + " m3"*/
 }
 
+function strToSpectra(strSpectra)
+{
+  spectra = []
+   // Assume specta had been entered 99.99/99.99/99.99/99.99/99.99 = Find out 
+  if (val.indexOf("/") > -1) {
+    spectra = val.split("/");
+  }        
+  else if (val.indexOf("-") > -1) {
+    spectra = val.split("-");  
+  }
+  else if (val.indexOf(",") > -1) {
+    spectra = val.split(","); 
+  }
+  else if (val.indexOf("\t") > -1) {
+    spectra = val.split("\t");    
+  }
+
+  if (spectra.length != 5){
+    // Abort if not 5 elements 
+    return [-99]
+  }
+  else 
+  {
+    // Check it is all numeric and accumulate 
+    for (i = 0; index < 5; i++)
+    {
+      if (typeof(spectra[i]) == Number || !isNaN(parseFloat(spectra[i])))
+      {
+          // OK 
+      }
+      else
+      {
+        return [-99]
+      }
+    }
+  }
+  return spectra
+}
+
+function ValLevel(val, call)
+{
+  var spectra = [0.0, 0.0, 0.0, 0.0, 0.0 ];
+
+  var strSpectra = ""
+  if (typeof(val) == Number || !isNaN(parseFloat(val))) {
+    // Valid entry  now set up spectra
+
+    Overall = parseFloat(val).toFixed(1);
+    if (call == 1 || call == 2) 
+    {
+      spectra[0] = Overall - 10;
+      spectra[1] = Overall - 10;
+      spectra[2] = Overall - 4;
+      spectra[3] = Overall - 6;
+      spectra[4] = Overall - 11;
+    }
+    else
+    {
+      spectra[0] = Overall - 14;
+      spectra[1] = Overall - 8;
+      spectra[2] = Overall - 4;
+      spectra[3] = Overall - 5;
+      spectra[4] = Overall - 12;
+    }
+    strSpectra = spectra[0].toFixed(1) + "-" +spectra[1].toFixed(1)  + "-" +spectra[2].toFixed(1)  + "-" + spectra[3].toFixed(1)  + "-" +spectra[4].toFixed(1) 
+  }
+
+  if (Overall > 0)
+  {
+    if (call==1){
+
+      document.getElementsByName('Laeq16Spectra')[0].value =  strSpectra
+      document.getElementsByName('Laeq16Level')[0].value = Overall
+        /*document.getElementByID('Laeq16SpectraLabel').innerText = Overall + " dB(A)"
+        $("#Laeq16SpectraLabel").text(Overall);*/
+    }
+    else if (call == 2){
+      document.getElementsByName('Laeq8Spectra')[0].value = strSpectra  
+      document.getElementsByName('Laeq8Level')[0].value = Overall      
+      /* document.getElementByID('Laeq8SpectraLabel').value = Overall + " dB(A)"
+        $("#Laeq8SpectraLabel").text(Overall );*/
+    }
+    else if (call == 3){
+      document.getElementsByName('LamaxvSpectra')[0].value = strSpectra 
+      document.getElementsByName('LamaxvLevel')[0].value = Overall      
+        /*document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
+        $("#LamaxvSpectraLabel").text(Overall);*/
+    }      
+    else if (call == 4){
+      document.getElementsByName('LamaxoSpectra')[0].value = OverallstrSpectra 
+      document.getElementsByName('LamaxoLevel')[0].value = Overall      
+      /*document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
+        $("#LamaxoSpectraLabel").text(Overall );*/
+    }
+  }
+  else
+  {
+    if (call==1){
+      document.getElementsByName('Laeq16Spectra')[0].value = ""
+    }
+    else if (call == 2){
+      document.getElementsByName('Laeq8Spectra')[0].value = ""
+    }
+    else if (call == 3){
+      document.getElementsByName('LamaxvSpectra')[0].value = ""
+    }      
+    else if (call == 4){
+      document.getElementsByName('LamaxoSpectra')[0].value = "" 
+    }
+  }
+}
+
 function ValSpectra(val, call)
 {
   //console.log (" ValSpectra " + val + " - " + call)
@@ -65,6 +177,7 @@ function ValSpectra(val, call)
   var spectra = [ ];
   var strSpectra = ""
   var iCount=-1;
+
   // Assume specta had been entered 99.99/99.99/99.99/99.99/99.99 = Find out 
   if (val.indexOf("/") > -1) {
     spectra = val.split("/");
@@ -84,54 +197,31 @@ function ValSpectra(val, call)
   var Overall = ""
   if (spectra.length == 5){
     //alert("Before calc")
-    Overall = CalcSpectra(spectra);
+    Overall = CalcTotal(spectra);
     //alert("after  calc" + Overall)
     strSpectra = parseFloat(spectra[0]).toFixed(1) + "-" +parseFloat(spectra[1]).toFixed(1)  + "-" +parseFloat(spectra[2]).toFixed(1)  + "-" + parseFloat(spectra[3]).toFixed(1)  + "-" +parseFloat(spectra[4]).toFixed(1) 
     //alert("strSpectra   " + Overall)
   }
-  // else assume user has entered value - set up defailt spectra 
-  else  if (typeof(val) == Number || !isNaN(parseFloat(val))) {
-    if (call == 1 || call == 2) 
-    {
-      spectra[0] = val - 10;
-      spectra[1] = val - 10;
-      spectra[2] = val - 4;
-      spectra[3] = val - 6;
-      spectra[4] = val - 11;
-    }
-    else
-    {
-      spectra[0] = val - 14;
-      spectra[1] = val - 8;
-      spectra[2] = val - 4;
-      spectra[3] = val - 5;
-      spectra[4] = val - 12;
-    }
-    
-    Overall = parseFloat(val).toFixed(1);
-    strSpectra = spectra[0].toFixed(1) + "-" +spectra[1].toFixed(1)  + "-" +spectra[2].toFixed(1)  + "-" + spectra[3].toFixed(1)  + "-" +spectra[4].toFixed(1) 
-  }
+
   if (Overall >0)
   {
     if (call==1){
-      document.getElementsByName('Laeq16Spectra')[0].value =  Overall + " (" + strSpectra  + ")"
+      document.getElementsByName('Laeq16Spectra')[0].value =  strSpectra
+      document.getElementsByName('Laeq16Level')[0].value =  Overall
       /*document.getElementByID('Laeq16SpectraLabel').innerText = Overall + " dB(A)"
       $("#Laeq16SpectraLabel").text(Overall);*/
     }
     else if (call == 2){
-      document.getElementsByName('Laeq8Spectra')[0].value = Overall + " (" + strSpectra  +  ")"
-    /* document.getElementByID('Laeq8SpectraLabel').value = Overall + " dB(A)"
-      $("#Laeq8SpectraLabel").text(Overall );*/
+      document.getElementsByName('Laeq8Spectra')[0].value = strSpectra 
+      document.getElementsByName('Laeq8Level')[0].value =  Overall
     }
     else if (call == 3){
-      document.getElementsByName('LamaxvSpectra')[0].value = Overall + " (" + strSpectra  + ")"
-      /*document.getElementById('LamaxvSpectraLabel').value = Overall + " dB(A)"
-      $("#LamaxvSpectraLabel").text(Overall);*/
+      document.getElementsByName('LamaxvSpectra')[0].value = strSpectra
+      document.getElementsByName('LamaxvLevel')[0].value =  Overall
     }      
     else if (call == 4){
-      document.getElementsByName('LamaxoSpectra')[0].value = Overall + " (" + strSpectra  + ")"
-      /*document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
-      $("#LamaxoSpectraLabel").text(Overall );*/
+      document.getElementsByName('LamaxoSpectra')[0].value = strSpectra 
+      document.getElementsByName('LamaxoLevel')[0].value =  Overall
     }
   }
   else
@@ -164,9 +254,25 @@ function Copy_Text()
       alert("something went wrong");
     });;
 }
-function CalcSpectra(spectra)
+function Paste_Text()
 {
-  //alert("CalcSpectra")
+  var strText
+  let strtext =  navigator.clipboard.readText();
+
+  //navigator.clipboard
+  //  .readText(strText)
+  //  .then(() => {
+  //    alert("successfully read");
+  //    alert(strText)
+  //  })
+  //  .catch(() => {
+  //    alert("something went wrong");
+  // });;
+}
+
+function CalcTotal(spectra)
+{
+  //alert("CalcTotral;")
 
   var sTot=0.0;
   var sTot1=0.0;
@@ -177,7 +283,7 @@ function CalcSpectra(spectra)
     //sTot=sTot+ (10 * Math.log10(parseFloat(spectra[i])));
     fVal = parseFloat(spectra[iLoop])
     sTot=sTot+ Math.pow(10,  (fVal/10));
-  }FilterConfig
+  }
   sTot1 = 10* Math.log10(sTot);
   //alert ("sTot1 "+ sTot1)
   return sTot1.toFixed(1);

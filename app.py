@@ -98,6 +98,7 @@ class ElementSRI(db.Model):
     UniqueID = db.Column(db.Integer, primary_key=True)
     ElementType= db.Column(db.String(64))
     Description= db.Column(db.String(64))
+    URL= db.Column(db.String(64))
     Reference= db.Column(db.String(64))
     Metric= db.Column(db.String(64))
     Hz63 = db.Column(db.Integer)
@@ -111,14 +112,15 @@ class ElementSRI(db.Model):
     Spectra= Hz125 + "/" + Hz250 + "/" + Hz500 + "/" + Hz1000 + "/" + Hz2000 
     OpenArea = db.Column(db.Integer)
 
-    def __init__(self,     UniqueID ,    ELementType,    Description,    Reference,
-                Metric,    Hz63,   Hz125,  Hz250,  Hz500,  Hz1000, Hz2000, Hz4000, Hz8000,  OpenArea):
+    def __init__(self,     UniqueID ,    ELementType,    Description,    Reference, 
+                Metric,    URL, Hz63,   Hz125,  Hz250,  Hz500,  Hz1000, Hz2000, Hz4000, Hz8000,  OpenArea):
 
             UniqueID = self.UniqueID 
             ElementType= self.ElementType
             Description= self.Description
             Reference= self.Reference
-            Metric= - self.Metric
+            Metric=  self.Metric
+            URL = self.URL
             Hz63 = self.Hz63
             Hz125 = self.Hz125
             Hz250 = self.Hz250
@@ -300,6 +302,7 @@ def index():
         print("In post method of index")
 
         session["status"] = "RoomDetails"
+        session["disabled"] = ""
         
         return redirect('/search')
 
@@ -505,6 +508,7 @@ def add(id):
 
     # Loop over elememnts and update selected levels
     session["status"] = "ElementDisplay"
+    session["disabled"] = "disabled"
 
     return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"], 
                                     defaultquantitylist= session["defaultquantitylist"])
@@ -556,6 +560,7 @@ def showresults ():
     #    session["status"] = "ElementDisplay"
 
     session["status"] = "ElementDisplay"
+    session["disabled"] = "disabled"
 
     return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"]) 
 
@@ -595,7 +600,7 @@ def automate():
         elif Metric == "LamaxO": Label = "Overheating L<sub>AFmax</sub>"  
 
         # The spectra field should be blank
-        strDisplay = ""
+        strSpectra = ""
         sNoise = 0.0
 
         if Spectra != "":
@@ -604,9 +609,9 @@ def automate():
             if strRet != "Validated":
                 render_template('search.html',BadEntry = strRet)    
 
-            strDisplay, sNoise = SetSpectra(Spectra)
+            sNoise = GetTotal(Spectra)
         
-        facade = dict(Metric=Metric, FacadeSpectra=Spectra,FacadeLevel=sNoise, FacadeDisplay = strDisplay, InternalSpectra="",InternalLevel=0.0, InternalDisplay="", Label=Label)
+        facade = dict(Metric=Metric, FacadeSpectra=Spectra,FacadeLevel=sNoise,  InternalSpectra="",InternalLevel=0.0, InternalDisplay="", Label=Label)
 
         session["facadedetails"].append(facade)
     
@@ -668,6 +673,7 @@ def automate():
 
     # Loop over elememnts and update selected levelssession
     session["status"] = "ElementDisplay"
+    session["disabled"] = "disabled"
 
     print ("Returning from automate ")
 
@@ -709,6 +715,7 @@ def share():
     print (shareString )
 
     session["status"] = "ShareDisplay"
+    session["disabled"] = "disabled"
     return render_template('search.html',shareString=shareString, facadedetails=session["facadedetails"],defaultquantitylist= session["defaultquantitylist"])
 
     #   return ("/automate?" + s)
@@ -741,6 +748,7 @@ def remove(id):
 
         # Go back to searching for elements 
         session["status"] = "SearchDisplay"
+        session["disabled"] = ""
         #return render_template('search.html')
         return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
                                     defaultquantitylist= session["defaultquantitylist"])
@@ -751,6 +759,7 @@ def remove(id):
     session["FacadeColumn"] = IsFacadeColumnRequired()
 
     session["status"] = "ElementDisplay"
+    session["disabled"] = "disabled"
     return render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
                                     defaultquantitylist= session["defaultquantitylist"])
 
@@ -791,19 +800,19 @@ def ClearSessionVariables():
     session["LamaxO"] = "Overheating L<sub>AFmax</sub>"    
 
     session["facadedetails"] = []
-    facade = dict(Metric="Laeq16", FacadeSpectra="46.0-46.0-52.0-50.0-45.0",FacadeLevel=56.0, FacadeDisplay = "56.0 (46.0-46.0-52.0-50.0-45.0)", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    facade = dict(Metric="Laeq16", FacadeSpectra="45.0-45.0-51.0-59.0-.0",FacadeLevel="55.0",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
     Label=session["Laeq16"])
     session["facadedetails"].append(facade)
 
-    facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectraA="",InternalLevel=0.0, InternalDisplay="",
+    facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
     Label=session["Laeq8"])
     session["facadedetails"].append(facade)
 
-    facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel="", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
     Label=session["LamaxV"])
     session["facadedetails"].append(facade)
 
-    facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel=0.0, FacadeDisplay = "", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
     Label=session["LamaxO"])
     session["facadedetails"].append(facade)
     
@@ -833,6 +842,7 @@ def ClearSessionVariables():
     session['LamaxvSpectraLabel']  = ""
     session['LamaxoSpectraLabel']  = ""
     session["status"] = "RoomDetails"
+    session["disabled"] = ""
 
     return "Success"
 
@@ -840,113 +850,105 @@ def SetupSessionVariables():
 
     print ("def setupsessionvaribles")
 
-    #session["gstrRoomType"] = request.form.get('roomtype')
-    iCount = 0
+    if session["disabled"] != "disabled":
+        # Get the facade details if they have not already been entered 
+        iCount = 0 
+        strText = request.form.get('Laeq16Spectra')
+        if strText != "":
+            strError, strSpectra  = ValSpectra(strText)
+            if strError != "Validated":
+                return strError        
 
-    strText = request.form.get('Laeq16Spectra')
-    if strText != "":
-        strInput = strText.split()
+            iCount = iCount + 1
+            session["facadedetails"][0]["FacadeLevel"] = GetTotal(strSpectra)
+            session["facadedetails"][0]["FacadeSpectra"] = strSpectra
 
-        iCount = iCount + 1
-        strError, session["facadedetails"][0]["FacadeSpectra"] = ValSpectra(strInput[1])
-        if strError != "Validated":
-            return strError        
+        else:
+            session["facadedetails"][0]["FacadeSpectra"] = ""
+            session["facadedetails"][0]["FacadeLevel"] = ""
+            session["facadedetails"][0]["InternalSpectra"] = ""
+            session["facadedetails"][0]["InternalLevel"] = 0.0
+            session["facadedetails"][0]["InternalDisplay"] = ""
 
-        session["facadedetails"][0]["FacadeLevel"] = strInput[0]
-        session["facadedetails"][0]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strText = request.form.get('Laeq8Spectra')
+        if strText != "":
+            strError, strSpectra = ValSpectra(strText)
+            if strError != "Validated":
+                return strError        
+            
+            iCount = iCount + 1
+            session["facadedetails"][1]["FacadeLevel"] = GetTotal(strSpectra)
+            session["facadedetails"][1]["FacadeSpectra"] = strSpectra
 
-    else:
-        session["facadedetails"][0]["FacadeSpectra"] = ""
-        session["facadedetails"][0]["FacadeLevel"] = ""
-        session["facadedetails"][0]["FacadeDisplay"] = ""
-        session["facadedetails"][0]["InternalSpectra"] = ""
-        session["facadedetails"][0]["InternalLevel"] = 0.0
-        session["facadedetails"][0]["InternalDisplay"] = ""
-
-    strText = request.form.get('Laeq8Spectra')
-    if strText != "":
-        strInput = strText.split()
-        iCount = iCount + 1
-        strError, session["facadedetails"][1]["FacadeSpectra"] = ValSpectra(strInput[1])
-        if strError != "Validated":
-            return strError        
-
-        session["facadedetails"][1]["FacadeLevel"] = strInput[0]
-        session["facadedetails"][1]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
-
-    else:
-        session["facadedetails"][1]["FacadeSpectra"] = ""
-        session["facadedetails"][1]["FacadeLevel"] = ""
-        session["facadedetails"][1]["FacadeDisplay"] = ""
-        session["facadedetails"][1]["InternalSpectra"] = ""
-        session["facadedetails"][1]["InternalLevel"] = 0.0
-        session["facadedetails"][1]["InternalDisplay"] = ""
+        else:
+            session["facadedetails"][1]["FacadeSpectra"] = ""
+            session["facadedetails"][1]["FacadeLevel"] = ""
+            session["facadedetails"][1]["InternalSpectra"] = ""
+            session["facadedetails"][1]["InternalLevel"] = 0.0
+            session["facadedetails"][1]["InternalDisplay"] = ""
 
 
-    strText =  request.form.get('LamaxvSpectra')
-    if strText != "":
-        strInput = strText.split()
-        iCount = iCount + 1
+        strText =  request.form.get('LamaxvSpectra')
+        if strText != "":
+            strError, strSpectra = ValSpectra(strText)
+            if strError != "Validated":
+                return strError        
+            
+            iCount = iCount + 1
+            session["facadedetails"][2]["FacadeLevel"] = GetTotal(strSpectra)
+            session["facadedetails"][2]["FacadeSpectra"] = strSpectra
 
-        strError, session["facadedetails"][2]["FacadeSpectra"] = ValSpectra(strInput[1])
-        if strError != "Validated":
-            return strError        
-        session["facadedetails"][2]["FacadeLevel"] = strInput[0]
-        session["facadedetails"][2]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
-
-    else:
-        session["facadedetails"][2]["FacadeSpectra"] = ""
-        session["facadedetails"][2]["FacadeLevel"] = ""
-        session["facadedetails"][2]["FacadeDisplay"] = ""
-        session["facadedetails"][2]["InternalSpectra"] = ""
-        session["facadedetails"][2]["InternalLevel"] = 0.0
-        session["facadedetails"][2]["InternalDisplay"] = ""
+        else:
+            session["facadedetails"][2]["FacadeSpectra"] = ""
+            session["facadedetails"][2]["FacadeLevel"] = ""
+            session["facadedetails"][2]["InternalSpectra"] = ""
+            session["facadedetails"][2]["InternalLevel"] = 0.0
+            session["facadedetails"][2]["InternalDisplay"] = ""
 
 
-    strText =  request.form.get('LamaxoSpectra')
-    if strText != "":
-        strInput = strText.split()
-        iCount = iCount + 1
-        strError, session["facadedetails"][3]["FacadeSpectra"] = ValSpectra(strInput[1])
-        if strError != "Validated":
-            return strError        
-        session["facadedetails"][3]["FacadeLevel"] = strInput[0]
-        session["facadedetails"][3]["FacadeDisplay"] = strInput[0] + " " + strInput[1]
+        strText =  request.form.get('LamaxoSpectra')
+        if strText != "":
+            strError, strSpectra = ValSpectra(strText)
+            if strError != "Validated":
+                return strError        
+            
+            iCount = iCount + 1
+            session["facadedetails"][3]["FacadeLevel"] = GetTotal(strSpectra)
+            session["facadedetails"][3]["FacadeSpectra"] = strSpectra
 
-    else:
-        session["facadedetails"][3]["FacadeSpectra"] = ""
-        session["facadedetails"][3]["FacadeLevel"] = ""
-        session["facadedetails"][3]["FacadeDisplay"] = ""
-        session["facadedetails"][3]["InternalSpectra"] = ""
-        session["facadedetails"][3]["InternalLevel"] = 0.0
-        session["facadedetails"][3]["InternalDisplay"] = ""
+        else:
+            session["facadedetails"][3]["FacadeSpectra"] = ""
+            session["facadedetails"][3]["FacadeLevel"] = ""
+            session["facadedetails"][3]["InternalSpectra"] = ""
+            session["facadedetails"][3]["InternalLevel"] = 0.0
+            session["facadedetails"][3]["InternalDisplay"] = ""
 
-    if iCount == 0:
-        return "Error. there must be at last one entry for spectra."
-        print ("No Spectra")
+        if iCount == 0:
+            return "Error. there must be at last one entry for spectra."
+            print ("No Spectra")
 
 
-    # Check axh for Room Dimensions and assign variables accordingly
-    print( request.form.get('RoomDimensions'),'ssssssssss')
-    strRD = request.form.get('RoomDimensions').split("x")
-    #print(strRD)
-    if (len(strRD) != 2 ):
-        return "Error. Enter Room Dimensions in format axh where a = floor area in metres  and h = height in metres"
+        # Check axh for Room Dimensions and assign variables accordingly
+        print( request.form.get('RoomDimensions'),'ssssssssss')
+        strRD = request.form.get('RoomDimensions').split("x")
+        #print(strRD)
+        if (len(strRD) != 2 ):
+            return "Error. Enter Room Dimensions in format axh where a = floor area in metres  and h = height in metres"
 
-    if math.isnan(float(strRD[0])) or math.isnan(float(strRD[1])):
-        #print("except " + strRD[0] + "/" + strRD[1])
-        return "Error. Enter Room Dimensions in format axxx h where a = floor area in metres  and h = height in metres"
+        if math.isnan(float(strRD[0])) or math.isnan(float(strRD[1])):
+            #print("except " + strRD[0] + "/" + strRD[1])
+            return "Error. Enter Room Dimensions in format axxx h where a = floor area in metres  and h = height in metres"
 
-    varRD = [0.0, 0.0]
-    varRD[0] = float(strRD[0])
-    varRD[1] = float(strRD[1])
+        varRD = [0.0, 0.0]
+        varRD[0] = float(strRD[0])
+        varRD[1] = float(strRD[1])
 
-    session["gsArea"] = varRD[0]
-    session["gsHeight"] = varRD[1]
-    session["gsVolume"] = varRD[0] * varRD[1]
+        session["gsArea"] = varRD[0]
+        session["gsHeight"] = varRD[1]
+        session["gsVolume"] = varRD[0] * varRD[1]
 
-    # Hardcode for now 
-    session["gsRev"] = 0.5 
+        # Hardcode for now 
+        session["gsRev"] = 0.5 
    
     #session["facadedetails"] = []
     
@@ -972,7 +974,6 @@ def SetupSessionVariables():
     #    session["facadedetails"].append(facade)
     
     # check format is 99.9-99.9-99.9-99.9-99.9-99.9
-
 
     session['RoomDimensions'] = request.form.get('RoomDimensions')
     #session['RoomDimensionsLabel'] = request.form.get('RoomDimensionsLabel')
@@ -1037,12 +1038,12 @@ def ValSpectra(strSpectra):
 
     return "Validated", strSpectra
 
-def SetSpectra (strSpectra):
+def GetTotal (strSpectra):
 
-    print ("def SetSpectra")    
+    print ("def GetTotal")    
 
     # Receives a spectra string e.g. "46.0-46.0-52.0-50.0-45.0 (56.0)" which has been validated and returns 
-    # a display string "46.0-46.0-52.0-50.0-45.0 (56.0) and a total e.g. 56"
+    # a total formatted 
 
     sAntiLogTot = 0.0
 
@@ -1053,9 +1054,8 @@ def SetSpectra (strSpectra):
         sAntiLogTot = sAntiLogTot + pow (10 , (float(mystr) / 10))  
 
     sTot = round(10 * math.log(sAntiLogTot,10) ,1)
-    strDisplayString  = str(sTot) + " (" + strSpectra + ")"
 
-    return strDisplayString, sTot
+    return sTot
 
 def GetfromDataBase(page):
     # Read from thee database for a page 

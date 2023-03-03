@@ -26,33 +26,17 @@
             <a href="/" class="about fs-16 f-500">Home</a>
             <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
                 <div class="d-flex ">
-                    <button class="about fs-16 f-500"><a href="/about/">About</a></button>
-                    <button class="about fs-16 f-500"><a href="/help/">Help</a></button>
-                   <!---- <button class="donate fs-16 f-500"><a href="//">Donate1</a></button>-->
-
+                    <a class="about" href="/about/">About</a>
+                    <a class="about" href="/help/">Help</a>
+                    <!-- 
                     {% if not current_user.is_authenticated %}
-                    <!--<div class="login_button fs-16 f-500 myBtnLogIn">Log in</div>-->
                         <button class="about fs-16 f-500"><a href="/logmein/">LogIn</a></button>
                         <button class="about fs-16 f-500"><a href="/registration/">Registration</a></button>
-                        <!--<div 
-                    <div class="registration_button d-flex justify-content-center align-items-center myBtnRegistration">
-                        <div class="fs-16 f-500 c-white myBtnRegistration">Registration</div>
-                    </div>-->
                     {% endif %}
                     {% if current_user.is_authenticated %}                    
-                        <!--<div class="d-flex justify-content-center align-items-center column">
-                        {% if session["selectedelements"]|length > 0 %}
-                                <button class="about fs-16 f-500"><a href="/download/">download</a></button>
-                                <button class="about fs-16 f-500"><a href="/share/">share</a></button>
-                            {% endif %}
-                        </div>-->
                         <button class="about fs-16 f-500"><a href="/logout">Logout</a></button>
-                        <!--<div class="registration_button d-flex justify-content-center align-items-center">
-                            <a href="/logout" class="navbar-item c-white">
-                                Log out
-                            </a> 
-                        </div>-->
                     {% endif %}
+                    -->
                 </div>
             </div>
         </div>
