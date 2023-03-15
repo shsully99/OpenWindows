@@ -4,6 +4,7 @@ import shutil
 import datetime
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from openpyxl.styles import PatternFill 
 
 
 def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI, BaseDir):
@@ -63,7 +64,7 @@ def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI, 
             elif facade["Metric"] == "LamaxO":
                 ws.cell(row = i, column = 2).value = "Overheating LAFmax dB(A)"
 
-            sIncident = [float(x) for x in facade["FacadeSpectra"].rstrip(';').split("-")]
+            sIncident = [float(x) for x in facade["FacadeSpectra"].rstrip(';').split("/")]
 
             ws.cell(row = i, column = 5).value = sIncident[0]
             ws.cell(row = i, column = 6).value = sIncident[1]
@@ -78,8 +79,14 @@ def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI, 
     for selement in selectedelements: 
 
         ourElement = ElementSRI.query.filter(ElementSRI.UniqueID == selement["ElementID"] ).first()
-        print (ourElement.Description)
-        ws.cell(row = i, column = 2).value = ourElement.Description
+        print (ws.cell(row = i, column = 2).style )
+        if ourElement.URL != "":
+            ws.cell(row = i, column = 2).value =  '=HYPERLINK("{}", "{}")'.format(ourElement.URL, ourElement.Description)
+            ws.cell(row = i, column = 2).style = "Hyperlink"
+        else: 
+            ws.cell(row = i, column = 2).value =  ourElement.Description
+            ws.cell(row = i, column = 2).style = "Normal"
+
         ws.cell(row = i, column = 3).value = selement["Quantity"]
         ws.cell(row = i, column = 4).value = selement["FacadeDifference"]
         ws.cell(row = i, column = 5).value = selement["Hz125"]
@@ -87,10 +94,19 @@ def DownloadFile (selectedelements, facadedetails, gsVolume, gsRev, ElementSRI, 
         ws.cell(row = i, column = 7).value = selement["Hz500"]
         ws.cell(row = i, column = 8).value = selement["Hz1000"]
         ws.cell(row = i, column = 9).value = selement["Hz2000"]
-
         ws.cell(row = i, column = 10).value = ourElement.Metric
-        ws.cell(row = i, column = 11).value = selement["State"]
+        if selement["State"] == "Active":
+            ws.cell(row = i, column = 11).value = "On"
+        else:
+            ws.cell(row = i, column = 11).value = "Off"
+        ws.cell (row=i, column =11 ).fill = PatternFill(start_color='ccffcc',end_color='ccffcc',fill_type='solid')        
         i=i+1
+
+    ws.cell(row=i, column = 2).value = "Add in your element here."
+
+    for j in range (2,12):
+        ws.cell (row=i, column = j ).fill = PatternFill(start_color='ccffcc',end_color='ccffcc',fill_type='solid')
+   
 
     wb.save(dst)
     wb.close()

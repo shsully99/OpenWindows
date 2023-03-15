@@ -14,11 +14,53 @@
 <div class="container">
     <div class = "measurement_result_block" >
         <div class = "container measure_noise_block_inner">
+            <p class="home_container_block1_text1 fs-24 f-600 c-black">Introduction</p>
+            <div class = "row">
+                <div class = "col-6" >
+                    <br>
+                    <br>
+                    <p></p>
+                    Enter up to 4 noise levels on the top left of the screen, each of which represents your assessment of the 
+                    free-field noise levels at the facade. Then on the right of the screen enter the room dimensions of the room under consideration.
+                    <p></p>
+                    Next on the top right of the screen enter the details of the facade element you wish to add and click the "search" button.
+                    You will be presented with matching facade elements from the database.  Also shown is the calculated total noise level of you include 
+                    that element in your search. Click the Add button for an element you wish to include in your calculation.
+                    <p></p>
+                    The selected element(s) will be displayed. The display also shows the contribution that element makes to the 
+                    overall noise level as a decIbel level and also as a percentage. You can turn elements on or off on this screen on the
+                    Selected column or remove them by clicking the remove button on the far right of the screen. 
+                    <p></p>
+                    On the centre left you will see the "Share" and "Download" links. 
+                    "Share" takes you to a screen where you can copy a "Share" link into the copy/paste clipboard of your PC. Paste it into an 
+                    email to send to other members of your design team who will then be able to see your design if they click on that link.
+                    <p></p>
+                    "Download" will download the calculation into an Excel spreadsheet. This allows further processing of the results including 
+                    the ability to add "custom" elements. Currently this is the only place you can add a custom element. 
+                    <p></p>
+                    You can "toggle" between the element display and Search screen by clicking "Show Selected" and "Search". 
+                    <p></p>
+                    The calculation is carried according to two formular presented in BS 8233 and BS EN 12354-3 and shown on the right (excerpt from BB93). 
+                    The results at each frequency for each element are added logarithmically to determine the overall noise level within a room. 
+                    <p></p>
+                </div>
+                <div class = "col-1" >
+                </div>
+                <div class = "col-5" >
+                    <img src="{{url_for('static',filename='assets/images/Calc.png')}}" alt="" > 
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>            
+            <br>
+            <br>
             <p class="home_container_block1_text1 fs-24 f-600 c-black">Help for entry fields</p>
             <div class = "row">
                 <p></p>
                 <div class = "col-6" >
-                    <p class = "TopForm">One can enter up to four types of noise levels which the facade is exposed to.
+                    <p class = "TopForm">One can enter up to four types of noise levels which the facade is exposed to.</p>
                         <ul>
                             <li>The energy "average" noise levels over a 16 hour daytime period (L<sub>Aeq16h</sub>) </li>
                             <li>The energy "average" noise levels over an 8 hour night-time period (L<sub>Aeq8h</sub>)</li>
@@ -26,7 +68,8 @@
                             <li>The 1highest impulsive noise level of an 8 hour night-time period    (L<sub>Aeq8h</sub>)</li>    
                         </ul>
                         You can enter the noise level at the facade as an overall level in the left hand entry box or 
-                        the spectra at each octave band from 125 Hz to 2000 Hz, sepearated by "-" or "/"
+                        the spectra at each octave band from 125 Hz to 2000 Hz, sepearated by "-" or "/"/. If you enter an overall 
+                        level then a spectra will be created and shaped according to the one shown in ISO 717-1 (C<sub>tr</sub>). 
                 </div>
                 <div class = "col-1" >
                 </div>
@@ -43,6 +86,7 @@
                         <li>The area (m<sup>3</sup>) x height (m) OR </li>
                         <li>3 dimensions (length (m) x width (m) x height (m) )</li>
                     </ul>
+                    Note: If you select an open area element it will be selected as a percentage of the floor area. 
                 </div>
                 <div class = "col-1" >
                 </div>
@@ -53,7 +97,7 @@
             <br><hr><br>
             <div class="row" >
                 <div class = "col-6"  ">
-                    From drop-down list enter the type of element you wish to include on the facade. 
+                    From the drop-down list enter the type of element you wish to search the database for.  
                 </div>
                 <div class = "col-1" >
                 </div>
@@ -64,7 +108,12 @@
             <br><hr><br>
             <div class="row" >
                 <div class = "col-6"  ">
-                    Enter the area of facade of the element or equivalent area for ventilation elements. 
+                    Enter the surface area of the element selected im m<sup>2</sup> or equivalent area in mm<sup>2</sup>
+                    for vents. The area entered here is used to calculate the internal noise level for each element shown when you press search. 
+                    For open areas the area is the "acoustic open area". 
+                    For vents a number of vents will be shown which satisfies the equivant area value. So if you ask for 10000 mm<sup>2</sup>
+                    a vent of 4000 mm<sup>2</sup> will be assumed to have a quantity of 3 in order to comply with your request for a minimum 
+                    equivalent area of 1000 4000 mm<sup>2</sup>. 
                 </div>
                 <div class = "col-1" >
                 </div>
@@ -75,7 +124,8 @@
             <br><hr><br>
             <div class="row" >
                 <div class = "col-6"  ">
-                    If this element is placed on a quieter facade than enter the number of deciBels quiter. 
+                    If this element is placed on a quieter facade than enter the number of deciBels quieter. This is particuarly useful if you want 
+                    to estimate the effect of opening a window on a facade that does not face a noise source. 
                 </div>
                 <div class = "col-1" >
                 </div>
@@ -86,7 +136,7 @@
             <br><hr><br>
             <div class="row" >
                 <div class = "col-6"  ">
-                   Filter out elements that do not inclide keywords entered here. 
+                   If you enter a value here then that valuee will be used to filter the  search results. 
                 </div>
                 <div class = "col-1" >
                 </div>

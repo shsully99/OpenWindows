@@ -44,7 +44,7 @@ function ValRoomDimensions(val)
   sHeight = (parseFloat(sHeight)).toFixed(1)
   sVol = (parseFloat(sVol)).toFixed(1)
   document.getElementsByName('RoomDimensions')[0].value = sArea + "x"  + sHeight
-  $("#RoomDimensionsLabel").text(sVol + " m3");
+  $("#RoomDimensionsLabel").text(sVol);
   /*$(document).ready()
   {
     var val1 = 1
@@ -106,23 +106,23 @@ function ValLevel(val, call)
     // Valid entry  now set up spectra
 
     Overall = parseFloat(val).toFixed(1);
-    if (call == 1 || call == 2) 
-    {
-      spectra[0] = Overall - 10;
-      spectra[1] = Overall - 10;
-      spectra[2] = Overall - 4;
-      spectra[3] = Overall - 6;
-      spectra[4] = Overall - 11;
-    }
-    else
-    {
-      spectra[0] = Overall - 14;
-      spectra[1] = Overall - 8;
-      spectra[2] = Overall - 4;
-      spectra[3] = Overall - 5;
-      spectra[4] = Overall - 12;
-    }
-    strSpectra = spectra[0].toFixed(1) + "-" +spectra[1].toFixed(1)  + "-" +spectra[2].toFixed(1)  + "-" + spectra[3].toFixed(1)  + "-" +spectra[4].toFixed(1) 
+    //if (call == 1 || call == 2) 
+    //{
+    spectra[0] = Overall - 14;
+    spectra[1] = Overall - 10;
+    spectra[2] = Overall - 7;
+    spectra[3] = Overall - 4;
+    spectra[4] = Overall - 6;
+    //}
+    //else
+    //{
+    //  spectra[0] = Overall - 14;
+    //  spectra[1] = Overall - 8;
+    //  spectra[2] = Overall - 4;
+    //  spectra[3] = Overall - 5;
+    //  spectra[4] = Overall - 12;
+    //}
+    strSpectra = spectra[0].toFixed(1) + "/" +spectra[1].toFixed(1)  + "/" +spectra[2].toFixed(1)  + "/" + spectra[3].toFixed(1)  + "/" +spectra[4].toFixed(1) 
   }
 
   if (Overall > 0)
@@ -147,7 +147,7 @@ function ValLevel(val, call)
         $("#LamaxvSpectraLabel").text(Overall);*/
     }      
     else if (call == 4){
-      document.getElementsByName('LamaxoSpectra')[0].value = OverallstrSpectra 
+      document.getElementsByName('LamaxoSpectra')[0].value = strSpectra 
       document.getElementsByName('LamaxoLevel')[0].value = Overall      
       /*document.getElementById('LamaxoSpectraLabel').value = Overall + " dB(A)"
         $("#LamaxoSpectraLabel").text(Overall );*/
@@ -199,7 +199,7 @@ function ValSpectra(val, call)
     //alert("Before calc")
     Overall = CalcTotal(spectra);
     //alert("after  calc" + Overall)
-    strSpectra = parseFloat(spectra[0]).toFixed(1) + "-" +parseFloat(spectra[1]).toFixed(1)  + "-" +parseFloat(spectra[2]).toFixed(1)  + "-" + parseFloat(spectra[3]).toFixed(1)  + "-" +parseFloat(spectra[4]).toFixed(1) 
+    strSpectra = parseFloat(spectra[0]).toFixed(1) + "/" +parseFloat(spectra[1]).toFixed(1)  + "/" +parseFloat(spectra[2]).toFixed(1)  + "/" + parseFloat(spectra[3]).toFixed(1)  + "/" +parseFloat(spectra[4]).toFixed(1) 
     //alert("strSpectra   " + Overall)
   }
 
@@ -296,41 +296,41 @@ function FilterConfig(val)
 
         case "Glazing":
           document.getElementById('QuantityLabel').innerHTML = " Area"
-          //document.getElementById('QuantityMetric').innerHTML = "   "          
+          document.getElementById('QuantityMetric').innerHTML = "m<sup>2</sup>"
           document.getElementById('Quantity').disabled = false 
-          document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def0
+          document.getElementsByName('Quantity')[0].value = parseFloat(document.getElementById("dql").dataset.def0).toFixed(1)
           document.getElementById('qRow').style.visibility = "visible"          
           break;          
 
         case "Wall":
           document.getElementById('QuantityLabel').innerHTML  = " Area"   
-          //document.getElementById('QuantityMetric').innerHTML = "   "          
+          document.getElementById('QuantityMetric').innerHTML = "m<sup>2</sup>"
           document.getElementById('Quantity').disabled = false 
-          document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def1
+          document.getElementsByName('Quantity')[0].value = parseFloat(document.getElementById("dql").dataset.def1).toFixed(1)
           document.getElementById('qRow').style.visibility = "visible"          
           break;          
 
         case "Door":
           document.getElementById('QuantityLabel').innerHTML = " Area"
-          //document.getElementById('QuantityMetric').innerHTML = " m2"
+          document.getElementById('QuantityMetric').innerHTML = "m<sup>2</sup>"
           document.getElementById('Quantity').disabled = false 
-          document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def2
+          document.getElementsByName('Quantity')[0].value = parseFloat(document.getElementById("dql").dataset.def2).toFixed(1)
           document.getElementById('qRow').style.visibility = "visible"          
           break;
 
         case "OpenArea":
             document.getElementById('QuantityLabel').innerHTML = "                "
-            //document.getElementById('QuantityMetric').innerHTML = "   "            
+            document.getElementById('QuantityMetric').innerHTML = "   "            
             document.getElementById('Quantity').disabled = true
-            document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def3
+            document.getElementsByName('Quantity')[0].value = parseFloat(document.getElementById("dql").dataset.def3).toFixed(1)
             document.getElementById('qRow').style.visibility = "hidden"
             break;
 
         case "Vent":
-            document.getElementById('QuantityLabel').innerHTML = "Equivalent Area"
-            //document.getElementById('QuantityMetric').innerHTML = "  mm2 "            
+            document.getElementById('QuantityLabel').innerHTML = "Eq Area"
+            document.getElementById('QuantityMetric').innerHTML = "mm<sup>2</sup>"
             document.getElementById('Quantity').disabled = false
-            document.getElementsByName('Quantity')[0].value = document.getElementById("dql").dataset.def4
+            document.getElementsByName('Quantity')[0].value = parseFloat(document.getElementById("dql").dataset.def4).toFixed(1)
             document.getElementById('qRow').style.visibility = "visible"          
             break;
     }

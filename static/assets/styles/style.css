@@ -601,6 +601,11 @@ a {
  }
 
 
+ .RoomDim { 
+    width: 40%;
+ }
+
+
 
 
 /* Tooltip container */
@@ -879,6 +884,11 @@ a {
     margin-left: 20px;
     font-size: 20px;
     line-height: 30px;
+    font-weight:bold;    
+    color: #062cda;
+}
+
+.bluelink{
     font-weight:bold;    
     color: #062cda;
 }
@@ -1193,4 +1203,9 @@ a {
     .home_container {
         margin-top: 260px;
     }
+}
+
+.table {
+  --bs-table-striped-bg: rgb(204,236,255);;
+  --bs-table-border-color: grey;
 }

@@ -68,7 +68,7 @@
                         <label class = "TopFormBold">Level </label>
                         <label class = "TopFormBold">     Spectra dB(A) </label>
 
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Free-field noise level at the facade.  " data-bs-content="Enter the value of the overall noise level in the left hand box OR spectra for 125-2000 Hz in the right, separated by tabs or dashes."> ? </a> 
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Free-field noise level at the facade.  " data-bs-content="Enter the value of the overall noise level in the left hand box OR spectra for 125-2000 Hz in the right, separated by tabs or slashes."> ? </a> 
                     </div>                        
                   
                     <div class = "col-4 " >
@@ -198,12 +198,13 @@
                         <span>
                             <input name="RoomDimensions" id="RoomDimensions" type="text"
                             placeholder="Enter floor area(m2) x height(m), alternatively length"
-                            class = "TopForm"
+                            class = "TopForm RoomDim"
                             onchange="ValRoomDimensions(this.value)"
-                            value="{{ session['RoomDimensions']}}"
+                            value="{{ session['RoomDimensions']}}  "
                             {{ session["disabled"] }}>
-                            <!-- <label class = "TopForm" for = "" name="RoomDimensionsLabel" id="RoomDimensionsLabel" 
-                            value = "{{ session['RoomDimensionsLabel']}}"" >  </label>-->
+
+                            <label class = "TopForm" for = "RoomDimensions" name="RoomDimensionsLabel" id="RoomDimensionsLabel">
+                            {{ session['gsVolume']|round(1) }}m</label><sup>3</sup>
                         </span> 
                     </div>                                           
                 </div>
@@ -229,18 +230,17 @@
 
                 <div class="row" id="qRow">
                     <div class = "col-5"><span>
-                        <label  class= "TopForm" name="QuantityLabel" id ="QuantityLabel">Area</label>
+                        <label  class= "TopForm" name="QuantityLabel" id ="QuantityLabel"> Area </label>
                         <a id = "QuantityQuery" tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Area" data-bs-content="For doors, glazing and walls enter the area in m2. For vents enter the maximum equivalent area for ventilation in mm2. ">?</a>
                     </span>
                     </div> 
                     <div class = "col-7">
                         <span>
                             <input type="text" placeholder="Type area"
-                                class = "TopForm"
+                                class = "TopForm RoomDim"
                                 name="Quantity" id="Quantity"
                                 value="{{ session['gsFilterQuantity'] }}">
-                            <!-- <label name="QuantityMetric" id="QuantityMetric" class = "TopForm"
-                                placeholder="m2"></label>  -->
+                                <label name="QuantityMetric" id="QuantityMetric" class = "TopForm">m<sub>2</sub></label>
                         </span>
                     </div>                                           
                 </div>
@@ -296,7 +296,7 @@
 </div>
 </form>
 
-{% if session["status"] == "SearchDisplay" and querySearch is not defined %}
+<!-- {% if session["status"] == "SearchDisplay" and querySearch is not defined %}
     <div class="container">
         <div class="measurement_result_block">
             <div class="measure_noise_block_inner">
@@ -311,11 +311,11 @@
             </div>
         </div>
     </div>
-{% endif %}
+{% endif %} -->
 
 {% if BadEntry is defined %}
     <br>
-    <h3 style = " padding-top: 25px; text-align:center;">
+    <h2 style = " padding-top: 18px; text-align:center;">
 
 
         {{ BadEntry }}
@@ -329,7 +329,7 @@
             <div class = "col-12" style = "border:5px solid red; "> -->
                 <div >
                     <br>
-                    <p > Copy the link below to clipboard/p>
+                    <p > Copy the link below to clipboard. You can paste the results into an email which can be sent to other users. </p>
                     <br>
                     <button id="shareCopy"  onclick = "Copy_Text()" > Copy text to clipboard  </button>
                     <br>
@@ -341,26 +341,6 @@
         <!--    </div>
         </div> -->
     </div>
-</div>
-
-<div class="container">
-    <div class="TopFormCentre"> 
-      <!-- <div class="row" >
-           <div class = "col-12" style = "border:5px solid red; "> -->
-               <div >
-                   <br>
-                   <p > Copy the link below to clipboard/p>
-                   <br>
-                   <button id="shareCopy"  onclick = "Paste_Text()" > Paste text to clipboard  </button>
-                   <br>
-                   <br>
-                   <textarea rows="5" cols="150"  </textarea>
-  
-               </div>
-              
-       <!--    </div>
-       </div> -->
-   </div>
 </div>
 
 {% elif session["status"] == "SearchDisplay" and querySearch is defined %}
@@ -427,28 +407,32 @@
                             <tr class="TopForm"> 
                                 <th>Spectra</th>
                                 <th>Description</th>
-                                <th>URL</th>
                                 {% for facade in facadedetails %}
                                     {% if facade.FacadeSpectra != "" %}                                
                                         <th><span>
                                         {{ facade.Label | safe }}
-                                            <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Calculated Total " data-bs-content="This column shows what the internal level wll be if this element is added.">?</a>
+                                            <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Calculated Total " data-bs-content="This column shows what the overall internal level wll be if this element is added.">?</a>
                                           </span>
                                         </th>
                                     {% endif %}
-                                {% endfor %}
+                                {% endfor %}row
+                                {% if session["selectedelements"]|length < 8 %}
                                 <th><span>Select
                                     <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Select" data-bs-content="Click add to include this element.">?</a>
                                     </span>   
                                 </th>
+                                {% endif %}
                                 <!-- <th>Actions</th> -->
                             </tr>
                             {% for row in querySearch.items %}
                             <tr>
                                 <td>{{ row.Hz125|string + "/" + row.Hz250|string + "/" + row.Hz500|string + "/" +
-                                    row.Hz1000|string + "/" + row.Hz2000|string }}
+                                   row.Hz1000|string + "/" + row.Hz2000|string }}
+                                {% if row.URL %}
+                                <td><a class = "c-blue" href = "{{ row.URL }}" target = "_blank">{{ row.Description }}</a></td>
+                                {% else %}
                                 <td>{{ row.Description }}</td>
-                                <td>{{ row.URL }}</td>
+                                {% endif %}                              
                                 {% if df is defined %}
                                     {% for key, dfrow in df.iterrows() %}
                                         {% if row.UniqueID == dfrow.UniqueID %}
@@ -460,8 +444,10 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
-                                <td class="c-orange"><a class="c-orange" href="/add/{{row.UniqueID}}" method="POST">Add</a>
+                                {% if session["selectedelements"]|length < 8 %}
+                                <td class="bluelink"><a  href="/add/{{row.UniqueID}}" method="POST">Add</a>
                                 </td>
+                                {% endif %}                              
                             </tr>
                             {% endfor %}
                         </table>
@@ -481,17 +467,17 @@
                 <div class="row">
                     <div class = "col-3"  >
                         <a class="about"  href="/share">Share</a>
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Share" class="about" data-bs-content="Click Share to send the results electronically">?</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Share" class="about" data-bs-content="Click to display the results in a format which can be shared electonically.">?</a>
                     </div> 
                     <div class = "col-3"  >
                         <a class="about" href="/download">Download</a>
-                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Download" class="about" data-bs-content="Click  download this selection as a spreadsheet">?</a>
+                        <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Download" class="about" data-bs-content="Click  to download this selection as a spreadsheet">?</a>
                     </div> 
                 </div>                
                 <div>
                     <table id="example" class="table table-striped table-bordered" style="width:100%">
                         <tr>
-                            <th>Quantity</th>
+                            <th>Area/Quantity</th>
                             <th>Type</th>
                             <th>Description</th>
                     {% for facade in facadedetails %}
@@ -513,9 +499,18 @@
                         </tr>
                         {% for item in session["selectedelements"] %}
                         <tr>
-                            <td>{{ item['Quantity'] }}</td>
+                            {% if item['ElementType'] == "Vent" %}
+                                <td>{{ item['Quantity'] }}No</td>
+                            {% else %}
+                                <td>{{ item['Quantity']|round(2) }} m<sup>2</sup></td>
+                            {% endif %}
+
                             <td>{{ item['ElementType'] }}</td>
+                            {% if item['URL']%}
+                            <td><a class = "c-blue" href = "{{ item['URL']}}"  target = "_blank">{{ item['ElementDescription'] }}</a></td>
+                            {% else %}
                             <td>{{ item['ElementDescription'] }}</td>
+                            {% endif %}                              
             {% for facade in facadedetails %}
                 {% if facade.FacadeSpectra != "" %}               
                     {% for elDetail in item['elementLevels'] %}
@@ -532,9 +527,9 @@
                             <td> {{ item["FacadeDifference"] }} dB quieter</td>
                             {% endif %}
                             {% endif %}
-                            <td><a href="/change/{{item.ElementID}}" method="POST">{{ "On" if item["State"] == "Active" else "Off"
+                            <td><a href="/change/{{item.ElementID}}" method="POST" class = "bluelink">{{ "On" if item["State"] == "Active" else "Off"
                                 }}</a></td>
-                            <td><a href="/remove/{{item.ElementID}}" method="POST">Remove</a></td>
+                            <td><a href="/remove/{{item.ElementID}}" method="POST" class = "bluelink">Remove</a></td>
                         </tr>
                         {% endfor %}
                     </table>

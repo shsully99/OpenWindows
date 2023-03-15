@@ -90,7 +90,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'app.login'
 login_manager.init_app(app)
 
-
     #   Declaration of database class
 class ElementSRI(db.Model):
 
@@ -352,6 +351,12 @@ def search():
     
         querySearch  = GetfromDataBase(1)
 
+        if querySearch.first == 0:
+            strRet = "Error. No items found for this selection"
+            return render_template('search.html', BadEntry = strRet,
+                                            facadedetails = session["facadedetails"],
+                                defaultquantitylist= session["defaultquantitylist"])            
+
         df = SetupSRIs(querySearch)
 
         session["status"] = "SearchDisplay"
@@ -455,7 +460,8 @@ def add(id):
         Percent = 0.0))
 
     sQuantity = 0.0
-    sQuantity = session["gsFilterQuantity"]
+
+    sQuantity = float(session["gsFilterQuantity"])
 
     if myElement.Metric == "Dnew":
         if myElement.ElementType == "OpenArea":
@@ -474,6 +480,7 @@ def add(id):
                         ElementDescription=myElement.Description,
                         FacadeDifference=                                
                         session["gsFacadeDifference"],
+                        URL=myElement.URL,
                         Hz125=myElement.Hz125,
                         Hz250=myElement.Hz250,
                         Hz500=myElement.Hz500,
@@ -569,6 +576,9 @@ def showresults ():
 def automate():
 
     print ("def automate():")
+    
+    # First reset the sysmem for first time entry 
+    ClearSessionVariables()
 
     args = request.args
     parsedict= args.to_dict(flat=False)
@@ -578,7 +588,6 @@ def automate():
     session["gsVolume"] = session["gsArea"] * session["gsHeight"] 
     session["gsRev"] = 0.5 
 
-    session["facadedetails"] = []
     metList = parsedict['MetricList'][0].rstrip(']').lstrip('[').split(',')
     spectraList = parsedict['SpectraList'][0].rstrip(']').lstrip('[').split(',')
 
@@ -588,16 +597,27 @@ def automate():
     session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
     session["LamaxO"] = "Overheating L<sub>AFmax</sub>"  
 
+    InitFacadeDetails()
+
+    k = 0
     for i,j in zip(metList,spectraList):
         Metric = i.rstrip(" ").lstrip(" ").rstrip("'").lstrip("'")
         Spectra = j.rstrip(" ").lstrip(" ").rstrip("'").lstrip("'")
         # Validate the spectra at this point 
         Label = ""
 
-        if Metric == "Laeq16": Label="Daytime L<sub>Aeq,16h</sub>"
-        elif Metric == "Laeq8": Label = "Night-time L<sub>Aeq,8h</sub>"
-        elif Metric == "LamaxV": Label = "Ventilation L<sub>AFmax</sub>"
-        elif Metric == "LamaxO": Label = "Overheating L<sub>AFmax</sub>"  
+        if Metric == "Laeq16": 
+            Label="Daytime L<sub>Aeq,16h</sub>"
+            k=0
+        elif Metric == "Laeq8": 
+            Label = "Night-time L<sub>Aeq,8h</sub>"
+            k=1
+        elif Metric == "LamaxV": 
+            Label = "Ventilation L<sub>AF,max</sub>"
+            k=2
+        elif Metric == "LamaxO": 
+            Label = "Overheating L<sub>AF,max</sub>"
+            k=3
 
         # The spectra field should be blank
         strSpectra = ""
@@ -607,13 +627,14 @@ def automate():
             strRet = ValSpectra(Spectra)
             # todo - sort out error here 
             if strRet != "Validated":
-                render_template('search.html',BadEntry = strRet)    
+                render_template('search.html',selected=session["selectedelements"],facadedetails=session["facadedetails"],
+                                    defaultquantitylist=session["defaultquantitylist"],BadEntry = strRet)                     
 
             sNoise = GetTotal(Spectra)
         
         facade = dict(Metric=Metric, FacadeSpectra=Spectra,FacadeLevel=sNoise,  InternalSpectra="",InternalLevel=0.0, InternalDisplay="", Label=Label)
 
-        session["facadedetails"].append(facade)
+        session["facadedetails"][k] = facade 
     
     session["selectedelements"] = []
     #session['selectedcount'] = 0
@@ -621,6 +642,7 @@ def automate():
     elIDList = parsedict["ElementIDList"][0].rstrip(']').lstrip('[').split(',')   
     QList = parsedict["QuantityList"][0].rstrip(']').lstrip('[').split(',') 
     FDList = parsedict["FacDifList"][0].rstrip(']').lstrip('[').split(',') 
+
 
     for i,j,k in zip(elIDList,QList, FDList):
 
@@ -645,6 +667,7 @@ def automate():
                                 ElementType=myElement.ElementType,
                                 ElementDescription=myElement.Description,
                                 FacadeDifference=FacDif,
+                                URL=myElement.URL,
                                 Hz125=myElement.Hz125,
                                 Hz250=myElement.Hz250,
                                 Hz500=myElement.Hz500,
@@ -710,7 +733,7 @@ def share():
     parsedict["FacDifList"] = FacDifList
 
     shareString = urlencode(parsedict)
-    shareString  = "/automate?" + shareString 
+    shareString  = "http://www.openwindows.uk/automate?" + shareString 
 
     print (shareString )
 
@@ -720,7 +743,6 @@ def share():
 
     #   return ("/automate?" + s)
     
-
 @app.route('/remove/<int:id>', methods=['GET', 'POST'])
 def remove(id):
     print(f"*** In remove routine ")    
@@ -731,6 +753,7 @@ def remove(id):
         if selectedelement["ElementID"] == id:
             session["selectedelements"].remove(selectedelement)
             bFound = True
+            break;
     #        session['selectedcount'] = session['selectedcount'] - 1
 
     if bFound == False: 
@@ -788,44 +811,45 @@ def ClearSessionVariables():
     session["gsHeight"] = 2.4
     session["gsVolume"] = 18.0
     session['RoomDimensions'] = "7.5x2.4"
-    #session["RoomDimensions"] = ""
-    #session["RoomDimensionsLabel"] = "18 m3"
 
     # Hardcode for now 
     session["gsRev"] = 0.5 
 
     session["Laeq16"] = "Daytime L<sub>Aeq,16h</sub>"
     session["Laeq8"] = "Night-time L<sub>Aeq,8h</sub>"
-    session["LamaxV"] = "Ventilation L<sub>AFmax</sub>"
-    session["LamaxO"] = "Overheating L<sub>AFmax</sub>"    
+    session["LamaxV"] = "Ventilation L<sub>AF,max</sub>"
+    session["LamaxO"] = "Overheating L<sub>AF,max</sub>"    
 
-    session["facadedetails"] = []
-    facade = dict(Metric="Laeq16", FacadeSpectra="45.0-45.0-51.0-59.0-.0",FacadeLevel="55.0",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
-    Label=session["Laeq16"])
-    session["facadedetails"].append(facade)
+    InitFacadeDetails()
 
-    facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
-    Label=session["Laeq8"])
-    session["facadedetails"].append(facade)
+    session["facadedetails"][0]["FacadeSpectra"]="51.0/55.0/58.0/61.0/59.0"
+    session["facadedetails"][0]["FacadeLevel"]="65.0"
+    
+    #facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    #Label=session["Laeq8"])
+    #session["facadedetails"].append(facade)
 
-    facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel="", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
-    Label=session["LamaxV"])
-    session["facadedetails"].append(facade)
+    #facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel="", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    #Label=session["LamaxV"])
+    #session["facadedetails"].append(facade)
 
-    facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
-    Label=session["LamaxO"])
-    session["facadedetails"].append(facade)
+    #facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    #Label=session["LamaxO"])
+    #session["facadedetails"].append(facade)
     
     session["selectedelements"] = []
 
     session["gstrFilterElementType"] = "Glazing"
     session["gsFilterQuantity"] = 2
+    #session["QuantityMetric"] = "m<sup> 2</sup>"
+    #session["QuantityLabel"] = "Area"
+    
 
     session["elementtypeslist"] = ["Glazing","Wall","Door","OpenArea","Vent"]
     #session["ETQuantityTitle"] = ["Area","Area","Area","OpenArea","Equivalent"]
     #session["ETQuantityHeader"] = ["Area","Area","Area","OpenArea","Equivalent"]
 
-    session["defaultquantitylist"] = [2, 10 , 2,0,2500]
+    session["defaultquantitylist"] = [2, 10 , 2,0,5000]
 
     print (session["defaultquantitylist"])
 
@@ -853,6 +877,7 @@ def SetupSessionVariables():
     if session["disabled"] != "disabled":
         # Get the facade details if they have not already been entered 
         iCount = 0 
+
         strText = request.form.get('Laeq16Spectra')
         if strText != "":
             strError, strSpectra  = ValSpectra(strText)
@@ -925,11 +950,9 @@ def SetupSessionVariables():
 
         if iCount == 0:
             return "Error. there must be at last one entry for spectra."
-            print ("No Spectra")
-
 
         # Check axh for Room Dimensions and assign variables accordingly
-        print( request.form.get('RoomDimensions'),'ssssssssss')
+        #print( request.form.get('RoomDimensions'),'ssssssssss')
         strRD = request.form.get('RoomDimensions').split("x")
         #print(strRD)
         if (len(strRD) != 2 ):
@@ -945,10 +968,12 @@ def SetupSessionVariables():
 
         session["gsArea"] = varRD[0]
         session["gsHeight"] = varRD[1]
-        session["gsVolume"] = varRD[0] * varRD[1]
+        session["gsVolume"] = round (varRD[0] * varRD[1],1)
 
         # Hardcode for now 
         session["gsRev"] = 0.5 
+
+        session['RoomDimensions'] = request.form.get('RoomDimensions')
    
     #session["facadedetails"] = []
     
@@ -975,7 +1000,7 @@ def SetupSessionVariables():
     
     # check format is 99.9-99.9-99.9-99.9-99.9-99.9
 
-    session['RoomDimensions'] = request.form.get('RoomDimensions')
+    #session['RoomDimensions'] = request.form.get('RoomDimensions')
     #session['RoomDimensionsLabel'] = request.form.get('RoomDimensionsLabel')
 
     # First time Search display, validate entries
@@ -996,11 +1021,31 @@ def SetupSessionVariables():
     # New defaults for search
 
     session["defaultquantitylist"] = [session["gsArea"]/2/4, (session["gsArea"]/2)*session["gsHeight"], 2,0,5000]
-    if session["gstrFilterElementType"] == "Glazing":session["defaultquantitylist"][0] = session["gsFilterQuantity"]
-    elif session["gstrFilterElementType"] == "Wall":session["defaultquantitylist"][1] = session["gsFilterQuantity"]
-    elif session["gstrFilterElementType"] == "Door":session["defaultquantitylist"][2] = session["gsFilterQuantity"]
-    elif session["gstrFilterElementType"] == "OpenArea":session["defaultquantitylist"][3] = session["gsFilterQuantity"]
-    elif session["gstrFilterElementType"] == "Vent":session["defaultquantitylist"][4] = session["gsFilterQuantity"]
+    if session["gstrFilterElementType"] == "Glazing":
+        session["defaultquantitylist"][0] = session["gsFilterQuantity"]
+        session["QuantityMetric"] = "m<sup>2</sup>"
+        session["QuantityLabel"] = "Area"
+
+    elif session["gstrFilterElementType"] == "Wall":
+        session["defaultquantitylist"][1] = session["gsFilterQuantity"]
+        session["QuantityMetric"] = "m<sup>2</sup>"
+        session["QuantityLabel"] = "Area"
+
+    elif session["gstrFilterElementType"] == "Door":
+        session["defaultquantitylist"][2] = session["gsFilterQuantity"]
+        session["QuantityLabel"] = "Area"
+        session["QuantityMetric"] = "m<sup>2</sup>"
+
+    elif session["gstrFilterElementType"] == "OpenArea":
+        session["defaultquantitylist"][3] = session["gsFilterQuantity"]
+        session["QuantityMetric"] = " "
+        session["QuantityLabel"] = " "
+
+    elif session["gstrFilterElementType"] == "Vent":
+        session["defaultquantitylist"][4] = session["gsFilterQuantity"]
+        session["QuantityLabel"] = "Eq. Area"
+        session["QuantityMetric"] = "mm<sup>2</sup>"
+
 
 
 
@@ -1028,13 +1073,16 @@ def ValSpectra(strSpectra):
     print ("After split " + strSpectra)
 
     iCount = 0 
-    for str in strSpectra.split('-'):
+    for str in strSpectra.split('/'):
         iCount = iCount + 1 
+        if len(str) == 0: 
+            return "Error. Invalid spectra found", ""
+        
         if(math.isnan(float(str))):
-            return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9", ""
+            return "Error. Invalid spectra entry. Enter format 99.9/99.9/99.9/99.9/99.9/99.9", ""
     
     if iCount != 5:
-        return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9", ""
+        return "Error. Invalid spectra entry. Enter format 99.9/99.9/99.9/99.9/99.9/99.9", ""
 
     return "Validated", strSpectra
 
@@ -1047,9 +1095,9 @@ def GetTotal (strSpectra):
 
     sAntiLogTot = 0.0
 
-    for mystr in strSpectra.split('-'):
+    for mystr in strSpectra.split('/'):
         if(math.isnan(float(mystr))):
-            return "Error. Invalid spectra entry. Enter format 99.9-99.9-99.9-99.9-99.9-99.9"
+            return "Error. Invalid spectra entry. Enter format 99.9/99.9/99.9/99.9/99.9/99.9"
         print (mystr)
         sAntiLogTot = sAntiLogTot + pow (10 , (float(mystr) / 10))  
 
@@ -1099,12 +1147,14 @@ def SetupSRIs (PageofElements):
                 sPercent = float(strPercent[0])
                 sQuantity = sPercent * session["gsArea"] /100
 
+        
         # Put our element into a dictionay that calc noise can understnd 
         selectedelement = dict(ElementID=Row.UniqueID,
                             Quantity=sQuantity,
                             ElementType=session["gstrFilterElementType"],
                             ElementDescription=Row.Description,
                             FacadeDifference=session["gsFacadeDifference"],
+                            URL=Row.URL,
                             Hz125=Row.Hz125, 
                             Hz250=Row.Hz250, 
                             Hz500=Row.Hz500, 
@@ -1231,7 +1281,7 @@ def AntiLogSpectraToString(sAntiLogSpectra):
     while iLp1  < gciMaxSpectra:
         sInternalSpectra[iLp1] = 10 * math.log(sAntiLogSpectra[iLp1],10)
         if iLp1 > 0: 
-            strInternalDisplay = strInternalDisplay + "-"
+            strInternalDisplay = strInternalDisplay + "/"
         strInternalDisplay = strInternalDisplay + str(round(sInternalSpectra[iLp1],1))
         sAntiLogTot += sAntiLogSpectra[iLp1]
         iLp1 = iLp1 + 1 
@@ -1240,6 +1290,28 @@ def AntiLogSpectraToString(sAntiLogSpectra):
 
     return sInternalSpectra, strInternalDisplay
 
+def InitFacadeDetails():
+
+        # Initialise facade details - called twice as there is a path via automate where errotrs may occur
+    print("def InitFacadeDetails():")
+
+    session["facadedetails"] = []
+    facade = dict(Metric="Laeq16", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["Laeq16"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="Laeq8", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["Laeq8"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="LamaxV", FacadeSpectra="",FacadeLevel="", InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["LamaxV"])
+    session["facadedetails"].append(facade)
+
+    facade = dict(Metric="LamaxO", FacadeSpectra="",FacadeLevel="",  InternalSpectra="",InternalLevel=0.0, InternalDisplay="",
+    Label=session["LamaxO"])
+    session["facadedetails"].append(facade)
+        
 def SetBackColourClass(sLevel, strMetric):
     # Depending on the metric and the level - set the background colour to alert the user 
     if (strMetric) == "Laeq16":
@@ -1258,7 +1330,7 @@ def SetBackColourClass(sLevel, strMetric):
         else:
             strBackColor = "BackGreen"
     elif (strMetric) == "LamaxO":
-        if sLevel > 60:
+        if sLevel > 65:
             strBackColor = "BackRed"
         else:
             strBackColor = "BackGreen"            
