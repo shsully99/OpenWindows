@@ -97,6 +97,8 @@ class ElementSRI(db.Model):
     UniqueID = db.Column(db.Integer, primary_key=True)
     ElementType= db.Column(db.String(64))
     Description= db.Column(db.String(64))
+    Width = db.Column(db.String(64))
+    Weight = db.Column(db.String(64))    
     URL= db.Column(db.String(64))
     Reference= db.Column(db.String(64))
     Metric= db.Column(db.String(64))
@@ -111,12 +113,14 @@ class ElementSRI(db.Model):
     Spectra= Hz125 + "/" + Hz250 + "/" + Hz500 + "/" + Hz1000 + "/" + Hz2000 
     OpenArea = db.Column(db.Integer)
 
-    def __init__(self,     UniqueID ,    ELementType,    Description,    Reference, 
+    def __init__(self,     UniqueID ,    ELementType,    Description,   Width, Weight, Reference, 
                 Metric,    URL, Hz63,   Hz125,  Hz250,  Hz500,  Hz1000, Hz2000, Hz4000, Hz8000,  OpenArea):
 
             UniqueID = self.UniqueID 
             ElementType= self.ElementType
             Description= self.Description
+            Width = self.Width
+            Weight = self.Weight
             Reference= self.Reference
             Metric=  self.Metric
             URL = self.URL
@@ -222,10 +226,7 @@ def register():
 
     form = RegisterForm(request.form)
 
-    print(form.data,'ggggggggggggggg')
 
-    print(form.data["full_name"])
-    print(form.data["email"])
 
     session["Username"] = form.data["full_name"]
     session["email"] =  form.data["email"]
@@ -321,58 +322,60 @@ def Userregistration():
     session["email"] = ""
     return render_template('registration.html')    
 
+
+
 @app.route('/search', methods=['POST', 'GET'])
 def search():
-    print ("def search():")
+    print ("def search():" + request.method)
 
-    if request.method == 'POST':
-        strRet = SetupSessionVariables()
-        print (strRet)
-        print(f"*** In post method of search " +  session["status"] + str(session["gsFilterQuantity"]))  
+    #if request.method == 'POST':
+    strRet = SetupSessionVariables()
+    print (strRet)
+    print(f"*** In post method of search " +  session["status"] + str(session["gsFilterQuantity"]))  
 
-        if (strRet != "Success"):
-            print ("setup failed" + strRet)
-            return render_template('search.html', BadEntry = strRet,
-                                            facadedetails = session["facadedetails"],
-                                defaultquantitylist= session["defaultquantitylist"])
-
-
-        # if (session["status"] == "RoomDetails"):
-        #     # Validate RoomDetails - return error or show search display page
-        #     strRet = SetupSessionVariables()
-        #     if strRet != "Success":
-        #         return render_template('search.html',BadEntry = strRet)
-        #     else:
-        #         session["status"] = "SearchDisplay"
-        #         return render_template('search.html')
+    if (strRet != "Success"):
+        print ("setup failed" + strRet)
+        return render_template('search.html', BadEntry = strRet,
+                                        facadedetails = session["facadedetails"],
+                            defaultquantitylist= session["defaultquantitylist"])
 
 
-            # First time Search display, validate entries
-    
-        querySearch  = GetfromDataBase(1)
+    # if (session["status"] == "RoomDetails"):
+    #     # Validate RoomDetails - return error or show search display page
+    #     strRet = SetupSessionVariables()
+    #     if strRet != "Success":
+    #         return render_template('search.html',BadEntry = strRet)
+    #     else:
+    #         session["status"] = "SearchDisplay"
+    #         return render_template('search.html')
 
-        if querySearch.first == 0:
-            strRet = "Error. No items found for this selection"
-            return render_template('search.html', BadEntry = strRet,
-                                            facadedetails = session["facadedetails"],
-                                defaultquantitylist= session["defaultquantitylist"])            
 
-        df = SetupSRIs(querySearch)
+        # First time Search display, validate entries
 
-        session["status"] = "SearchDisplay"
+    querySearch  = GetfromDataBase(1)
 
-        session.modified = True
+    if querySearch.first == 0:
+        strRet = "No items found for this selection"
+        return render_template('search.html', BadEntry = strRet,
+                                        facadedetails = session["facadedetails"],
+                            defaultquantitylist= session["defaultquantitylist"])            
 
-        return render_template('search.html',
-                                df = df,
-                                querySearch = querySearch,
-                                facadedetails = session["facadedetails"],
-                                defaultquantitylist= session["defaultquantitylist"])
+    df = SetupSRIs(querySearch)
 
-    else:
+    session["status"] = "SearchDisplay"
 
-        print(f"*** In get  method of search - do we ever get here? ")
-        return render_template('search.html')
+    session.modified = True
+
+    return render_template('search.html',
+                            df = df,
+                            querySearch = querySearch,
+                            facadedetails = session["facadedetails"],
+                            defaultquantitylist= session["defaultquantitylist"])
+
+    #else:
+
+    #    print(f"*** In get  method of search - do we ever get here? ")
+    #    return render_template('search.html')
 
 @app.route('/paginate', methods=['GET', 'POST'], defaults={"page": 1}) 
 @app.route('/paginate/<int:page>', methods=['GET', 'POST'])
@@ -385,7 +388,6 @@ def paginate(page):
 
     df = SetupSRIs (querySearch)    
 
-    print (df)
 
     return render_template('search.html', querySearch=querySearch, df=df, facadedetails=session["facadedetails"],
                                     defaultquantitylist= session["defaultquantitylist"])
@@ -651,7 +653,6 @@ def automate():
         FacDif = int(k.rstrip(" ").lstrip(" ").rstrip("'").lstrip("'"))
 
         myElement = ElementSRI.query.filter(ElementSRI.UniqueID == ElementID).first()
-        print(myElement)
 
         elementLevels = []
 
@@ -735,7 +736,7 @@ def share():
     shareString = urlencode(parsedict)
     shareString  = "http://www.openwindows.uk/automate?" + shareString 
 
-    print (shareString )
+    #print (shareString )
 
     session["status"] = "ShareDisplay"
     session["disabled"] = "disabled"
@@ -851,7 +852,7 @@ def ClearSessionVariables():
 
     session["defaultquantitylist"] = [2, 10 , 2,0,5000]
 
-    print (session["defaultquantitylist"])
+    #print (session["defaultquantitylist"])
 
     session["gsFacadeDifference"]= 0 
     session["gstrFilterField"] = ""
@@ -867,12 +868,38 @@ def ClearSessionVariables():
     session['LamaxoSpectraLabel']  = ""
     session["status"] = "RoomDetails"
     session["disabled"] = ""
-
+    session.modified = True
+    
     return "Success"
+
+
 
 def SetupSessionVariables():
 
     print ("def setupsessionvaribles")
+
+    #strLaeq16Spectra = ""
+    #strLaeq8Spectra = ""
+    #strLamaxvSpectra = ""
+    #strLamaxoSpectra = ""
+
+    #if session["disabled"] != "disabled":
+    #    if strMethod = "POST":
+    #        strLaeq16Spectra = request.form.get('Laeq16Spectra')
+    #        strLaeq8Spectra = request.form.get('Laeq8Spectra')
+    #        strLamaxvSpectra = request.form.get('LamaxvSpectra')
+    #        strLamaxoSpectra = request.form.get('LamaxoSpectra')
+    #    else:
+    #        args = request.args
+    #        parsedict= args.to_dict(flat=False)
+    #        strLaeq16Spectra = parsedict('Laeq16Spectra')
+    #        strLaeq8Spectra = parsedict('Laeq8Spectra')
+    #        strLamaxvSpectra = parsedict('LamaxvSpectra')
+    #        strLamaxoSpectra = parsedict('LamaxoSpectra')
+
+
+    #    strRD = request.form.get('RoomDimensions').split("x")
+
 
     if session["disabled"] != "disabled":
         # Get the facade details if they have not already been entered 
@@ -896,6 +923,7 @@ def SetupSessionVariables():
             session["facadedetails"][0]["InternalDisplay"] = ""
 
         strText = request.form.get('Laeq8Spectra')
+        print ("laeq8" + strText)
         if strText != "":
             strError, strSpectra = ValSpectra(strText)
             if strError != "Validated":
@@ -949,7 +977,7 @@ def SetupSessionVariables():
             session["facadedetails"][3]["InternalDisplay"] = ""
 
         if iCount == 0:
-            return "Error. there must be at last one entry for spectra."
+            return "Error. There must be at last one entry for spectra."
 
         # Check axh for Room Dimensions and assign variables accordingly
         #print( request.form.get('RoomDimensions'),'ssssssssss')
@@ -1009,10 +1037,10 @@ def SetupSessionVariables():
         try:
             session["gsFilterQuantity"] = float(request.form.get('Quantity'))
         except:
-            return ("Error. Enter quantity")
+            return ("Error. Enter Area")
 
         if (session["gsFilterQuantity"] == 0):
-            return ("Error. Quantity must be greater than 0")
+            return ("Error.Area must be greater than 0")
 
     session["gsFacadeDifference"] = int(request.form.get('quietfacade'))
 
@@ -1046,11 +1074,8 @@ def SetupSessionVariables():
         session["QuantityLabel"] = "Eq. Area"
         session["QuantityMetric"] = "mm<sup>2</sup>"
 
-
-
-
     print("After setup")
-    print(session["facadedetails"])
+    #print(session["facadedetails"])
 
     #session['selectedcount'] = 0
     #if (session['selectedcount'] > 0 ):
@@ -1098,7 +1123,7 @@ def GetTotal (strSpectra):
     for mystr in strSpectra.split('/'):
         if(math.isnan(float(mystr))):
             return "Error. Invalid spectra entry. Enter format 99.9/99.9/99.9/99.9/99.9/99.9"
-        print (mystr)
+        #print (mystr)
         sAntiLogTot = sAntiLogTot + pow (10 , (float(mystr) / 10))  
 
     sTot = round(10 * math.log(sAntiLogTot,10) ,1)
@@ -1175,12 +1200,15 @@ def SetupSRIs (PageofElements):
 
                 # Show the level with the "new" nosie added
                 lTotalAntiLog =  pow (10 , (facade["InternalLevel"] / 10)) + pow (10 , (sNoise / 10))                
-                print (f' snoise {sNoise} facadedetailsLevel {facade["InternalLevel"] } ' )
+                #print (f' snoise {sNoise} facadedetailsLevel {facade["InternalLevel"] } ' )
                 df.loc[i,[tstr]] = 10 * math.log(lTotalAntiLog,10)
             
-        df.loc[i,['UniqueID']] = Row.UniqueID        
+        df.loc[i,['UniqueID']] = Row.UniqueID    
+        df.loc[i,['Quantity']] = sQuantity
 
         i=i+1
+
+    #print (df)
 
     return df 
 
@@ -1233,7 +1261,7 @@ def SetupTotals():
                 if session["selectedelements"][j]["State"] == "Active":            
                     sElementLevel = session["selectedelements"][j]["elementLevels"][i]["Level"] 
                     sElementSpectra = session["selectedelements"][j]["elementLevels"][i]["Spectra"]                     
-                    print (f" Looping {sElementLevel} {sElementSpectra}")
+                    #print (f" Looping {sElementLevel} {sElementSpectra}")
                     iLp1 = 0
                     while iLp1  < gciMaxSpectra:
                         sAntiLogSpectra[iLp1] = sAntiLogSpectra[iLp1]+ pow (10, sElementSpectra[iLp1]/10)
@@ -1249,12 +1277,12 @@ def SetupTotals():
             session["facadedetails"][i]["InternalLevel"]
 
 
-            print ( session["facadedetails"][i]["InternalSpectra"])
-            print (session["facadedetails"][i]["InternalDisplay"])
+            #print ( session["facadedetails"][i]["InternalSpectra"])
+            #print (session["facadedetails"][i]["InternalDisplay"])
 
     # Called after the selected elements array has changed to update the percentages on each element.     
     # Also a good time to 0 out unuued spectra
-    print ("-------------------------------")
+
     for i in range (0,len(session["facadedetails"])):
         if session["facadedetails"][i]["FacadeSpectra"] != "":
             sTotal = session["facadedetails"][i]["InternalLevel"]
@@ -1336,9 +1364,38 @@ def SetBackColourClass(sLevel, strMetric):
             strBackColor = "BackGreen"            
     return strBackColor
 
+# No cacheing at all for API endpoints.
+#@app.after_request
+#def add_header(response):
+    # response.cache_control.no_store = True
+    #if 'Cache-Control' not in response.headers:
+#    print ("after_requeest")
+#    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+#    response.headers["Expires"] = "0"
+#    response.headers["Pragma"] = "no-cache"
+#    response.headers["Cache-Control"] = "public, max-age=0"##
+
+    #response.headers['Cache-Control'] = 'no-store'
+#    return response
+
+
+    #r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    #r.headers["Pragma"] = "no-cache"
+    #r.headers["Expires"] = "0"
+    #r.headers['Cache-Control'] = 'public, max-age=0'
+
+#@app.after_request
+#def better_back_button(resp):
+#    print ("after_requeest")
+#    resp.headers.add('Cache-Control', 'no-store, no-cache, revalidate, post-check=0, pre-check=0')
+#    return resp
+
+
+
 if __name__ == "__main__":
     app.jinja_env.auto_reload = True
     app.config["TEMPLATES_AUTO_RELOAD"] = True
+    #app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     # with app.app_context():
     #     init_db()
 

@@ -1,10 +1,21 @@
 {% extends 'base.html' %}
 
 {% block head %}
+
+<!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0"> -->
+
 <title>Search</title>
 
 <script language="javascript" type="text/javascript">
-    
+ 
+    if (window.history && window.history.pushState) {
+    window.addEventListener('popstate', function() {
+      location.reload();
+    });
+    }
+
     window.onload = function(){
         //document.getElementById("company_name").value = "value";
         //alert (document.getElementById("elementtype").value)
@@ -36,6 +47,7 @@
     $('.popover-dismiss').popover({
         trigger: 'focus'
     })
+  
 
 </script>
 
@@ -279,7 +291,7 @@
                                placeholder="Enter keyword"/>
                     </div>                                           
                 </div>
-                <div class="row">                
+                .<div class="row">                
                     <div class = "col-7"  >
                         <!-- Toggle Display elements and searchj results --> 
                         {% if session["selectedelements"]|length > 0 %}
@@ -405,8 +417,15 @@
                         <table id="customers">
                             <!--<tr class="fs-18 f-500"> -->
                             <tr class="TopForm"> 
-                                <th>Spectra</th>
+                                <th>Spectra dB(A)</th>
+                                <th>Reference</th>                                
                                 <th>Description</th>
+                                {% if session["gstrFilterElementType"]  == "Glazing"  or session["gstrFilterElementType"]  == "Door" or session["gstrFilterElementType"]  == "Wall" %}
+                                    <th>Width mm </th>
+                                {% endif %}
+                                {% if  session["gstrFilterElementType"]  == "Door" or session["gstrFilterElementType"]  == "Wall" %}
+                                    <th>Weight kg/m<sup>2</sup></th>
+                                {% endif %}                                
                                 {% for facade in facadedetails %}
                                     {% if facade.FacadeSpectra != "" %}                                
                                         <th><span>
@@ -415,7 +434,12 @@
                                           </span>
                                         </th>
                                     {% endif %}
-                                {% endfor %}row
+                                {% endfor %}
+                                {% if  session["gstrFilterElementType"]  == "Vent" %}
+                                    <th><span>EA mm<sup>2</sup> x No
+                                    <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Unit EA " data-bs-content="This column shows  the equivalent area of 1 unit and the number of units included in the calculation">?</a>
+                                 </span></th>                                
+                                {% endif %}
                                 {% if session["selectedelements"]|length < 8 %}
                                 <th><span>Select
                                     <a tabindex="0" href="#" data-bs-toggle="popover"  data-bs-trigger="focus"  title="Select" data-bs-content="Click add to include this element.">?</a>
@@ -427,12 +451,19 @@
                             {% for row in querySearch.items %}
                             <tr>
                                 <td>{{ row.Hz125|string + "/" + row.Hz250|string + "/" + row.Hz500|string + "/" +
-                                   row.Hz1000|string + "/" + row.Hz2000|string }}
+                                   row.Hz1000|string + "/" + row.Hz2000|string }}</td>
                                 {% if row.URL %}
-                                <td><a class = "c-blue" href = "{{ row.URL }}" target = "_blank">{{ row.Description }}</a></td>
+                                   <td><a class = "c-blue" href = "{{ row.URL }}" target = "_blank">{{ row.Reference }}</a></td>
                                 {% else %}
+                                   <td>{{ row.Reference }}</td>
+                                {% endif %}                                     
                                 <td>{{ row.Description }}</td>
-                                {% endif %}                              
+                                {% if session["gstrFilterElementType"]  == "Glazing"  or session["gstrFilterElementType"]  == "Door" or session["gstrFilterElementType"]  == "Wall" %}
+                                    <td>{{ row.Width }}</td>
+                                {% endif %}
+                                {% if  session["gstrFilterElementType"]  == "Door" or session["gstrFilterElementType"]  == "Wall" %}
+                                    <td>{{ row.Weight }}</td>
+                                {% endif %}                                                                
                                 {% if df is defined %}
                                     {% for key, dfrow in df.iterrows() %}
                                         {% if row.UniqueID == dfrow.UniqueID %}
@@ -441,12 +472,18 @@
                                                     <td class="f-500">{{'%0.1f' % dfrow[facade.Metric] }}</td>
                                                 {% endif %}
                                             {% endfor %}
+                                            {% if  session["gstrFilterElementType"]  == "Vent" %}
+                                                <td> {{ row.OpenArea }}x{{ dfrow.Quantity|round|int }} </td>
+                                            {% endif %}  
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
                                 {% if session["selectedelements"]|length < 8 %}
-                                <td class="bluelink"><a  href="/add/{{row.UniqueID}}" method="POST">Add</a>
-                                </td>
+                                <!-- <td style="color: red;""><a  href="/add/{{row.UniqueID}}" method="POST">Add</a>
+                                </td> -->
+                                <td><a class = "c-blue" href = "/add/{{row.UniqueID}}" >Add</a></td>
+                                {% else %}
+
                                 {% endif %}                              
                             </tr>
                             {% endfor %}

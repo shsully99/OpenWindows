@@ -9,16 +9,16 @@ def calcnoisesingle (selectedelement,
                 gsVolume, 
                 gsRev):
 
-    print ("def calcnoisesingle " )
-    print (strIncidentSpectra)
-    print (selectedelement)
+    #print ("def calcnoisesingle " )
+    #print (strIncidentSpectra)
+    #print (selectedelement)
 
     gciMinSpectra = 0
     gciMaxSpectra = 5
 
     #sSpectra = [float(x) for x in selectedelement["Spectra"].rstrip(';').split("/")]
     sSpectra = [0.0, 0.0, 0.0, 0.0, 0.0]
-    print (selectedelement["Hz125"])
+    #print (selectedelement["Hz125"])
 
     sSpectra[0] = float(selectedelement["Hz125"])
     sSpectra[1] = float(selectedelement["Hz250"])
@@ -34,9 +34,9 @@ def calcnoisesingle (selectedelement,
     else:
         strMetric = "Rw"
 
-    print(f"SRI Spectra {sSpectra}")
-    print(f"Incident  Spectra {sIncident}")
-    print(f"rev {gsRev} vol {gsVolume} ")
+    #print(f"SRI Spectra {sSpectra}")
+    #print(f"Incident  Spectra {sIncident}")
+    #print(f"rev {gsRev} vol {gsVolume} ")
 
     # For each frequency from 125 to 2000 Hz
     sInternalElementSpectra = [0.0,0.0,0.0,0.0,0.0]
@@ -46,12 +46,12 @@ def calcnoisesingle (selectedelement,
         sTemp = 0.0
 
         if (sIncident[iLp1]) > 0:  
-            print(type(sIncident[iLp1]))
-            print(type(selectedelement["FacadeDifference"]))
-            print(type(selectedelement["Quantity"]))
-            print(type(sSpectra[iLp1]))     
-            print(type(gsVolume))                    
-            print(type(gsRev))                        
+     #       print(type(sIncident[iLp1]))
+     #       print(type(selectedelement["FacadeDifference"]))
+     #       print(type(selectedelement["Quantity"]))
+     #       print(type(sSpectra[iLp1]))     
+     #       print(type(gsVolume))                    
+     #       print(type(gsRev))                        
             if strMetric == "Rw":
                 print (f'Rw + {selectedelement["Quantity"]}   {gsVolume}  {gsRev}' )
                 sTemp = sIncident[iLp1]  - selectedelement["FacadeDifference"] - sSpectra[iLp1] + (10 * math.log(selectedelement["Quantity"]/ gsVolume,10)) + (10 * math.log((gsRev),10)) + 11 
