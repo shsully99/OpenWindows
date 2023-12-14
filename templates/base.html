@@ -36,6 +36,7 @@
             <div class="header_container_block2 d-flex justify-content-space-between align-items-center">
                 <div class="d-flex ">
                     <a class="about" href="/about/">About</a>
+                    <a class="about" href="/overview/">Overview</a>                    
                     <a class="about" href="/help/">Help</a>
                     <!-- 
                     {% if not current_user.is_authenticated %}
@@ -90,7 +91,7 @@
                     Log out
                 </a>
             </div>-->
-            {% endif %}
+ <!--             {% endif %}
         </div>
     </div>
 </div>
@@ -132,15 +133,22 @@
 
 <!-- ss- -->
 
-
 {% block head %}
 {% endblock %}
 </header>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://cookieconsent.popupsmart.com/src/js/popper.js"></script><script> window.start.init({Palette:"palette7",Mode:"banner bottom",Theme:"block",Time:"5",})</script>
+
 {% block body %}{% endblock %}
 </body>
+
+
+
+
+
 <script src="{{url_for('static',filename='assets/js/Modal.js')}}"></script>
 <script src="{{url_for('static',filename='assets/js/ShowHidePass.js')}}"></script>
 <script src="{{url_for('static',filename='assets/js/OpenNavbar.js')}}"></script>
